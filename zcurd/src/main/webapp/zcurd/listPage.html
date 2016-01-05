@@ -1,0 +1,144 @@
+<#include "/common/head.html"/>
+
+    <table id="dg" class="easyui-datagrid" 
+            data-options="
+            	rownumbers:true,
+            	fit:true,
+            	border:false,
+            	rownumbers:true,
+            	url:'listData?headId=${headId}',
+            	method:'get',
+            	toolbar:'#tb',
+            	pagination:true">
+        <thead>
+            <tr>
+            	<th data-options="field:'${head.id_field}',checkbox:true"></th>
+				<#list fieldList as item>
+           		<#if item.is_show_list == 1 && item.field_name != head.id_field>
+				<th data-options="field:'${item.field_name}',width:${item.column_length}">${item.column_name}</th>
+           		</#if>
+            	</#list>
+            </tr>
+        </thead>
+    </table>
+    <div id="tb" style="padding:2px 5px;">
+        <div class="wrap_search">
+        	<#list fieldList as item>
+	         	<#if item.is_search == 1>
+		            <#if item.dict??>
+		            	<span class="search_item">
+			            	<span class="item_text">${item.column_name}: </span>
+			            	<span class="item_obj">
+			            		<select class="easyui-combobox" name="${item.field_name}">
+			            			<option></option>
+			            			<#list item.dict.keySet() as key>
+			            				<option value="${key}">${item.dict.get(key)}</option>
+			            			</#list>
+			            		</select>
+			            	</span>    
+			            </span>
+			        <#else>
+			        	<#assign easyui_type="easyui-textbox" />
+			        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
+			        		<#assign easyui_type="easyui-datebox" />
+		        		</#if>
+		        		
+			        	<#if item.search_type == 2>
+			        		<span class="search_item search_between">
+				                <span class="item_text">${item.column_name}: </span>
+				                <span class="item_obj">
+				                    <input class="${easyui_type}" name="_start_${item.field_name}"/> ～ <input class="${easyui_type}" name="_end_${item.field_name}"/>
+				                </span>
+				            </span>
+			            <#else>
+			            	<span class="search_item">
+				            	<span class="item_text">${item.column_name}: </span>
+				            	<span class="item_obj">
+				            		<input class="${easyui_type}" type="text" name="${item.field_name}" />
+				            	</span>    
+				            </span>
+			        	</#if>
+		            </#if>
+	         	</#if>
+          	</#list>
+        </div>
+        <div style="text-align: left; margin:6px;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">编辑</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-clear" plain="true" onclick="del()">删除</a>
+            <div style="float:right; padding-right:40px;">
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search">重置</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="ft" style="padding:2px 5px;">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="alert('增加')"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+    </div>
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	log(param);
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function add() {
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("增加成功！");
+		datagrid.datagrid("load");
+	}
+	top.openWindow("${head.form_name}-增加", "../zcurd/addPage?headId=${head.id}");
+}
+
+function update() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择需要编辑的一条数据！");
+		return;
+	}
+	var id = rowsSel[0].${head.id_field};
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("更新成功！");
+		datagrid.datagrid("load");
+	}
+	top.openWindow("${head.form_name}-编辑", "../zcurd/updatePage?headId=${head.id}&id=" + id);
+}
+
+function del() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.${head.id_field});
+	});
+	if(ids.length < 1) {
+		showWarnMsg("请选择需要删除的数据！");
+		return;
+	}
+	confirmMsg("确认删除？", function() {
+		$.post("delete?headId=${head.id}", {id: ids}, function(data) {
+			showMsg("删除成功！");
+			datagrid.datagrid("load");
+		});
+	});
+}
+</script>
+
+<#include "/common/foot.html"/>

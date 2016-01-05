@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>index</title>
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/themes/default/easyui.css">
+<!--<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/metro_gray.css">-->
+<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/themes/icon.css">
+<script type="text/javascript" src="../js/jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+<style type="text/css">
+body{padding: 0px; margin: 0px;}
+.head{background: #09C; font-size: 14px; color: white; height: 50px; line-height: 50px; padding: 0px 8px;}
+.easyui-tabs .tabs{border-color: #A5C4EF;}
+.easyui-tabs .tabs li a.tabs-inner{border-radius: 2px 2px 0 0;}
+.tree-node {padding: 5px 0px;}
+.tree-node-hover{background: #465467; color: white;}
+.tree-node-selected{background: #0099cc; color: white;}
+
+.left{background-color: #293038;}
+
+.menu_head{
+	height: 30px;
+	line-height: 30px;
+	background: #394555;
+	color: #aeb9c2;
+	text-align: center;
+}
+</style>
+</head>
+<body class="easyui-layout">
+<div id="loadFloat" style="position: absolute; width: 100%; height: 500px; height: 100%; z-index: 999; background: white;"></div>
+<div data-options="region:'north',border:false" style="height:50px;">
+	<div class="head">厂商后台</div>
+</div>
+<div data-options="region:'west',split:true, border:false" style="width:185px;background-color: #293038;color:white">
+	<div class="zsy_menu">
+		<div class="menu_head">菜单导航</div>
+        <ul class="easyui-tree" data-options="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
+            <li data-options="">
+                <span>在线表单</span>
+                <ul>
+                    <li data-options="attributes:'list'">表单列表</li>
+                </ul>
+            </li>
+            <li data-options="iconCls:'icon-add'">
+                <span>内容管理</span>
+                <ul>
+                    <li data-options="attributes:'../zcurd/listPage?headId=121'">游戏用户</li>
+                    <li data-options="attributes:'http://www.sina.com.cn'">新浪</li>
+                    <li>Microsoft Office</li>
+                    <li>Games</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+	</div>
+</div>	
+<div data-options="region:'center', border:false">
+    <div id="mainTabs" class="easyui-tabs" style="height:250px" data-options="border:false,fit:true">
+        <div title="首页">
+            <iframe src="../zcurd/listPage?headId=121" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+<div id="tabsMenu">
+    <div data-options="iconCls:'icon-mini-refresh'" type="refresh">刷新</div>
+    <div data-options="iconCls:'icon-applicationdelete'" type="close">关闭</div>
+    <div data-options="iconCls:'icon-cancel'" type="closeOther">关闭其他</div>
+    <div data-options="iconCls:'icon-cross'" type="closeAll">关闭所有</div>
+</div>
+
+<div id="w" class="easyui-window" title="Window Layout" data-options="iconCls:'icon-save',closed:true,modal:true" style="width:750px;height:500px;padding:0px;">
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div data-options="region:'center',border:false" style="padding:0px;">
+            <iframe src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+        </div>
+        <div data-options="region:'south',border:false" style="text-align:right;padding:5px 10px 5px 0px;border-top:1px solid #ddd;">
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:subPage.save();" style="width:80px">保存</a>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:closeWindow()" style="width:80px">取消</a>            
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(function() {
+	$("#loadFloat").remove();
+});
+var subPage = {};
+function openWindow(title, url) {
+	$("#w iframe").attr("src", url);
+    $("#w").window({
+    	closed:false,
+    	modal:true,
+    	iconCls:'icon-save',
+    	title: title || '增加'
+    });
+}
+function closeWindow() {
+    $("#w").window("close");
+}
+
+// 选项卡
+var mainTabs = $('#mainTabs');
+
+// 选项卡菜单
+var tabsMenu = $('#tabsMenu').menu({
+    onClick : function(item) {
+        var curTabTitle = $(this).data('tabTitle');
+        var type = $(item.target).attr('type');
+
+        if (type === 'refresh') {
+            var iframe = mainTabs.tabs('getSelected').panel('panel').find('iframe');
+            iframe.attr("src", iframe.attr("src"));
+            return;
+        }
+
+        if (type === 'close') {
+            var t = mainTabs.tabs('getTab', curTabTitle);
+            if (t.panel('options').closable) {
+                mainTabs.tabs('close', curTabTitle);
+            }
+            return;
+        }
+
+        var allTabs = mainTabs.tabs('tabs');
+        var closeTabsTitle = [];
+
+        $.each(allTabs, function() {
+            var opt = $(this).panel('options');
+            if (opt.closable && opt.title != curTabTitle
+                    && type === 'closeOther') {
+                closeTabsTitle.push(opt.title);
+            } else if (opt.closable && type === 'closeAll') {
+                closeTabsTitle.push(opt.title);
+            }
+        });
+
+        for ( var i = 0; i < closeTabsTitle.length; i++) {
+            mainTabs.tabs('close', closeTabsTitle[i]);
+        }
+    }
+});
+
+// 初始化选项卡
+mainTabs.tabs({
+    fit : true,
+    border : false,
+    tools : [ {
+        iconCls : 'icon-large-picture',
+        style:"border:0px",
+        handler : function() {
+            $('#mainLayout').layout("collapse", "north").layout("collapse", "west");
+        }
+    }],
+    onContextMenu : function(e, title) {
+        e.preventDefault();
+        tabsMenu.menu('show', {
+            left : e.pageX,
+            top : e.pageY
+        }).data('tabTitle', title);
+    }
+});
+
+function treeBeforeSelect(node) {
+    if(node.children) {
+        if(node.state == "open") {
+            $(this).tree("collapse", node.target);
+        }else {
+            $(this).tree("expand", node.target);
+        }
+        return false;
+    }    
+}
+function treeSelect(node) {
+    var href = node.attributes;
+    console.log(node);
+    $("#mainTabs").tabs('add',{
+        title:node.text,
+        content:'<iframe src="' + href + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
+        closable:true
+    });
+}
+</script>
+</body>
+</html>

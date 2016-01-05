@@ -1,0 +1,77 @@
+<#include "/common/head.html"/>
+
+ <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+    <div style="padding:0px">
+    <form id="ff" method="post">
+        <table cellpadding="5" width="100%">
+           	<#list addFieldList as item>
+           		<#assign easyui_type="easyui-textbox" />
+	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
+	        		<#assign easyui_type="easyui-datebox" />
+        		</#if>
+        		
+           		<#if item_index == 0 || (item_index + 0) % 3 == 0>
+            <tr>
+           		</#if>
+           		<th>${item.column_name}：</th>
+               	<td>
+               		<#if item.dict??>
+						<select class="easyui-combobox" name="${item.field_name}" style="width: 130px;">
+	            			<option></option>
+	            			<#list item.dict.keySet() as key>
+		            				<option value="${key}">${item.dict.get(key)}</option>
+	            			</#list>
+		            		</select>		        	
+			        <#else>
+               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="" data-options="required:false" style="width: 130px;"></input>
+			        </#if>
+           		</td>
+           		
+           		<#if item_index != 0 && (item_index + 1) % 3 == 0>
+            </tr>
+           		</#if>
+           	</#list>
+           	<#if addFieldList.size() % 3 != 0>
+           		<#if (3 - addFieldList.size() % 3) == 1>
+                <td></td>
+	           	</#if>
+	           	<#if (3 - addFieldList.size() % 3) == 2>
+                <td></td>
+                <td></td>
+	           	</#if>
+            </tr>
+           	</#if>
+        </table>
+    </form>
+    </div>
+</div>
+<script>
+top.window.subPage.save = save;
+function save(successFunc) {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("add", getParam(), function(data) {
+			if(successFunc) {
+				successFunc();
+			}
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+			console.log(parent.datagrid);
+		});
+	}
+}
+function getParam() {
+	var param = {
+	    "headId": ${headId}, 
+		<#list addFieldList as item>
+       	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if addFieldList.size()!=item_index>, </#if>
+		</#list>
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+</script>
+<#include "/common/foot.html"/>
