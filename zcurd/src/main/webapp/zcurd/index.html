@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../js/jquery-easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 <style type="text/css">
-body{padding: 0px; margin: 0px;}
+body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";}
 .head{background: #09C; font-size: 14px; color: white; height: 50px; line-height: 50px; padding: 0px 8px;}
 .easyui-tabs .tabs{border-color: #A5C4EF;}
 .easyui-tabs .tabs li a.tabs-inner{border-radius: 2px 2px 0 0;}
@@ -30,7 +30,8 @@ body{padding: 0px; margin: 0px;}
 </style>
 </head>
 <body class="easyui-layout">
-<div id="loadFloat" style="position: absolute; width: 100%; height: 500px; height: 100%; z-index: 999; background: white;"></div>
+<div id="loadFloat" style="position: absolute; width: 99.9%; height: 500px; height: 99%; z-index: 999; background: white;"></div>
+
 <div data-options="region:'north',border:false" style="height:50px;">
 	<div class="head">厂商后台</div>
 </div>
@@ -55,10 +56,9 @@ body{padding: 0px; margin: 0px;}
             </li>
         </ul>
     </div>
-	</div>
-</div>	
+</div>
 <div data-options="region:'center', border:false">
-    <div id="mainTabs" class="easyui-tabs" style="height:250px" data-options="border:false,fit:true">
+    <div id="mainTabs" style="height:250px">
         <div title="首页">
             <iframe src="../zcurd/listPage?headId=121" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
         </div>
@@ -69,6 +69,9 @@ body{padding: 0px; margin: 0px;}
     <div data-options="iconCls:'icon-applicationdelete'" type="close">关闭</div>
     <div data-options="iconCls:'icon-cancel'" type="closeOther">关闭其他</div>
     <div data-options="iconCls:'icon-cross'" type="closeAll">关闭所有</div>
+</div>
+<div id="tabTools" style="border: 0px; border-bottom: 1px solid #95B8E7;">
+	<a href="###" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="alert('最大化，开发中...')"></a>
 </div>
 
 <div id="w" class="easyui-window" title="Window Layout" data-options="iconCls:'icon-save',closed:true,modal:true" style="width:750px;height:500px;padding:0px;">
@@ -88,6 +91,7 @@ body{padding: 0px; margin: 0px;}
 $(function() {
 	$("#loadFloat").remove();
 });
+
 var subPage = {};
 function openWindow(title, url) {
 	$("#w iframe").attr("src", url);
@@ -148,13 +152,7 @@ var tabsMenu = $('#tabsMenu').menu({
 mainTabs.tabs({
     fit : true,
     border : false,
-    tools : [ {
-        iconCls : 'icon-large-picture',
-        style:"border:0px",
-        handler : function() {
-            $('#mainLayout').layout("collapse", "north").layout("collapse", "west");
-        }
-    }],
+    tools : "#tabTools",
     onContextMenu : function(e, title) {
         e.preventDefault();
         tabsMenu.menu('show', {
@@ -176,7 +174,6 @@ function treeBeforeSelect(node) {
 }
 function treeSelect(node) {
     var href = node.attributes;
-    console.log(node);
     $("#mainTabs").tabs('add',{
         title:node.text,
         content:'<iframe src="' + href + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',

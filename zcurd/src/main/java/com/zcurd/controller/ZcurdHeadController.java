@@ -1,14 +1,13 @@
 package com.zcurd.controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
-import com.jfinal.plugin.activerecord.ICallback;
 import com.zcurd.common.CommonController;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -41,24 +40,22 @@ public class ZcurdHeadController extends CommonController {
 	}
 	
 	public void save() {
-		final String[] fields = getParaValues("rowsStr[]");
+		final String fields = getPara("rowsStr");
+		final JSONArray jsonObjs = JSONObject.parseArray(fields);
 		Db.tx(new IAtom(){
+			@SuppressWarnings("unchecked")
 			public boolean run() throws SQLException {
 				ZcurdHead zcurdHead = getModel(ZcurdHead.class, "model");
 				zcurdHead.update();
 				final long headId = zcurdHead.getLong("id");
-				if(fields != null) {
-					Db.execute(new ICallback() {
-						@Override
-						public Object call(Connection conn) throws SQLException {
-							Statement st = conn.createStatement();
-							st.execute("delete from zcurd_field where head_id=" + headId);
-							for (String string : fields) {
-								st.execute("insert into zcurd_field" + string);
-							}
-							return true;
-						}
-					});
+				Db.update("delete from zcurd_field where head_id=" + headId);
+				if(jsonObjs.size() > 0) {
+					for (Object object : jsonObjs) {
+						ZcurdField field = new ZcurdField();
+						field.set("head_id", headId);
+						field.setAttrs((Map<String, Object>)object);
+						field.save();
+					}
 				}
 				return true; 
 			}

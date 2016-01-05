@@ -16,7 +16,7 @@
            		<th>${item.column_name}：</th>
                	<td>
                		<#if item.dict??>
-						<select class="easyui-combobox" name="${item.field_name}" style="width: 130px;">
+						<select class="easyui-combobox" name="${item.field_name}">
 	            			<option></option>
 	            			<#list item.dict.keySet() as key>
 		            				<option value="${key}">${item.dict.get(key)}</option>

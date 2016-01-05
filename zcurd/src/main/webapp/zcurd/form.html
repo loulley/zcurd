@@ -1,28 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>from</title>
-<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/themes/default/easyui.css">
-<!--<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/metro_gray.css">-->
-<link rel="stylesheet" type="text/css" href="../js/jquery-easyui/themes/icon.css">
-<script type="text/javascript" src="../js/jquery-easyui/jquery.min.js"></script>
-<script type="text/javascript" src="../js/jquery-easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../../zcurd/datagrid_data1.js"></script>
-<style type="text/css">
-body{padding: 0px;}
-.wrap_search .search_item, .wrap_search .search_item .item_text, .wrap_search .search_item .item_obj{display: inline-block;height: 28px; line-height: 28px; overflow: hidden;}
-.wrap_search .search_item{width: 200px;}
-.wrap_search .search_item .item_text{width: 80px; text-align: right;}
-.wrap_search .search_item .item_obj{}
-.wrap_search .search_item.search_between{display: inline-block; width: 400px;}
-.wrap_search input,select{width: 100px;}
-form th{text-align: right; font-weight: normal;}
-</style>
-</head>
-<body>
- <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+<#include "/common/head.html"/>
+
+ <div id="zcurdHeadTable" class="easyui-panel add_content" data-options="fit:true,border:false">
     <div style="padding:0px">
     <form id="ff" method="post">
         <table cellpadding="5" width="100%">
@@ -37,8 +15,8 @@ form th{text-align: right; font-weight: normal;}
             <tr>
                 <th>是否自增</th>
                 <td>
-                	<label><input type="radio" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
-                	<label><input type="radio" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
+                	<label><input type="radio" class="box" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
+                	<label><input type="radio" class="box" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
                 </td>
                 <th></th>
                 <td></td>
@@ -93,9 +71,6 @@ form th{text-align: right; font-weight: normal;}
             <div id="tb" style="height:auto">
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">增加</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">Accept</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>
             </div>
             <script type="text/javascript">
         
@@ -159,15 +134,7 @@ form th{text-align: right; font-weight: normal;}
             </script>
         </div>
         <div title="页面" style="padding:10px">
-            <p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
-            <ul>
-                <li>easyui is a collection of user-interface plugin based on jQuery.</li>
-                <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
-                <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
-                <li>complete framework for HTML5 web page.</li>
-                <li>easyui save your time and scales while developing your products.</li>
-                <li>easyui is very easy but powerful.</li>
-            </ul>
+            <p style="font-size:14px">开发中</p>
         </div>
     </div>
     </div>
@@ -177,10 +144,8 @@ top.window.subPage.save = save;
 function save(successFunc) {
 	if($("#zcurdHeadTable").form('validate')) {
 		accept();
-		var rowsStr = rows2String($("#dg").datagrid("getRows"));
-		
 		var param = getParam();
-		param.rowsStr = rowsStr;
+		param.rowsStr = JSON.stringify($("#dg").datagrid("getRows"));
 		$.post("save", param, function(data) {
 			if(successFunc) {
 				successFunc();
@@ -200,29 +165,6 @@ function getParam() {
 		"model.is_auto": $(":checked[name='is_auto']").val()
 	}
 }
-function rows2String (rows) {
-	var result = [];
-	for (var i = 0; i < rows.length; i++) {
-		var row = rows[i];
-		delete row.id;
-		row.head_id = ${model.id};
-		var fieldStr = "(";
-		var valueStr = "(";
-		for(key in row) {
-			fieldStr += key + ", ";
-			if(row[key] == null) {
-				valueStr += "" + row[key] + ", ";	
-			}else {
-				valueStr += "'" + row[key] + "', ";	
-			}
-		}
-		fieldStr += ") values "
-		valueStr += ")";
-		result.push((fieldStr + valueStr).replace(/, \)/g, ")"));
-	};
-	return result;
-}
-
 function submitForm(){
     $('#ff').form('submit');
 }
@@ -230,7 +172,4 @@ function clearForm(){
     $('#ff').form('clear');
 }
 </script>   
-
-
-</body>
-</html>
+<#include "/common/foot.html"/>

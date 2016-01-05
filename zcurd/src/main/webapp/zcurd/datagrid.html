@@ -53,7 +53,6 @@
             </span>
         </div>
         <div style="text-align: left; margin:6px;">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="genForm()">生成表单</a>
             <div style="float:right; padding-right:40px;">
@@ -89,13 +88,6 @@ function zcurdGetParam() {
 		}
 	});
 	return param;
-}
-
-function add() {
-	top.window.subPage.loadCurrDatagrid = function() {
-		datagrid.datagrid("load");
-	}
-	top.openWindow();
 }
 
 function edit() {
