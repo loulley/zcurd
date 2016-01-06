@@ -1,0 +1,175 @@
+<#include "/common/head.html"/>
+
+ <div id="zcurdHeadTable" class="easyui-panel add_content" data-options="fit:true,border:false">
+    <div style="padding:0px">
+    <form id="ff" method="post">
+        <table cellpadding="5" width="100%">
+            <tr>
+                <th>表单名称:</th>
+                <td><input class="easyui-textbox" type="text" name="form_name" value="${model.form_name}" data-options="required:true"></input></td>
+                <th>数据表名称:</th>
+                <td><input class="easyui-textbox" type="text" name="table_name" value="${model.table_name}" data-options="required:true"></input></td>
+                <th>主键:</th>
+                <td><input class="easyui-textbox" type="text" name="id_field" value="${model.id_field}" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <th>是否自增</th>
+                <td>
+                	<label><input type="radio" class="box" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
+                	<label><input type="radio" class="box" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
+                </td>
+                <th></th>
+                <td></td>
+                <th></th>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+    <div class="easyui-tabs" data-options="border:false" style="height:500px;">
+        <div title="数据">
+            <table id="dg" class="easyui-datagrid" style="height:700px;" 
+                    data-options="
+                        fit: true,
+                        border: false,
+                        iconCls: 'icon-edit',
+                        singleSelect: true,
+                        toolbar: '#tb',
+                        url: 'listField?head_id=${model.id}',
+                        method: 'get',
+                        onClickCell: onClickCell,
+                        onLoadSuccess: function(data) {
+                            setTimeout(function(){
+                                for(var i = 0; i < data.rows.length; i++) {
+                                    $('#dg').datagrid('beginEdit', i);
+                                }
+                            }, 200); 
+                        }
+                    ">
+                <thead>
+                    <tr>
+                        <th data-options="field:'field_name',width:100,editor:'textbox'">字段名称</th>
+                        <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
+                        <th data-options="field:'data_type',width:80,align:'right',editor:{type:'textbox',required:true}">数据类型</th>
+                        <th data-options="field:'is_show_list',width:80,align:'right',
+                                formatter:function(value,row){
+                                    return value;
+                                },
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        required:true
+                                    }
+                                }">是否列表显示</th>
+                        <th data-options="field:'dict_sql',width:150,editor:'textbox'">字典sql</th>
+                        <th data-options="field:'order_num',width:60,align:'center',editor:'textbox'">顺序</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="tb" style="height:auto">
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">增加</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+            </div>
+            <script type="text/javascript">
+        
+                var editIndex = undefined;
+                function endEditing(){
+                    if (editIndex == undefined){return true}
+                    if ($('#dg').datagrid('validateRow', editIndex)){
+                        //var ed = $('#dg').datagrid('getEditor', {index:editIndex,field:'productid'});
+                        //var productname = $(ed.target).combobox('getText');
+                        //$('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
+                        //$('#dg').datagrid('endEdit', editIndex);
+                        editIndex = undefined;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                function onClickCell(index, field){
+                    $('#dg').datagrid('selectRow', index).datagrid('beginEdit', index);return;
+                    if (editIndex != index){
+                        if (endEditing()){
+                            $('#dg').datagrid('selectRow', index)
+                                    .datagrid('beginEdit', index);
+                            var ed = $('#dg').datagrid('getEditor', {index:index,field:field});
+                            if (ed){
+                                ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                            }
+                            editIndex = index;
+                        } else {
+                            $('#dg').datagrid('selectRow', editIndex);
+                        }
+                    }
+                }
+                function append(){
+                    if (endEditing()){
+                        $('#dg').datagrid('appendRow',{is_show_list:1});
+                        editIndex = $('#dg').datagrid('getRows').length-1;
+                        $('#dg').datagrid('selectRow', editIndex)
+                                .datagrid('beginEdit', editIndex);
+                    }
+                }
+                function removeit(){
+                    if (editIndex == undefined){return}
+                    $('#dg').datagrid('cancelEdit', editIndex)
+                            .datagrid('deleteRow', editIndex);
+                    editIndex = undefined;
+                }
+                function accept(){
+                    if (endEditing()){
+                        $('#dg').datagrid('acceptChanges');
+                    }
+                }
+                function reject(){
+                    $('#dg').datagrid('rejectChanges');
+                    editIndex = undefined;
+                }
+                function getChanges(){
+                    var rows = $('#dg').datagrid('getChanges');
+                    alert(rows.length+' rows are changed!');
+                }
+            </script>
+        </div>
+        <div title="页面" style="padding:10px">
+            <p style="font-size:14px">开发中</p>
+        </div>
+    </div>
+    </div>
+</div>
+<script>
+top.window.subPage.save = save;
+function save(successFunc) {
+	if($("#zcurdHeadTable").form('validate')) {
+		accept();
+		var param = getParam();
+		param.rowsStr = JSON.stringify($("#dg").datagrid("getRows"));
+		$.post("update", param, function(data) {
+			if(successFunc) {
+				successFunc();
+			}
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+			console.log(parent.datagrid);
+		});
+	}
+}
+function getParam() {
+	return {
+		"model.id": ${model.id},
+		"model.form_name": $(":input[name='form_name']").val(), 
+		"model.table_name": $(":input[name='table_name']").val(), 
+		"model.id_field": $(":input[name='id_field']").val(), 
+		"model.is_auto": $(":checked[name='is_auto']").val()
+	}
+}
+function submitForm(){
+    $('#ff').form('submit');
+}
+function clearForm(){
+    $('#ff').form('clear');
+}
+</script>   
+<#include "/common/foot.html"/>
