@@ -10,8 +10,10 @@ import com.jfinal.core.JFinal;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.zcurd.controller.MenuController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
+import com.zcurd.model.Menu;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 
@@ -35,6 +37,7 @@ public class DemoConfig extends JFinalConfig {
 	public void configRoute(Routes me) {
 		me.add("/zcurd", ZcurdController.class, "/zcurd");
 		me.add("/zcurdHead", ZcurdHeadController.class, "/zcurd");
+		me.add("/menu", MenuController.class, "/zcurd/menu");
 	}
 	
 	/**
@@ -51,6 +54,7 @@ public class DemoConfig extends JFinalConfig {
 		me.add(arp);
 		arp.addMapping("zcurd_head", ZcurdHead.class);
 		arp.addMapping("zcurd_field", ZcurdField.class);
+		arp.addMapping("sys_menu", Menu.class);
 	}
 	
 	/**

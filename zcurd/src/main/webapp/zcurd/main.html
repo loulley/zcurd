@@ -9,6 +9,7 @@
 <script type="text/javascript" src="../js/jquery-easyui/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery-easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 <style type="text/css">
 body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";}
 .head{background: #09C; font-size: 14px; color: white; height: 50px; line-height: 50px; padding: 0px 8px;}
@@ -38,7 +39,7 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 <div data-options="region:'west',split:true, border:false" style="width:185px;background-color: #293038;color:white">
 	<div class="zsy_menu">
 		<div class="menu_head">菜单导航</div>
-        <ul class="easyui-tree" data-options="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
+        <ul id="menuTree" class="easyui-tree1" data-options1="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
             <li data-options="">
                 <span>在线表单</span>
                 <ul>
@@ -90,7 +91,48 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 <script type="text/javascript">
 $(function() {
 	$("#loadFloat").remove();
+	
+	//加载菜单
+	loadTree();
 });
+
+//加载菜单
+function loadTree() {
+	$.post("../menu/listAll", function(data) {
+		var menulist = [];
+		$.each(data, function(i, item) {
+			menulist.push({
+				id: item.id,
+				text: item.menu_name,
+				attributes: item.menu_url, 
+				parent_id: item.parent_id,
+				iconCls: item.icon
+			});
+		});
+		
+		for(var i = 0; i < menulist.length; i++) {
+			var children = menulist[i].children || [];
+			for(var j = 0; j < menulist.length; j++) {
+				if(menulist[j].parent_id == menulist[i].id) {
+					children.push(menulist[j]);
+				}
+			}
+			menulist[i].children = children;
+		}
+		
+		var treeData = [];
+		$.each(menulist, function(i, item) {
+			if(item.parent_id == 0) {
+				treeData.push(item);
+			}
+		});
+		$("#menuTree").tree({
+			data: treeData,
+			onBeforeSelect: treeBeforeSelect, 
+			onSelect: treeSelect
+		});
+	});
+}
 
 var subPage = {};
 function openWindow(title, url) {
@@ -163,22 +205,25 @@ mainTabs.tabs({
 });
 
 function treeBeforeSelect(node) {
-    if(node.children) {
+    if(node.children && node.children.length > 0) {
         if(node.state == "open") {
             $(this).tree("collapse", node.target);
         }else {
             $(this).tree("expand", node.target);
         }
         return false;
-    }    
+    } 
 }
 function treeSelect(node) {
-    var href = node.attributes;
-    $("#mainTabs").tabs('add',{
-        title:node.text,
-        content:'<iframe src="' + href + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
-        closable:true
-    });
+    if(!mainTabs.tabs("exists", node.text)) {
+    	$("#mainTabs").tabs('add',{
+            title:node.text,
+            content:'<iframe id="tabs' + node.id + '" src="' + node.attributes + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
+            closable:true
+        });
+    }else {
+    	mainTabs.tabs("select", node.text);
+    }
 }
 </script>
 </body>
