@@ -51,9 +51,6 @@
                         <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
                         <th data-options="field:'data_type',width:80,align:'right',editor:{type:'textbox',required:true}">数据类型</th>
                         <th data-options="field:'is_show_list',width:80,align:'right',
-                                formatter:function(value,row){
-                                    return value;
-                                },
                                 editor:{
                                     type:'combobox',
                                     options:{
@@ -63,6 +60,26 @@
                                         required:true
                                     }
                                 }">是否列表显示</th>
+                        <th data-options="field:'is_search',width:80,align:'right',
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        required:true
+                                    }
+                                }">是否搜索</th>
+                        <th data-options="field:'search_type',width:80,align:'right',
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'值'}, {value:'2', text:'范围'}],
+                                        required:true
+                                    }
+                                }">搜索类型</th>          
                         <th data-options="field:'dict_sql',width:150,editor:'textbox'">字典sql</th>
                         <th data-options="field:'order_num',width:60,align:'center',editor:'textbox'">顺序</th>
                     </tr>

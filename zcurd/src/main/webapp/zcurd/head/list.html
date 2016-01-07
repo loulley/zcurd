@@ -1,12 +1,11 @@
 <#include "/common/head.html"/>
-
-    <table id="dg" class="easyui-datagrid" 
-            data-options="
+<script type="text/javascript" src="${basePath}/js/ZeroClipboard/ZeroClipboard.min.js"></script>
+    <table id="dg" class="easyui-datagrid1" 
+            data-options1="
             	rownumbers:true,
             	fit:true,
             	border:false,
             	rownumbers:true,
-            	
             	url:'listData',
             	method:'get',
             	toolbar:'#tb',
@@ -19,6 +18,11 @@
                 <th data-options="field:'id_field',width:120">主键字段</th>
                 <th data-options="field:'is_auto',width:120">是否自增</th>
                 <th data-options="field:'create_time',width:120">创建时间</th>
+                <th data-options="field:'operate',width:120,
+                	formatter: function(value, row, index){
+						return '<a class=operate href=### onclick=preview(' + index + ')>预览</a><a class=operate data-clipboard-target=fe_text href=### onclick=copyUrl(this, ' + index + ')>复制地址</a>';
+					}
+                ">操作</th>
             </tr>
         </thead>
     </table>
@@ -69,9 +73,60 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
     </div>
-
 <script type="text/javascript">
 var datagrid = $("#dg");
+$(function() {
+	datagrid.datagrid({
+		rownumbers:true,
+    	fit:true,
+    	border:false,
+    	rownumbers:true,
+    	url:'listData',
+    	method:'get',
+    	toolbar:'#tb',
+    	pagination:true,
+    	columns:[[
+	    	{field:'id', checkbox:true},
+	    	{field:'form_name', title: '表单名称', width:120},
+	    	{field:'table_name', title: '数据库表名', width:120},
+	        {field:'id_field', title: '主键字段', width:120},
+	        {field:'is_auto', title: '是否自增', width:120},
+	        {field:'create_time', title: '创建时间', width:120},
+	        {field:'operate', title: '操作', width:120, 
+	        	formatter: function(value, row, index){
+				  	return '<a class="operate" href="###" onclick="preview(' + index + ')">预览</a>' + 
+				  		   '<a class="operate" id="copyBtn' + index + '" data-clipboard-target="fe_text' + index + '" href="###" onclick1="copyUrl(this, ' + index + ')">复制地址</a>';
+			  	} 
+	        }
+	    ]],
+	    onLoadSuccess: function(data) {
+	    	//处理复制
+	    	$.each(datagrid.datagrid("getRows"), function(i) {
+	    		copyUrl($("#copyBtn" + i).get(0), i);
+	    	});
+	    }
+	});
+});
+
+//预览
+function preview(index) {
+	var row = datagrid.datagrid("getRows")[index];
+	top.window.addMainTab("[预览]" + row.form_name, "../zcurd/listPage?headId=" + row.id);
+}
+
+//复制地址
+function copyUrl(obj, index) {
+	var row = datagrid.datagrid("getRows")[index];
+	$('<textarea id="fe_text' + index + '"></textarea>').text("../zcurd/listPage?headId=" + row.id).hide().appendTo("body");
+	var clip = new ZeroClipboard(obj, {
+  		moviePath: "${basePath}/js/ZeroClipboard/ZeroClipboard.swf"
+	});
+	clip.on('complete', function(client, args) {
+		showMsg("复制成功, 内容为：" + args.text)
+	});
+}
+
+//搜索
 function zcurdSearch() {
 	var param = zcurdGetParam();
 	log(param);

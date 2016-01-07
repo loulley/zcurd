@@ -39,7 +39,7 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 <div data-options="region:'west',split:true, border:false" style="width:185px;background-color: #293038;color:white">
 	<div class="zsy_menu">
 		<div class="menu_head">菜单导航</div>
-        <ul id="menuTree" class="easyui-tree1" data-options1="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
+        <ul id="menuTree" class="easyui-tree" data-options="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
             <li data-options="">
                 <span>在线表单</span>
                 <ul>
@@ -75,7 +75,7 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 	<a href="###" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="alert('最大化，开发中...')"></a>
 </div>
 
-<div id="w" class="easyui-window" title="Window Layout" data-options="iconCls:'icon-save',closed:true,modal:true" style="width:750px;height:500px;padding:0px;">
+<div id="w">
     <div class="easyui-layout" data-options="fit:true,border:false">
         <div data-options="region:'center',border:false" style="padding:0px;">
             <iframe src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
@@ -93,7 +93,7 @@ $(function() {
 	$("#loadFloat").remove();
 	
 	//加载菜单
-	loadTree();
+	//loadTree();
 });
 
 //加载菜单
@@ -135,13 +135,16 @@ function loadTree() {
 }
 
 var subPage = {};
-function openWindow(title, url) {
+function openWindow(title, url, options) {
+	options = options || [];
 	$("#w iframe").attr("src", url);
     $("#w").window({
     	closed:false,
     	modal:true,
     	iconCls:'icon-save',
-    	title: title || '增加'
+    	title: title || '增加',
+    	width: options.width || 700,
+    	height: options.height || 450
     });
 }
 function closeWindow() {
@@ -215,14 +218,21 @@ function treeBeforeSelect(node) {
     } 
 }
 function treeSelect(node) {
-    if(!mainTabs.tabs("exists", node.text)) {
+	addMainTab(node.text, node.attributes);
+}
+
+/**
+ * 增加一个主窗口
+ */
+function addMainTab(text, url) {
+	if(!mainTabs.tabs("exists", text)) {
     	$("#mainTabs").tabs('add',{
-            title:node.text,
-            content:'<iframe id="tabs' + node.id + '" src="' + node.attributes + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
+            title: text,
+            content:'<iframe src="' + url + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
             closable:true
         });
     }else {
-    	mainTabs.tabs("select", node.text);
+    	mainTabs.tabs("select", text);
     }
 }
 </script>
