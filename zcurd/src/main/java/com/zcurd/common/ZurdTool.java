@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Record;
 
-public class zurdTool {
+public class ZurdTool {
 	
 	public static List<Map<String, Object>> listRecord2ListMap(List<Record> listRecord) {
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();

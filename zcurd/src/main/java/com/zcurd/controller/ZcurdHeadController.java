@@ -11,7 +11,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.zcurd.common.CommonController;
-import com.zcurd.common.zurdTool;
+import com.zcurd.common.ZurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
@@ -79,7 +79,7 @@ public class ZcurdHeadController extends CommonController {
 		int rowCount = Db.queryLong("select count(*) from information_schema.TABLES a" + sqlWhere).intValue();
 		
 		String sqllimit = " limit " + (pageNumber - 1) * pageSize + ", " + pageSize;
-		List<Map<String, Object>> list = zurdTool.listRecord2ListMap(Db.find("select * from information_schema.TABLES a " + sqlWhere + " order by a.CREATE_TIME desc " + sqllimit));
+		List<Map<String, Object>> list = ZurdTool.listRecord2ListMap(Db.find("select * from information_schema.TABLES a " + sqlWhere + " order by a.CREATE_TIME desc " + sqllimit));
 		
 		int totalPage = rowCount / pageSize;
 		if(rowCount % pageSize > 0) {
