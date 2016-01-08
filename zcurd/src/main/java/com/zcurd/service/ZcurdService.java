@@ -127,15 +127,22 @@ public class ZcurdService {
 			}
 		}
 		List<ZcurdField> addFieldList = new ArrayList<ZcurdField>();
+		List<ZcurdField> updateFieldList = new ArrayList<ZcurdField>();
 		for (ZcurdField zcurdField : fieldList) {
 			if(!zcurdField.getStr("field_name").equals(head.getStr("id_field"))) {
-				addFieldList.add(zcurdField);
+				if(zcurdField.getInt("is_allow_add") == 1) {
+					addFieldList.add(zcurdField);
+				}
+				if(zcurdField.getInt("is_allow_update") == 1) {
+					updateFieldList.add(zcurdField);
+				}
 			}
 		}
 		map.put("head", head);
 		map.put("fieldList", fieldList);
 		map.put("dictMap", dictMap);
 		map.put("addFieldList", addFieldList);
+		map.put("updateFieldList", updateFieldList);
 		return map;
 	}
 	

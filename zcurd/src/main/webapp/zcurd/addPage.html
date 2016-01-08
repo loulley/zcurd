@@ -4,19 +4,28 @@
     <div style="padding:0px">
     <form id="ff" method="post">
         <table cellpadding="5" width="100%">
+        	<#assign columnSize=head.dialog_size?split("x")[0]?number />
+        	<#if columnSize lt 500>
+        		<#assign columnSize=1 />
+        	<#elseif columnSize gte 500 && columnSize lt 800 >
+       			<#assign columnSize=2 />
+        	<#else>
+        		<#assign columnSize=3 />
+        	</#if>
+        	
            	<#list addFieldList as item>
            		<#assign easyui_type="easyui-textbox" />
 	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
 	        		<#assign easyui_type="easyui-datebox" />
         		</#if>
         		
-           		<#if item_index == 0 || (item_index + 0) % 3 == 0>
+           		<#if item_index == 0 || (item_index + 0) % columnSize == 0>
             <tr>
            		</#if>
-           		<th>${item.column_name}：</th>
+           		<th><span>${item.column_name}：</span></th>
                	<td>
                		<#if item.dict??>
-						<select class="easyui-combobox" name="${item.field_name}">
+						<select class="easyui-combobox" name="${item.field_name}" style="width: 130px;">
 	            			<option></option>
 	            			<#list item.dict.keySet() as key>
 		            				<option value="${key}">${item.dict.get(key)}</option>
@@ -27,15 +36,15 @@
 			        </#if>
            		</td>
            		
-           		<#if item_index != 0 && (item_index + 1) % 3 == 0>
+           		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            		</#if>
            	</#list>
            	<#if addFieldList.size() % 3 != 0>
-           		<#if (3 - addFieldList.size() % 3) == 1>
+           		<#if (3 - addFieldList.size() % columnSize) == 1>
                 <td></td>
 	           	</#if>
-	           	<#if (3 - addFieldList.size() % 3) == 2>
+	           	<#if (3 - addFieldList.size() % columnSize) == 2>
                 <td></td>
                 <td></td>
 	           	</#if>

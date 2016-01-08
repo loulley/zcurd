@@ -136,7 +136,13 @@ function loadTree() {
 
 var subPage = {};
 function openWindow(title, url, options) {
-	options = options || [];
+	log(options);
+	options = options || {};
+	if(options.size && options.size.indexOf("x") >= 0) {
+		options.width = options.size.split("x")[0];
+		options.height = options.size.split("x")[1];
+	}
+	log(options);
 	$("#w iframe").attr("src", url);
     $("#w").window({
     	closed:false,

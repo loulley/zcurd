@@ -65,24 +65,5 @@ public class ZcurdController extends CommonController {
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		zcurdService.delete(getParaToInt("headId"), ids);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/**
-	 * 数据库生成表单
-	 */
-	public void genForm() {
-		String tableName = getPara("tableName");
-		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.genForm("demo_users");
-		
-	}
 
 }

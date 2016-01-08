@@ -18,8 +18,19 @@
                 	<label><input type="radio" class="box" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
                 	<label><input type="radio" class="box" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
                 </td>
-                <th></th>
-                <td></td>
+                <th>弹窗大小:</th>
+                <td>
+                	<input name="dialog_size" value="${model.dialog_size}" class="easyui-combobox" data-options="
+                		valueField: 'id',
+        				textField: 'text',
+                		data:[
+                			{id:'400x300', text:'400x300'}, 
+                			{id:'600x400', text:'600x400'}, 
+                			{id:'800x500', text:'800x500'},
+                			{id:'900x600', text:'900x600'}
+               			]
+               		" />
+                </td>
                 <th></th>
                 <td></td>
             </tr>
@@ -54,7 +65,7 @@
                         <th data-options="field:'field_name',width:100,editor:'textbox'">字段名称</th>
                         <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
                         <th data-options="field:'data_type',width:80,align:'right',editor:{type:'textbox',required:true}">数据类型</th>
-                        <th data-options="field:'is_show_list',width:80,align:'right',
+                        <th data-options="field:'is_show_list',width:60,align:'right',
                                 editor:{
                                     type:'combobox',
                                     options:{
@@ -63,8 +74,28 @@
                                         data: [{value:1, text:'是'}, {value:'0', text:'否'}],
                                         required:true
                                     }
-                                }">是否列表显示</th>
-                        <th data-options="field:'is_search',width:80,align:'right',
+                                }">列表显示</th>
+                        <th data-options="field:'is_allow_add',width:60,align:'right',
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        required:true
+                                    }
+                                }">允许增加</th>
+                        <th data-options="field:'is_allow_update',width:60,align:'right',
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        required:true
+                                    }
+                                }">允许编辑</th>                
+                        <th data-options="field:'is_search',width:60,align:'right',
                                 editor:{
                                     type:'combobox',
                                     options:{
@@ -74,7 +105,7 @@
                                         required:true
                                     }
                                 }">是否搜索</th>
-                        <th data-options="field:'search_type',width:80,align:'right',
+                        <th data-options="field:'search_type',width:60,align:'right',
                                 editor:{
                                     type:'combobox',
                                     options:{
@@ -85,7 +116,7 @@
                                     }
                                 }">搜索类型</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
-                        <th data-options="field:'order_num',width:60,align:'center',editor:'textbox'">顺序</th>
+                        <th data-options="field:'order_num',width:50,align:'center',editor:'textbox'">顺序</th>
                     </tr>
                 </thead>
             </table>
@@ -183,7 +214,8 @@ function getParam() {
 		"model.form_name": $(":input[name='form_name']").val(), 
 		"model.table_name": $(":input[name='table_name']").val(), 
 		"model.id_field": $(":input[name='id_field']").val(), 
-		"model.is_auto": $(":checked[name='is_auto']").val()
+		"model.is_auto": $(":checked[name='is_auto']").val(),
+		"model.dialog_size": $(":input[name='dialog_size']").val()
 	}
 }
 function submitForm(){
