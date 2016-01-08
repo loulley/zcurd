@@ -10,7 +10,7 @@ public class ZcurdField extends Model<ZcurdField> {
 	public static final ZcurdField me = new ZcurdField();
 	
 	public Page<ZcurdField> paginate(int pageNumber, int pageSize, int headId) {
-		return paginate(pageNumber, pageSize, "select * ", "from zcurd_field where head_id=?", new Object[]{headId});
+		return paginate(pageNumber, pageSize, "select * ", "from zcurd_field where head_id=? order by order_num", new Object[]{headId});
 	}
 	
 	public List<ZcurdField> findByHeadId(int headId) {

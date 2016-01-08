@@ -1,7 +1,6 @@
 package com.zcurd.controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.CommonController;
 import com.zcurd.common.zurdTool;
 import com.zcurd.model.ZcurdField;
@@ -27,10 +25,6 @@ public class ZcurdHeadController extends CommonController {
 	
 	//表单列表
 	public void list() {
-		ZcurdHead head = ZcurdHead.me.findById(1);
-		List<ZcurdField> fieldList = ZcurdField.me.findByHeadId(head.getLong("id").intValue());
-		setAttr("head", head);
-		setAttr("fieldList", fieldList);
 		render("head/list.html");
 	}
 	
@@ -102,18 +96,17 @@ public class ZcurdHeadController extends CommonController {
 		renderSuccess();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//删除
+	public void delete() {
+		Integer[] ids = getParaValuesToInt("id[]");
+		for (Integer id : ids) {
+			ZcurdHead.me.deleteById(id);
+			Db.update("delete from zcurd_field where head_id=?", id);
+		}
+		renderSuccess();
+	}
 	
 	public void listField() {
-		renderDatagrid(ZcurdField.me.paginate(getParaToInt("page", 1), getParaToInt("rows", 100), getParaToInt("head_id")));
+		renderDatagrid(ZcurdField.me.paginate(getParaToInt("page", 1), getParaToInt("rows", 500), getParaToInt("head_id")));
 	}
 }

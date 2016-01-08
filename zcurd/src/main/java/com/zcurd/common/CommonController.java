@@ -27,5 +27,18 @@ public class CommonController extends Controller {
 		result.put("result", "success");
 		renderJson(result);
 	}
+	
+	public void renderFailed(String msg) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("result", "fail");
+		result.put("msg", msg);
+		renderJson(result);
+	}
+	
+	public void renderFailed() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("result", "fail");
+		renderJson(result);
+	}
 
 }

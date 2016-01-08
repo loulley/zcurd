@@ -39,7 +39,7 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 <div data-options="region:'west',split:true, border:false" style="width:185px;background-color: #293038;color:white">
 	<div class="zsy_menu">
 		<div class="menu_head">菜单导航</div>
-        <ul id="menuTree" class="easyui-tree" data-options="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
+        <ul id="menuTree" class="easyui-tree1" data-options1="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
             <li data-options="">
                 <span>在线表单</span>
                 <ul>
@@ -61,7 +61,7 @@ body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "Dej
 <div data-options="region:'center', border:false">
     <div id="mainTabs" style="height:250px">
         <div title="首页">
-            <iframe src="../zcurd/listPage?headId=121" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+            <iframe src="${basePath}/zcurd/listPage?headId=130" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
         </div>
     </div>
 </div>
@@ -93,7 +93,7 @@ $(function() {
 	$("#loadFloat").remove();
 	
 	//加载菜单
-	//loadTree();
+	loadTree();
 });
 
 //加载菜单
@@ -104,7 +104,7 @@ function loadTree() {
 			menulist.push({
 				id: item.id,
 				text: item.menu_name,
-				attributes: item.menu_url, 
+				attributes: '${basePath}' + item.menu_url, 
 				parent_id: item.parent_id,
 				iconCls: item.icon
 			});

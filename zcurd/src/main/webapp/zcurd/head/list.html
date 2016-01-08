@@ -1,31 +1,7 @@
 <#include "/common/head.html"/>
 <script type="text/javascript" src="${basePath}/js/ZeroClipboard/ZeroClipboard.min.js"></script>
-    <table id="dg" class="easyui-datagrid1" 
-            data-options1="
-            	rownumbers:true,
-            	fit:true,
-            	border:false,
-            	rownumbers:true,
-            	url:'listData',
-            	method:'get',
-            	toolbar:'#tb',
-            	pagination:true">
-        <thead>
-            <tr>
-            	<th data-options="field:'id',checkbox:true"></th>
-                <th data-options="field:'form_name',width:120">表单名称</th>
-                <th data-options="field:'table_name',width:120">数据库表名</th>
-                <th data-options="field:'id_field',width:120">主键字段</th>
-                <th data-options="field:'is_auto',width:120">是否自增</th>
-                <th data-options="field:'create_time',width:120">创建时间</th>
-                <th data-options="field:'operate',width:120,
-                	formatter: function(value, row, index){
-						return '<a class=operate href=### onclick=preview(' + index + ')>预览</a><a class=operate data-clipboard-target=fe_text href=### onclick=copyUrl(this, ' + index + ')>复制地址</a>';
-					}
-                ">操作</th>
-            </tr>
-        </thead>
-    </table>
+
+    <table id="dg"></table>
     <div id="tb" style="padding:2px 5px;">
         <div class="wrap_search">
             <span class="search_item">
@@ -57,8 +33,9 @@
             </span>
         </div>
         <div style="text-align: left; margin:6px;">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">编辑</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="genForm()">生成表单</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">编辑</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-clear" plain="true" onclick="del()">删除</a>
             <div style="float:right; padding-right:40px;">
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search">重置</a>
@@ -66,13 +43,6 @@
         </div>
     </div>
 
-    <div id="ft" style="padding:2px 5px;">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="alert('增加')"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
-    </div>
 <script type="text/javascript">
 var datagrid = $("#dg");
 $(function() {
@@ -91,11 +61,11 @@ $(function() {
 	    	{field:'table_name', title: '数据库表名', width:120},
 	        {field:'id_field', title: '主键字段', width:120},
 	        {field:'is_auto', title: '是否自增', width:120},
-	        {field:'create_time', title: '创建时间', width:120},
+	        {field:'create_time', title: '创建时间', width:130},
 	        {field:'operate', title: '操作', width:120, 
 	        	formatter: function(value, row, index){
 				  	return '<a class="operate" href="###" onclick="preview(' + index + ')">预览</a>' + 
-				  		   '<a class="operate" id="copyBtn' + index + '" data-clipboard-target="fe_text' + index + '" href="###" onclick1="copyUrl(this, ' + index + ')">复制地址</a>';
+				  		   '<a class="operate" id="copyBtn' + index + '" data-clipboard-target="fe_text' + index + '" href="###">复制地址</a>'; 
 			  	} 
 	        }
 	    ]],
@@ -117,12 +87,31 @@ function preview(index) {
 //复制地址
 function copyUrl(obj, index) {
 	var row = datagrid.datagrid("getRows")[index];
-	$('<textarea id="fe_text' + index + '"></textarea>').text("../zcurd/listPage?headId=" + row.id).hide().appendTo("body");
+	$('#fe_text' + index).remove();
+	$('<textarea id="fe_text' + index + '"></textarea>').text("/zcurd/listPage?headId=" + row.id).hide().appendTo("body");
 	var clip = new ZeroClipboard(obj, {
   		moviePath: "${basePath}/js/ZeroClipboard/ZeroClipboard.swf"
 	});
 	clip.on('complete', function(client, args) {
 		showMsg("复制成功, 内容为：" + args.text)
+	});
+}
+
+//删除
+function del() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length < 1) {
+		showWarnMsg("请选择需要删除的数据！");
+		return;
+	}
+	confirmMsg("确认删除？", function() {
+		$.post("delete", {id: ids}, function(data) {
+			showMsg("删除成功！");
+			datagrid.datagrid("load");
+		});
 	});
 }
 
@@ -155,7 +144,7 @@ function update() {
 		datagrid.datagrid("load");
 	}
 	var id = rowsSel[0].id;
-	top.openWindow("编辑", "updatePage?id=" + id);
+	top.openWindow("编辑", "updatePage?id=" + id, {width: 800, height: 600});
 }
 
 function genForm() {
@@ -163,10 +152,6 @@ function genForm() {
 		datagrid.datagrid("load");
 	}
 	top.openWindow("生成表单", "genFormPage");
-}
-
-function log(obj) {
-	console.log(obj);
 }
 </script>
 

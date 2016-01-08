@@ -25,28 +25,32 @@
             </tr>
         </table>
     </form>
-    <div class="easyui-tabs" data-options="border:false" style="height:500px;">
+    <div class="easyui-tabs" data-options="border:false" style="height:450px;">
         <div title="数据">
-            <table id="dg" class="easyui-datagrid" style="height:700px;" 
+            <table id="dg" class="easyui-datagrid" style="height:450px;" 
                     data-options="
+                    	rownumbers:true,
                         fit: true,
                         border: false,
-                        iconCls: 'icon-edit',
-                        singleSelect: true,
                         toolbar: '#tb',
                         url: 'listField?head_id=${model.id}',
                         method: 'get',
                         onClickCell: onClickCell,
                         onLoadSuccess: function(data) {
-                            setTimeout(function(){
-                                for(var i = 0; i < data.rows.length; i++) {
-                                    $('#dg').datagrid('beginEdit', i);
-                                }
-                            }, 200); 
+                        	if(data.total < 20) {
+	                        	setTimeout(function(){
+	                                for(var i = 0; i < data.rows.length; i++) {
+	                                    $('#dg').datagrid('beginEdit', i);
+	                                }
+	                            }, 200); 
+                        	}else {
+                        		showMsg('字段数量超出了我的想象，默认不打开编辑模式！');
+                        	}
                         }
                     ">
                 <thead>
                     <tr>
+                    	<th data-options="field:'id', checkbox:true"></th>
                         <th data-options="field:'field_name',width:100,editor:'textbox'">字段名称</th>
                         <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
                         <th data-options="field:'data_type',width:80,align:'right',editor:{type:'textbox',required:true}">数据类型</th>
@@ -80,7 +84,7 @@
                                         required:true
                                     }
                                 }">搜索类型</th>          
-                        <th data-options="field:'dict_sql',width:150,editor:'textbox'">字典sql</th>
+                        <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
                         <th data-options="field:'order_num',width:60,align:'center',editor:'textbox'">顺序</th>
                     </tr>
                 </thead>
@@ -130,9 +134,9 @@
                     }
                 }
                 function removeit(){
-                    if (editIndex == undefined){return}
-                    $('#dg').datagrid('cancelEdit', editIndex)
-                            .datagrid('deleteRow', editIndex);
+                	$.each($("#dg").datagrid("getSelections"), function(i, item) {
+                		$('#dg').datagrid('deleteRow', $("#dg").datagrid("getRowIndex", item));
+                	});
                     editIndex = undefined;
                 }
                 function accept(){
@@ -151,7 +155,7 @@
             </script>
         </div>
         <div title="页面" style="padding:10px">
-            <p style="font-size:14px">开发中</p>
+            <p style="font-size:14px">开发中...</p>
         </div>
     </div>
     </div>

@@ -7,8 +7,9 @@
             	border:false,
             	rownumbers:true,
             	url:'listData?headId=${headId}',
-            	method:'get',
+            	method:'post',
             	toolbar:'#tb',
+            	pageSize: 20,
             	pagination:true">
         <thead>
             <tr>
@@ -71,14 +72,6 @@
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search">重置</a>
             </div>
         </div>
-    </div>
-
-    <div id="ft" style="padding:2px 5px;">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="alert('增加')"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
     </div>
 
 <script type="text/javascript">

@@ -177,6 +177,9 @@ public class ZcurdService {
 		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA='zcurd' and a.table_name=?";
 		Record dbHead = Db.findFirst(sqlHead, new String[]{tableName});
 		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME")).set("form_name", dbHead.getStr("TABLE_COMMENT"));
+		if(StringUtil.isEmpty(head.getStr("form_name"))) {
+			head.set("form_name", head.getStr("table_name"));
+		}
 		head.save();
 		
 		String sql = "select * from information_schema.columns a where a.`TABLE_SCHEMA`='zcurd' and a.table_name=?";
@@ -185,6 +188,10 @@ public class ZcurdService {
 			String column_name = record.getStr("COLUMN_COMMENT");
 			if(StringUtil.isEmpty(column_name)) {
 				column_name = record.getStr("COLUMN_NAME");
+			}
+			//主键
+			if("PRI".equals(record.getStr("COLUMN_KEY"))) {
+				head.set("id_field", record.getStr("COLUMN_NAME")).update();
 			}
 			new ZcurdField()
 				.set("head_id", head.getLong("id").intValue())
