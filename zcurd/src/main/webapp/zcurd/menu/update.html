@@ -1,0 +1,101 @@
+<#include "/common/head.html"/>
+
+ <div id="zcurdTable" class="easyui-panel" data-options="fit:true,border:false">
+    <div style="padding:0px">
+    <form id="ff" method="post">
+        <table cellpadding="5" width="100%">
+            <tr>
+           		<th>菜单名称：</th>
+               	<td>
+            		<input class="easyui-textbox"  data-options="required:true" type="text" name="menu_name" value="${model.menu_name!}"></input>
+           		</td>
+           		<th>菜单地址：</th>
+               	<td>
+            		<input class="easyui-textbox" type="text" name="menu_url" value="${model.menu_url!}"></input>
+           		</td>
+            </tr>
+        	<tr>
+           		<th>上级菜单：</th>
+               	<td>
+            		<input id="parent_id" class="easyui-textbox" type="text" name="parent_id" value="${model.parent_id!}"></input>
+           		</td>
+           		<th>图标：</th>
+               	<td>
+            		<input class="easyui-textbox" type="text" name="icon" value="${model.icon!}"></input>
+           		</td>
+            </tr>
+            <tr>
+           		<th>顺序：</th>
+               	<td>
+            		<input class="easyui-textbox" type="text" name="order_num" value="${model.order_num!}"></input>
+           		</td>
+           		<th></th>
+               	<td></td>
+            </tr>
+        </table>
+    </form>
+    </div>
+</div>
+<script>
+$(function() {
+	//上级菜单
+	$.post("../menu/listAll", function(data) {
+		var menulist = [];
+		$.each(data, function(i, item) {
+			menulist.push({
+				id: item.id,
+				text: item.menu_name,
+				attributes: '/zcurd' + item.menu_url, 
+				parent_id: item.parent_id,
+				iconCls: item.icon
+			});
+		});
+		
+		for(var i = 0; i < menulist.length; i++) {
+			var children = menulist[i].children || [];
+			for(var j = 0; j < menulist.length; j++) {
+				if(menulist[j].parent_id == menulist[i].id) {
+					children.push(menulist[j]);
+				}
+			}
+			menulist[i].children = children;
+		}
+		
+		var treeData = [];
+		$.each(menulist, function(i, item) {
+			if(item.parent_id == 0) {
+				treeData.push(item);
+			}
+		});
+		$("#parent_id").combotree({
+			data: treeData
+		});
+	});
+});
+
+top.window.subPage.save = save;
+function save(successFunc) {
+	if($("#zcurdTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			if(successFunc) {
+				successFunc();
+			}
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+		"model.id": ${model.id},
+   	    "model.menu_name": $(":input[name='menu_name']").val(), 
+  	    "model.menu_url": $(":input[name='menu_url']").val(), 
+  	    "model.parent_id": $(":input[name='parent_id']").val(), 
+  	    "model.icon": $(":input[name='icon']").val(), 
+   	    "model.order_num": $(":input[name='order_num']").val(), 
+   	 	"model.create_time": '${model.create_time!}'
+	}
+	return param;
+}
+</script>
+<#include "/common/foot.html"/>
