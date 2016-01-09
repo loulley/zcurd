@@ -6,7 +6,7 @@ import com.zcurd.model.Menu;
 public class MenuController extends CommonController {
 	
 	public void listAll() {
-		renderJson(Menu.me.find("select * from sys_menu"));
+		renderJson(Menu.me.find("select * from sys_menu order by order_num asc"));
 	}
 
 	public void list() {
