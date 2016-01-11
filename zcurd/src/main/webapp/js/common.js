@@ -5,7 +5,7 @@ if(!top.window.subPage) {
 
 $(function() {
 	//去掉加载页面时，遮挡的div
-	$("#loadFloat").remove();
+	//$("#loadFloat").remove();
 	$("body").css("visibility", "visible");
 });
 

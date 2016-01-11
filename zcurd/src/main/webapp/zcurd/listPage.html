@@ -1,7 +1,7 @@
 <#include "/common/head.html"/>
 
-    <table id="dg" class="easyui-datagrid" 
-            data-options="
+    <table id="dg" 
+            data-options1="
             	rownumbers:true,
             	fit:true,
             	border:false,
@@ -13,7 +13,7 @@
             	pagination:true">
         <thead>
             <tr>
-            	<th data-options="field:'${head.id_field}',checkbox:true"></th>
+            	<th data-options1="field:'${head.id_field}',checkbox:true"></th>
 				<#list fieldList as item>
            		<#if item.is_show_list == 1 && item.field_name != head.id_field>
 				<th data-options="field:'${item.field_name}',width:${item.column_length}">${item.column_name}</th>
@@ -30,12 +30,16 @@
 		            	<span class="search_item">
 			            	<span class="item_text">${item.column_name}: </span>
 			            	<span class="item_obj">
-			            		<select class="easyui-combobox" name="${item.field_name}" style="width:100px">
-			            			<option></option>
-			            			<#list item.dict.keySet() as key>
-			            				<option value="${key}">${item.dict.get(key)}</option>
-			            			</#list>
-			            		</select>
+			            		<input class="easyui-combobox" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:100px" data-options="
+			            				valueField: 'id',
+        								textField: 'text',
+			            				data: [
+			            					{id:'', text:''}
+			            					<#list item.dict.keySet() as key>
+			            					,{id:${key}, text:'${item.dict.get(key)}'}
+					            			</#list>
+			            				]
+			            			" />
 			            	</span>    
 			            </span>
 			        <#else>
@@ -48,14 +52,14 @@
 			        		<span class="search_item search_between">
 				                <span class="item_text">${item.column_name}: </span>
 				                <span class="item_obj">
-				                    <input class="${easyui_type}" name="_start_${item.field_name}"/> ～ <input class="${easyui_type}" name="_end_${item.field_name}"/>
+				                    <input class="${easyui_type}" name="_start_${item.field_name}" value="${queryPara[item.field_name!]!}"/> ～ <input class="${easyui_type}" name="_end_${item.field_name}" value="${queryPara[item.field_name!]!}"/>
 				                </span>
 				            </span>
 			            <#else>
 			            	<span class="search_item">
 				            	<span class="item_text">${item.column_name}: </span>
 				            	<span class="item_obj">
-				            		<input class="${easyui_type}" type="text" name="${item.field_name}" />
+				            		<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}"/>
 				            	</span>    
 				            </span>
 			        	</#if>
@@ -76,9 +80,33 @@
 
 <script type="text/javascript">
 var datagrid = $("#dg");
+var initPara = zcurdGetParam();
+$(function() {
+	var param = getInitParam();
+	datagrid.datagrid({
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData?headId=${headId}',
+    	method:'post',
+    	toolbar:'#tb',
+    	pageSize: 20,
+    	pagination:true,
+        queryParams: param,
+        columns: [[
+		         {field:'${head.id_field}', checkbox:true}
+				 <#list fieldList as item>
+	           	 <#if item.is_show_list == 1 && item.field_name != head.id_field>
+	           	 ,{field:'${item.field_name}', title: '${item.column_name}', width:${item.column_length}}
+	           	 </#if>
+	             </#list>
+	           ]]
+	});
+});
+
 function zcurdSearch() {
 	var param = zcurdGetParam();
-	log(param);
 	datagrid.datagrid("load", {
 		queryParams: param
 	})
@@ -94,12 +122,22 @@ function zcurdGetParam() {
 	return param;
 }
 
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	return param;
+}
+
 function add() {
 	top.window.subPage.loadCurrDatagrid = function() {
 		showMsg("增加成功！");
 		datagrid.datagrid("load");
 	}
-	top.openWindow("${head.form_name}-增加", "../zcurd/addPage?headId=${head.id}", {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-增加", "../zcurd/addPage?headId=${head.id}&" + $.param(initPara), {size: '${head.dialog_size!}'});
 }
 
 function update() {

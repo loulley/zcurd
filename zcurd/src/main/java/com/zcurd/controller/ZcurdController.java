@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.jfinal.aop.Duang;
 import com.zcurd.common.CommonController;
+import com.zcurd.common.ZurdTool;
 import com.zcurd.service.ZcurdService;
 
 public class ZcurdController extends CommonController {
@@ -14,6 +15,7 @@ public class ZcurdController extends CommonController {
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
 		setAttrs(metaMap);
+		setAttr("queryPara", ZurdTool.getQueryPara(getParaMap()));
 	}
 	
 	public void listData() {
@@ -30,6 +32,7 @@ public class ZcurdController extends CommonController {
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
 		setAttrs(metaMap);
+		setAttr("queryPara", ZurdTool.getQueryPara(getParaMap()));
 	}
 	
 	//增加

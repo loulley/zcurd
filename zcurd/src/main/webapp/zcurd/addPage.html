@@ -25,14 +25,18 @@
            		<th><span>${item.column_name}：</span></th>
                	<td>
                		<#if item.dict??>
-						<select class="easyui-combobox" name="${item.field_name}" style="width: 130px;">
-	            			<option></option>
-	            			<#list item.dict.keySet() as key>
-		            				<option value="${key}">${item.dict.get(key)}</option>
-	            			</#list>
-		            		</select>		        	
+	            		<input class="easyui-combobox" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
+	            				valueField: 'id',
+   								textField: 'text',
+	            				data: [
+	            					{id:'', text:''}
+	            					<#list item.dict.keySet() as key>
+	            					,{id:${key}, text:'${item.dict.get(key)}'}
+			            			</#list>
+	            				]
+	            			" />        	
 			        <#else>
-               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="" data-options="required:false" style="width: 130px;"></input>
+               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="required:false" style="width: 130px;"></input>
 			        </#if>
            		</td>
            		

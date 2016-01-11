@@ -10,13 +10,14 @@
 .tree-node-selected{background: #0099cc; color: white;}
 .left{background-color: #293038;}
 .menu_head{height: 30px;line-height: 30px;background: #394555;color: #aeb9c2;text-align: center;}
+.layout-expand-north, .layout-expand-west{height: 0px;}
 </style>
 
-<div class="easyui-layout" data-options="fit:true">
-	<div data-options="region:'north',border:false" style="height:50px;">
+<div id="layout" class="easyui-layout" data-options="fit:true, border:false">
+	<div data-options="region:'north',border:false, collapsedSize:0" style="height:50px;">
 		<div class="head">厂商后台</div>
 	</div>
-	<div data-options="region:'west',split:true, border:false" style="width:185px;background-color: #293038;color:white">
+	<div id="west" data-options="region:'west',split:true, border:false, collapsedSize:0" style="width:185px;background-color: #293038;color:white">
 		<div class="zsy_menu">
 			<div class="menu_head">菜单导航</div>
 	        <ul id="menuTree" class="easyui-tree1" data-options1="onBeforeSelect:treeBeforeSelect, onSelect:treeSelect">
@@ -54,7 +55,7 @@
     <div data-options="iconCls:'icon-cross'" type="closeAll">关闭所有</div>
 </div>
 <div id="tabTools" style="border: 0px; border-bottom: 1px solid #95B8E7;">
-	<a href="###" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="alert('最大化，开发中...')"></a>
+	<a id="fullScreen" href="###" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="fullScreen(this)"></a>
 </div>
 
 <#include "/common/dialogWindow.html"/>

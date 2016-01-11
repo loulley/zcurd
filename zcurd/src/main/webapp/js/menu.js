@@ -130,3 +130,18 @@ function addMainTab(text, url) {
     	mainTabs.tabs("select", text);
     }
 }
+
+/**
+ * 全屏
+ */
+function fullScreen() {
+	if($("#fullScreen").find(".icon-search").length > 0) {
+		$("#layout").layout('expand', 'west').layout('expand', 'north');
+		$("#fullScreen").find(".icon-save").removeClass("icon-search");
+	}else {
+		$("#layout").layout('collapse', 'north').layout('collapse', 'west');
+		$("#fullScreen").find(".icon-save").addClass("icon-search");
+		$(".layout-expand").hide();
+	}
+	
+}
