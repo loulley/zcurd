@@ -13,7 +13,7 @@
                 <td><input class="easyui-textbox" type="text" name="id_field" value="${model.id_field}" data-options="required:true"></input></td>
             </tr>
             <tr>
-                <th>是否自增</th>
+                <th>是否自增：</th>
                 <td>
                 	<label><input type="radio" class="box" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
                 	<label><input type="radio" class="box" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
@@ -114,7 +114,8 @@
                                         data: [{value:1, text:'值'}, {value:'2', text:'范围'}],
                                         required:true
                                     }
-                                }">搜索类型</th>          
+                                }">搜索类型</th>        
+                        <th data-options="field:'column_length',width:40,editor:'textbox'">列宽</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
                         <th data-options="field:'order_num',width:50,align:'center',editor:'textbox'">顺序</th>
                     </tr>

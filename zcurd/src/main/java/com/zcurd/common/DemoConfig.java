@@ -17,6 +17,8 @@ import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
+import com.zcurd.model.ZcurdHeadBtn;
+import com.zcurd.model.ZcurdHeadJs;
 
 import freemarker.template.TemplateModelException;
 
@@ -57,6 +59,8 @@ public class DemoConfig extends JFinalConfig {
 		me.add(arp);
 		arp.addMapping("zcurd_head", ZcurdHead.class);
 		arp.addMapping("zcurd_field", ZcurdField.class);
+		arp.addMapping("zcurd_head_btn", ZcurdHeadBtn.class);
+		arp.addMapping("zcurd_head_js", ZcurdHeadJs.class);
 		arp.addMapping("sys_menu", Menu.class);
 	}
 	

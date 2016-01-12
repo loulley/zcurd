@@ -86,5 +86,12 @@ function getParam() {
 	}
 	return param;
 }
+
+//扩展js
+<#list jsList as item>
+	<#if item.page == "add">
+${item.js_content!};
+	</#if>
+</#list>
 </script>
 <#include "/common/foot.html"/>

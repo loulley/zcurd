@@ -11,6 +11,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.StringUtil;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
+import com.zcurd.model.ZcurdHeadBtn;
+import com.zcurd.model.ZcurdHeadJs;
 
 public class ZcurdService {
 	
@@ -107,7 +109,7 @@ public class ZcurdService {
 	
 	public Map<String, Object> getDictData(String dictSql) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<Record> listRecord = Db.find("select 'key', 'text' union all " + dictSql);
+		List<Record> listRecord = Db.find("select 'key', 'text' union all select * from (" + dictSql + ") a");
 		for (int i = 1; i < listRecord.size(); i++) {
 			Record record = listRecord.get(i);
 			map.put(record.getStr("key"), record.getStr("text"));
@@ -138,11 +140,33 @@ public class ZcurdService {
 				}
 			}
 		}
+		List<ZcurdHeadBtn> btnList = ZcurdHeadBtn.me.findByHeadId(headId);
+		List<ZcurdHeadBtn> topList = new ArrayList<ZcurdHeadBtn>(); 
+		List<ZcurdHeadBtn> lineList = new ArrayList<ZcurdHeadBtn>(); 
+		for (ZcurdHeadBtn btn : btnList) {
+			if(btn.getInt("location") == 1) {
+				topList.add(btn);
+			}else if(btn.getInt("location") == 2) {
+				lineList.add(btn);
+			}
+		}
+		for (ZcurdHeadBtn btn : btnList) {
+			if(btn.getInt("action") == 1) {
+				head.set("form_type", 2); //设置表单类型为主从
+				break;
+			}
+		}
+		List<ZcurdHeadJs> jsList = ZcurdHeadJs.me.findByHeadId(headId);
+		
 		map.put("head", head);
 		map.put("fieldList", fieldList);
 		map.put("dictMap", dictMap);
 		map.put("addFieldList", addFieldList);
 		map.put("updateFieldList", updateFieldList);
+		map.put("btnList", btnList);
+		map.put("topList", topList);
+		map.put("lineList", lineList);
+		map.put("jsList", jsList);
 		return map;
 	}
 	
