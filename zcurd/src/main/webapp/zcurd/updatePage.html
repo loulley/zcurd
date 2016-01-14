@@ -31,6 +31,8 @@
             				<option value="${key}" <#if model[item.field_name]?? && (model[item.field_name] + "")==key>selected</#if> >${item.dict.get(key)}</option>
 	            			</#list>
 		            		</select>	
+			        <#elseif item.data_type=='text'>
+			        	<textarea name="${item.field_name}" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
 			        <#else>
                			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="required:false" style="width: 130px;"></input>
 			        </#if>

@@ -85,12 +85,13 @@ var dgOptions = {
     	toolbar:'#tb',
     	pageSize: 20,
     	pagination:true,
+    	multiSort:true,
         queryParams: getInitParam(),
         columns: [[
 		         {field:'${head.id_field}', checkbox:true}
 				 <#list fieldList as item>
 	           	 <#if item.is_show_list == 1 && item.field_name != head.id_field>
-	           	 ,{field:'${item.field_name}', title: '${item.column_name}', width:${item.column_length}}
+	           	 ,{field:'${item.field_name}', title: '${item.column_name}', width:${item.column_length}, sortable: true}
 	           	 </#if>
 	             </#list>
 	             <#if lineList.size() gt 0>
@@ -143,7 +144,7 @@ function add() {
 		showMsg("增加成功！");
 		datagrid.datagrid("load");
 	}
-	top.openWindow("${head.form_name}-增加", "../zcurd/addPage?headId=${head.id}&" + $.param(initPara), {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-增加", "${basePath}/zcurd/addPage?headId=${head.id}&" + $.param(initPara), {size: '${head.dialog_size!}'});
 }
 
 function update() {
@@ -157,7 +158,7 @@ function update() {
 		showMsg("更新成功！");
 		datagrid.datagrid("load");
 	}
-	top.openWindow("${head.form_name}-编辑", "../zcurd/updatePage?headId=${head.id}&id=" + id, {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-编辑", "${basePath}/zcurd/updatePage?headId=${head.id}&id=" + id, {size: '${head.dialog_size!}'});
 }
 
 function del() {

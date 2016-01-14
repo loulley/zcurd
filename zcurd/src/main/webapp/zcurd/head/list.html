@@ -36,6 +36,8 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="genForm()">生成表单</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">编辑</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-clear" plain="true" onclick="del()">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="extendBtn()">扩展按钮</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="extendJs()">扩展JS</a>
             <div style="float:right; padding-right:40px;">
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search">重置</a>
@@ -113,6 +115,36 @@ function del() {
 			datagrid.datagrid("load");
 		});
 	});
+}
+
+/**
+ * 扩展按钮
+ */
+function extendBtn() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length != 1) {
+		showWarnMsg("请选择一条数据！");
+		return;
+	}
+	top.addMainTab("扩展按钮", "${basePath}/zcurd/listPage?headId=137&head_id=" + ids[0]);
+}
+
+/**
+ * 扩展JS
+ */
+function extendJs() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length != 1) {
+		showWarnMsg("请选择一条数据！");
+		return;
+	}
+	top.addMainTab("扩展按钮", "${basePath}/zcurd/listPage?headId=138&head_id=" + ids[0]);
 }
 
 //搜索

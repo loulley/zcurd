@@ -21,16 +21,25 @@ public class ZcurdService {
 		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
 		@SuppressWarnings("unchecked")
 		Map<String, Map<String, Object>> dictMap = (Map<String, Map<String, Object>>) mapmeta.get("dictMap");
-		//System.out.println(dictMap);
 		
 		List<Object> paras = new ArrayList<Object>();
 		String sqlWhere = convertParaMap2SqlWhere(paraMap, paras);
 		
 		String sqlFrom = " from " + head.getStr("table_name");
 		String sqllimit = " limit " + (pageNumber - 1) * pageSize + ", " + pageSize;
+		String sqlOrderBy = " order by " + head.getStr("id_field") + " desc ";
+		
+		if(paraMap.get("sort") != null && paraMap.get("sort").length > 0) {
+			String[] sort = paraMap.get("sort")[0].split(",");
+			String[] order = paraMap.get("order")[0].split(",");
+			sqlOrderBy = " order by " + sort[0] + " " + order[0];
+			for (int i = 1; i < sort.length; i++) {
+				sqlOrderBy += ", " + sort[i] + " " + order[i];
+			}
+		}
 		
 		int rowCount = Db.queryLong("select count(*) " + sqlFrom + sqlWhere, paras.toArray()).intValue();
-		List<Record> listRecord = Db.find("select * " + sqlFrom + sqlWhere + " order by " + head.getStr("id_field") + " desc " + sqllimit, paras.toArray());
+		List<Record> listRecord = Db.find("select * " + sqlFrom + sqlWhere + sqlOrderBy + sqllimit, paras.toArray());
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		for (Record record : listRecord) {
 			Map<String, Object> rowMap = record.getColumns();

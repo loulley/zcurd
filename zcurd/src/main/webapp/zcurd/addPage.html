@@ -35,6 +35,8 @@
 			            			</#list>
 	            				]
 	            			" />        	
+			        <#elseif item.data_type=='text'>
+			        	<textarea name="${item.field_name}" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
 			        <#else>
                			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="required:false" style="width: 130px;"></input>
 			        </#if>

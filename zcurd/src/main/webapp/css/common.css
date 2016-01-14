@@ -12,3 +12,8 @@ table th{font-weight: normal; color: #383838; text-align: right;}
 table th span{display: inline-block; width: 100px;}
 .add_content input.box{width: 13px;}
 .datagrid-btable .operate{padding: 2px;}
+textarea {border: 1px solid rgb(149, 184, 231); border-radius: 4px;	}
+
+/**弹窗遮布背景**/
+.window-proxy-mask, .window-mask {background: #464646;}
+.window-mask{filter: alpha(opacity=60);opacity: 0.6;}
