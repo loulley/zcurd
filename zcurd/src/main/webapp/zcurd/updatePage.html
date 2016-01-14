@@ -2,7 +2,7 @@
 
  <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
     <div style="padding:0px">
-    <form id="ff" method="post">
+    <form id="ff" class="easyui-form" method="post">
         <table cellpadding="5" width="100%">
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
@@ -25,16 +25,16 @@
            		<th><span>${item.column_name}：</span></th>
                	<td>
                		<#if item.dict??>
-				        <select class="easyui-combobox" name="${item.field_name}" style="width: 130px;">
+				        <select class="easyui-combobox" data-options="<#if item.is_allow_null==0>required:true</#if>" name="${item.field_name}" style="width: 130px;">
 	            			<option value=""></option>
 	            			<#list item.dict.keySet() as key>
             				<option value="${key}" <#if model[item.field_name]?? && (model[item.field_name] + "")==key>selected</#if> >${item.dict.get(key)}</option>
 	            			</#list>
 		            		</select>	
 			        <#elseif item.data_type=='text'>
-			        	<textarea name="${item.field_name}" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
+			        	<textarea name="${item.field_name}" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
 			        <#else>
-               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="required:false" style="width: 130px;"></input>
+               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
 			        </#if>
            		</td>
            		

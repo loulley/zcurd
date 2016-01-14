@@ -1,8 +1,8 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+ <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
     <div style="padding:0px">
-    <form id="ff" method="post">
+    <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
         <table cellpadding="5" width="100%">
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
@@ -34,11 +34,12 @@
 	            					,{id:${key}, text:'${item.dict.get(key)}'}
 			            			</#list>
 	            				]
+	            				<#if item.is_allow_null==0>,required:true</#if>
 	            			" />        	
 			        <#elseif item.data_type=='text'>
-			        	<textarea name="${item.field_name}" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
+			        	<textarea name="${item.field_name}" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 130px;"></textarea>
 			        <#else>
-               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="required:false" style="width: 130px;"></input>
+               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
 			        </#if>
            		</td>
            		
@@ -63,14 +64,13 @@
 <script>
 top.window.subPage.save = save;
 function save(successFunc) {
-	if($("#zcurdHeadTable").form('validate')) {
+	if($("#ff").form('enableValidation').form('validate')) {
 		$.post("add", getParam(), function(data) {
 			if(successFunc) {
 				successFunc();
 			}
 			top.window.closeWindow();
 			top.window.subPage.loadCurrDatagrid();
-			console.log(parent.datagrid);
 		});
 	}
 }

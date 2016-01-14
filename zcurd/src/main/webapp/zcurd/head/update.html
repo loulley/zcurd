@@ -114,7 +114,17 @@
                                         data: [{value:1, text:'值'}, {value:'2', text:'范围'}],
                                         required:true
                                     }
-                                }">搜索类型</th>        
+                                }">搜索类型</th> 
+                        <th data-options="field:'is_allow_null',width:60,align:'right',
+                                editor:{
+                                    type:'combobox',
+                                    options:{
+                                        valueField:'value',
+                                        textField:'text',
+                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        required:true
+                                    }
+                                }">允许为空</th>               
                         <th data-options="field:'column_length',width:40,editor:'textbox'">列宽</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
                         <th data-options="field:'order_num',width:50,align:'center',editor:'textbox'">顺序</th>

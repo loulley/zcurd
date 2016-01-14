@@ -233,12 +233,16 @@ public class ZcurdService {
 			if("PRI".equals(record.getStr("COLUMN_KEY"))) {
 				head.set("id_field", record.getStr("COLUMN_NAME")).update();
 			}
-			new ZcurdField()
+			ZcurdField field = new ZcurdField()
 				.set("head_id", head.getLong("id").intValue())
 				.set("field_name", record.getStr("COLUMN_NAME"))
 				.set("column_name", column_name)
-				.set("data_type", record.getStr("DATA_TYPE"))
-				.save();
+				.set("data_type", record.getStr("DATA_TYPE"));
+			//不允许为空
+			if("NO".equals(record.getStr("IS_NULLABLE"))) {
+				field.set("is_allow_null", 0);
+			}
+			field.save();
 		}
 	}
 
