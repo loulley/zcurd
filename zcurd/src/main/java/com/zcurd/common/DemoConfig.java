@@ -11,6 +11,7 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.FreeMarkerRender;
+import com.zcurd.controller.LoginController;
 import com.zcurd.controller.MenuController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
@@ -40,6 +41,7 @@ public class DemoConfig extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
+		me.add("/login", LoginController.class, "/zcurd/login");
 		me.add("/zcurd", ZcurdController.class, "/zcurd");
 		me.add("/zcurdHead", ZcurdHeadController.class, "/zcurd");
 		me.add("/menu", MenuController.class, "/zcurd/menu");
@@ -62,6 +64,7 @@ public class DemoConfig extends JFinalConfig {
 		arp.addMapping("zcurd_head_btn", ZcurdHeadBtn.class);
 		arp.addMapping("zcurd_head_js", ZcurdHeadJs.class);
 		arp.addMapping("sys_menu", Menu.class);
+		
 	}
 	
 	/**
