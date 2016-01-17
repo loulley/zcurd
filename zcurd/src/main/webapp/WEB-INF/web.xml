@@ -5,6 +5,15 @@
 	id="WebApp_ID" version="2.5">
 
 	<filter>
+		<filter-name>login</filter-name>
+		<filter-class>com.zcurd.filter.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>login</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
 		<filter-name>jfinal</filter-name>
 		<filter-class>com.jfinal.core.JFinalFilter</filter-class>
 		<init-param>

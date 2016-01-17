@@ -55,7 +55,7 @@ public class ZcurdHeadController extends CommonController {
 					for (Object object : jsonObjs) {
 						ZcurdField field = new ZcurdField();
 						field.set("head_id", headId);
-						field.setAttrs((Map<String, Object>)object);
+						field._setAttrs((Map<String, Object>)object);
 						field.save();
 					}
 				}

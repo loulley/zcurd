@@ -1,5 +1,5 @@
 <#include "/common/head.html"/>
-<script type="text/javascript" src="${basePath}/js/menu.js"></script>
+<script type="text/javascript" src="${basePath}/res/js/menu.js"></script>
 
 <style type="text/css">
 .head{background: #09C; font-size: 14px; color: white; height: 50px; line-height: 50px; padding: 0px 8px; overflow: hidden;}
@@ -24,12 +24,12 @@
 			<td width="50%" style="font-size: 14px;">ZCURD 快速开发平台</td>
 			<td width="50%" align="right" style="font-size: 12px;">
 				<div class="easyui-panel rtool" data-options="border:false" style="text-align: right; background: #09C; color: white; margin-top: -1px;">
-			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm1'">515097842</a>
+			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm1'"><#if session['sysUser']??>${session['sysUser'].user_name}<#else>未登陆</#if></a>
 			    </div>
 			    <div id="mm1" style="width:150px;">
 			        <div data-options="iconCls:'icon-edit'">修改密码</div>
 			        <div class="menu-sep"></div>
-			        <div data-options="iconCls:'icon-undo'">退出</div>
+			        <div data-options="iconCls:'icon-undo'" onclick="location.href='${basePath}/login/logout'">退出</div>
 			    </div>
 			</td>
 		</tr></table></div>

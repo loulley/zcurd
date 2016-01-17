@@ -7,6 +7,7 @@ import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
+import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
@@ -16,6 +17,7 @@ import com.zcurd.controller.MenuController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
+import com.zcurd.model.User;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.model.ZcurdHeadBtn;
@@ -64,6 +66,7 @@ public class DemoConfig extends JFinalConfig {
 		arp.addMapping("zcurd_head_btn", ZcurdHeadBtn.class);
 		arp.addMapping("zcurd_head_js", ZcurdHeadJs.class);
 		arp.addMapping("sys_menu", Menu.class);
+		arp.addMapping("sys_user", User.class);
 		
 	}
 	
@@ -71,7 +74,7 @@ public class DemoConfig extends JFinalConfig {
 	 * 配置全局拦截器
 	 */
 	public void configInterceptor(Interceptors me) {
-		
+		me.add(new SessionInViewInterceptor());
 	}
 	
 	/**
