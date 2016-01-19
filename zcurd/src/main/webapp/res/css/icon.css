@@ -17,6 +17,18 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.l-btn-icon, .menu-icon{
+  padding-left: 2px;
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #848484;
+}
+#tb .l-btn-icon {
+	line-height: 14px;	
+}
+
 .glyphicon-asterisk:before {
   content: "\2a";
 }

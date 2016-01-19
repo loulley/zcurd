@@ -135,12 +135,12 @@ function addMainTab(text, url) {
  * 全屏
  */
 function fullScreen() {
-	if($("#fullScreen").find(".icon-search").length > 0) {
+	if($("#fullScreen").find(".glyphicon-screenshot").length > 0) {
 		$("#layout").layout('expand', 'west').layout('expand', 'north');
-		$("#fullScreen").find(".icon-save").removeClass("icon-search");
+		$("#fullScreen").find(".l-btn-icon").addClass("glyphicon-fullscreen").removeClass("glyphicon-screenshot");
 	}else {
 		$("#layout").layout('collapse', 'north').layout('collapse', 'west');
-		$("#fullScreen").find(".icon-save").addClass("icon-search");
+		$("#fullScreen").find(".l-btn-icon").addClass("glyphicon-screenshot").removeClass("glyphicon-fullscreen");
 		$(".layout-expand").hide();
 	}
 	

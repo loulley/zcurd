@@ -66,13 +66,14 @@
 </div>
 
 <div id="tabsMenu">
-    <div data-options="iconCls:'icon-mini-refresh'" type="refresh">刷新</div>
-    <div data-options="iconCls:'icon-applicationdelete'" type="close">关闭</div>
-    <div data-options="iconCls:'icon-cancel'" type="closeOther">关闭其他</div>
-    <div data-options="iconCls:'icon-cross'" type="closeAll">关闭所有</div>
+    <div data-options="iconCls:'glyphicon-refresh'" type="refresh" style="font-size: 12px;">刷新</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'glyphicon-remove'" type="close" style="font-size: 12px;">关闭</div>
+    <div data-options="iconCls:''" type="closeOther">关闭其他</div>
+    <div data-options="iconCls:''" type="closeAll">关闭所有</div>
 </div>
-<div id="tabTools" style="border: 0px; border-bottom: 1px solid #95B8E7;">
-	<a id="fullScreen" href="###" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="fullScreen(this)"></a>
+<div id="tabTools" style="border: 0px; border-bottom: 1px solid #D3D3D3;">
+	<a id="fullScreen" href="###" class="easyui-linkbutton" plain="true" iconCls="glyphicon-fullscreen" onclick="fullScreen(this)"></a>
 </div>
 
 <#include "/common/dialogWindow.html"/>
