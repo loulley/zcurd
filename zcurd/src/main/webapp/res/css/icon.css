@@ -1,9 +1,7 @@
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('glyphicons-halflings-regular.woff2');
-  /*
   src: url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('glyphicons-halflings-regular.woff2') format('woff2'), url('glyphicons-halflings-regular.woff') format('woff'), url('glyphicons-halflings-regular.ttf') format('truetype'), url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-  */
   }
 .glyphicon {
   position: relative;
@@ -13,6 +11,7 @@
   font-style: normal;
   font-weight: normal;
   line-height: 1;
+  font-size: 12px;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,8 +24,7 @@
   -moz-osx-font-smoothing: grayscale;
   color: #848484;
 }
-#tb .l-btn-icon {
-	line-height: 14px;	
+#tb .l-btn-icon {	
 }
 
 .glyphicon-asterisk:before {
