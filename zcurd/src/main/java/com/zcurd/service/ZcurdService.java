@@ -1,11 +1,16 @@
 package com.zcurd.service;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.ICallback;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.StringUtil;
@@ -213,6 +218,52 @@ public class ZcurdService {
 		return sb.toString();
 	}
 	
+	/**
+	 * jdbc方式获取结构信息（关系数据库通用）。有个问题，获取不到表的注释
+	 */
+	public void genFormByMetaData(final String tableName) {
+		Db.execute(new ICallback() {
+			@Override
+			public Object call(Connection conn) throws SQLException {
+				DatabaseMetaData metaData = conn.getMetaData();
+				System.out.println(conn.getCatalog());
+				ResultSet tableRet = metaData.getTables(null, "%", tableName, new String[]{"TABLE"}); 
+				while (tableRet.next())
+					System.out.println(tableRet.getString("REMARKS"));
+
+				String columnName;
+				String columnType;
+				ResultSet colRet = metaData.getColumns(null, "%", tableName, "%");
+				while (colRet.next()) {
+					columnName = colRet.getString("COLUMN_NAME");
+					columnType = colRet.getString("TYPE_NAME");
+					int datasize = colRet.getInt("COLUMN_SIZE");
+					int digits = colRet.getInt("DECIMAL_DIGITS");
+					int nullable = colRet.getInt("NULLABLE");
+					System.out.println(columnName + " " + columnType + " "
+							+ datasize + " " + digits + " " + nullable + " " + colRet.getString("REMARKS"));
+				}
+				
+				ResultSet pkRSet = metaData.getPrimaryKeys(null, null, tableName);
+				while (pkRSet.next()) {
+					System.err.println("****** Comment ******");
+					System.err.println("TABLE_CAT : " + pkRSet.getObject(1));
+					System.err.println("TABLE_SCHEM: " + pkRSet.getObject(2));
+					System.err.println("TABLE_NAME : " + pkRSet.getObject(3));
+					System.err.println("COLUMN_NAME: " + pkRSet.getObject(4));
+					System.err.println("KEY_SEQ : " + pkRSet.getObject(5));
+					System.err.println("PK_NAME : " + pkRSet.getObject(6));
+					System.err.println("****** ******* ******");
+				}
+				
+				ZcurdHead head = new ZcurdHead();
+				head.set("table_name", tableName);
+				
+				return null;
+			}
+		});
+	}
+	
 	public void genForm(String tableName) {
 		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA='zcurd' and a.table_name=?";
 		Record dbHead = Db.findFirst(sqlHead, new String[]{tableName});
@@ -222,8 +273,14 @@ public class ZcurdService {
 		}
 		head.save();
 		
-		String sql = "select * from information_schema.columns a where a.`TABLE_SCHEMA`='zcurd' and a.table_name=?";
-		List<Record> fieldList = Db.find(sql, new String[]{tableName});
+		String dbName = (String) Db.execute(new ICallback() {
+			@Override
+			public Object call(Connection conn) throws SQLException {
+				return conn.getCatalog();
+			}
+		});
+		String sql = "select * from information_schema.columns a where a.TABLE_SCHEMA=? and a.table_name=?";
+		List<Record> fieldList = Db.find(sql, new String[]{dbName, tableName});
 		for (Record record : fieldList) {
 			String column_name = record.getStr("COLUMN_COMMENT");
 			if(StringUtil.isEmpty(column_name)) {

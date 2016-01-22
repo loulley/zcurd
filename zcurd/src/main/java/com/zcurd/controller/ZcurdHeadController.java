@@ -1,5 +1,6 @@
 package com.zcurd.controller;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.ICallback;
 import com.jfinal.plugin.activerecord.Page;
 import com.zcurd.common.CommonController;
 import com.zcurd.common.ZurdTool;
@@ -72,20 +74,16 @@ public class ZcurdHeadController extends CommonController {
 	
 	//生成表单页面
 	public void genFormData() {
-		int pageNumber = getParaToInt("page", 1);
-		int pageSize = getParaToInt("rows", 10);
-		
-		String sqlWhere = " where 1=1 and a.TABLE_SCHEMA='zcurd' ";
-		int rowCount = Db.queryLong("select count(*) from information_schema.TABLES a" + sqlWhere).intValue();
-		
-		String sqllimit = " limit " + (pageNumber - 1) * pageSize + ", " + pageSize;
-		List<Map<String, Object>> list = ZurdTool.listRecord2ListMap(Db.find("select * from information_schema.TABLES a " + sqlWhere + " order by a.CREATE_TIME desc " + sqllimit));
-		
-		int totalPage = rowCount / pageSize;
-		if(rowCount % pageSize > 0) {
-			totalPage = totalPage + 1;
-		}
-		renderDatagrid(new Page<Map<String, Object>>(list, pageNumber, pageSize, totalPage, rowCount));
+		String dbName = (String) Db.execute(new ICallback() {
+			@Override
+			public Object call(Connection conn) throws SQLException {
+				return conn.getCatalog();
+			}
+		});
+		String sql = "select TABLE_SCHEMA, TABLE_TYPE, a.TABLE_NAME, TABLE_COMMENT, CREATE_TIME, ifnull(formCount, 0) as 'formCount' from information_schema.TABLES a left join (" +
+						"select table_name, count(*) as 'formCount' from zcurd_head group by table_name " + 
+					 ") b on a.table_name=b.table_name where a.TABLE_SCHEMA='" + dbName + "' order by formCount";
+		renderDatagrid(Db.find(sql));
 	}
 	
 	//生成表单
