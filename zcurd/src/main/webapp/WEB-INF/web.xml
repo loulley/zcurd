@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 
+	<session-config>  
+        <session-timeout>120</session-timeout>  
+	</session-config> 
+
 	<filter>
 		<filter-name>login</filter-name>
 		<filter-class>com.zcurd.filter.LoginFilter</filter-class>

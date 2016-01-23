@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
 import com.jfinal.plugin.activerecord.Page;
 import com.zcurd.common.CommonController;
+import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.ZurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -51,7 +52,7 @@ public class ZcurdHeadController extends CommonController {
 			public boolean run() throws SQLException {
 				ZcurdHead zcurdHead = getModel(ZcurdHead.class, "model");
 				zcurdHead.update();
-				final long headId = zcurdHead.getLong("id");
+				final Long headId = zcurdHead.getLong("id");
 				Db.update("delete from zcurd_field where head_id=" + headId);
 				if(jsonObjs.size() > 0) {
 					for (Object object : jsonObjs) {
@@ -61,6 +62,7 @@ public class ZcurdHeadController extends CommonController {
 						field.save();
 					}
 				}
+				DbMetaTool.updateMetaData(headId.intValue());
 				return true; 
 			}
 		});
@@ -100,6 +102,7 @@ public class ZcurdHeadController extends CommonController {
 		for (Integer id : ids) {
 			ZcurdHead.me.deleteById(id);
 			Db.update("delete from zcurd_field where head_id=?", id);
+			DbMetaTool.updateMetaData(id);
 		}
 		renderSuccess();
 	}

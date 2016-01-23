@@ -5,7 +5,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +12,10 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.ICallback;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
-import com.zcurd.model.ZcurdHeadBtn;
-import com.zcurd.model.ZcurdHeadJs;
 
 public class ZcurdService {
 	
@@ -108,9 +106,8 @@ public class ZcurdService {
 		for (Integer id : ids) {
 			Db.deleteById(head.getStr("table_name"), head.getStr("id_field"), id);
 		}
+		DbMetaTool.updateMetaData(headId);
 	}
-	
-	
 	
 	
 	public Record get(int headId, int id) {
@@ -121,67 +118,8 @@ public class ZcurdService {
 		return record;
 	}
 	
-	public Map<String, Object> getDictData(String dictSql) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<Record> listRecord = Db.find("select 'key', 'text' union all select * from (" + dictSql + ") a");
-		for (int i = 1; i < listRecord.size(); i++) {
-			Record record = listRecord.get(i);
-			map.put(record.getStr("key"), record.getStr("text"));
-		}
-		return map;
-	}
-	
 	public Map<String, Object> getMetaData(int headId) {
-		ZcurdHead head = ZcurdHead.me.findById(headId);
-		List<ZcurdField> fieldList = ZcurdField.me.findByHeadId(head.getLong("id").intValue());
-		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Map<String, Object>> dictMap = new HashMap<String, Map<String, Object>>();
-		for (ZcurdField zcurdField : fieldList) {
-			if(StringUtil.isNotEmpty(zcurdField.getStr("dict_sql"))) {
-				dictMap.put(zcurdField.getStr("field_name"), getDictData(zcurdField.getStr("dict_sql")));
-				zcurdField.put("dict", getDictData(zcurdField.getStr("dict_sql")));
-			}
-		}
-		List<ZcurdField> addFieldList = new ArrayList<ZcurdField>();
-		List<ZcurdField> updateFieldList = new ArrayList<ZcurdField>();
-		for (ZcurdField zcurdField : fieldList) {
-			if(!zcurdField.getStr("field_name").equals(head.getStr("id_field"))) {
-				if(zcurdField.getInt("is_allow_add") == 1) {
-					addFieldList.add(zcurdField);
-				}
-				if(zcurdField.getInt("is_allow_update") == 1) {
-					updateFieldList.add(zcurdField);
-				}
-			}
-		}
-		List<ZcurdHeadBtn> btnList = ZcurdHeadBtn.me.findByHeadId(headId);
-		List<ZcurdHeadBtn> topList = new ArrayList<ZcurdHeadBtn>(); 
-		List<ZcurdHeadBtn> lineList = new ArrayList<ZcurdHeadBtn>(); 
-		for (ZcurdHeadBtn btn : btnList) {
-			if(btn.getInt("location") == 1) {
-				topList.add(btn);
-			}else if(btn.getInt("location") == 2) {
-				lineList.add(btn);
-			}
-		}
-		for (ZcurdHeadBtn btn : btnList) {
-			if(btn.getInt("action") == 1) {
-				head.set("form_type", 2); //设置表单类型为主从
-				break;
-			}
-		}
-		List<ZcurdHeadJs> jsList = ZcurdHeadJs.me.findByHeadId(headId);
-		
-		map.put("head", head);
-		map.put("fieldList", fieldList);
-		map.put("dictMap", dictMap);
-		map.put("addFieldList", addFieldList);
-		map.put("updateFieldList", updateFieldList);
-		map.put("btnList", btnList);
-		map.put("topList", topList);
-		map.put("lineList", lineList);
-		map.put("jsList", jsList);
-		return map;
+		return DbMetaTool.getMetaData(headId);
 	}
 	
 	public ZcurdHead getHead(int headId) {
