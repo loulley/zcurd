@@ -128,6 +128,8 @@ function addMainTab(text, url) {
         });
     }else {
     	mainTabs.tabs("select", text);
+    	//刷新
+    	mainTabs.tabs('getSelected').panel('panel').find('iframe').attr("src", url)
     }
 }
 

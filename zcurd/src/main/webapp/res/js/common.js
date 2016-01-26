@@ -81,7 +81,6 @@ function openWindow(title, url, options) {
  */
 function closeWindow() {
     $("#dialogWindow").window("close");
-    $("#dialogWindow iframe").attr("src", "#");
 }
 
 
