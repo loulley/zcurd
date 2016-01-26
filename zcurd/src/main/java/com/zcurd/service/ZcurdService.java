@@ -203,20 +203,20 @@ public class ZcurdService {
 	}
 	
 	public void genForm(String tableName) {
-		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA='zcurd' and a.table_name=?";
-		Record dbHead = Db.findFirst(sqlHead, new String[]{tableName});
-		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME")).set("form_name", dbHead.getStr("TABLE_COMMENT"));
-		if(StringUtil.isEmpty(head.getStr("form_name"))) {
-			head.set("form_name", head.getStr("table_name"));
-		}
-		head.save();
-		
 		String dbName = (String) Db.execute(new ICallback() {
 			@Override
 			public Object call(Connection conn) throws SQLException {
 				return conn.getCatalog();
 			}
 		});
+		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA=? and a.table_name=?";
+		Record dbHead = Db.findFirst(sqlHead, new String[]{dbName, tableName});
+		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME")).set("form_name", dbHead.getStr("TABLE_COMMENT"));
+		if(StringUtil.isEmpty(head.getStr("form_name"))) {
+			head.set("form_name", head.getStr("table_name"));
+		}
+		head.save();
+		
 		String sql = "select * from information_schema.columns a where a.TABLE_SCHEMA=? and a.table_name=?";
 		List<Record> fieldList = Db.find(sql, new String[]{dbName, tableName});
 		for (Record record : fieldList) {
@@ -237,6 +237,17 @@ public class ZcurdService {
 			if("NO".equals(record.getStr("IS_NULLABLE"))) {
 				field.set("is_allow_null", 0);
 			}
+			//控件类型
+			String dataType = field.getStr("data_type");
+			String inputType = "easyui-textbox";
+			if(dataType.equals("timestamp") || dataType.equals("date") || dataType.equals("datetime")) {
+				inputType = "easyui-datebox";
+			}else if(dataType.equals("text")) {
+				inputType = "easyui-textbox";	//TODO 扩展支持area和富文本编辑
+			}else if(dataType.endsWith("int") || dataType.equals("long")) {
+				inputType = "easyui-numberspinner";
+			}
+			field.set("input_type", inputType);
 			field.save();
 		}
 	}

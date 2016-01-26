@@ -24,18 +24,16 @@
            		</#if>
            		<th><span>${item.column_name}：</span></th>
                	<td>
-               		<#if item.dict??>
-				        <select class="easyui-combobox" data-options="<#if item.is_allow_null==0>required:true</#if>" name="${item.field_name}" style="width: 130px;">
+               		<#if item.input_type == 'easyui-combobox'>
+               			<select class="easyui-combobox" data-options="<#if item.is_allow_null==0>required:true</#if>" name="${item.field_name}" style="width: 130px;">
 	            			<option value=""></option>
 	            			<#list item.dict.keySet() as key>
             				<option value="${key}" <#if model[item.field_name]?? && (model[item.field_name] + "")==key>selected</#if> >${item.dict.get(key)}</option>
 	            			</#list>
-		            		</select>	
-			        <#elseif item.data_type=='text'>
-			        	<textarea name="${item.field_name}" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 130px;">${model[item.field_name]!''}</textarea>
-			        <#else>
-               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
-			        </#if>
+               			</select>
+               		<#else>
+               			<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
+               		</#if>
            		</td>
            		
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>

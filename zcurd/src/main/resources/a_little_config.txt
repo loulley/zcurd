@@ -2,3 +2,9 @@ jdbcUrl = jdbc:mysql://127.0.0.1/zcurd?characterEncoding=utf8&zeroDateTimeBehavi
 user = root
 password = 123456
 devMode = true
+
+
+#jdbcUrl = jdbc:mysql://sqld.duapp.com:4050/RNgzmIUDlqijbJEoUHYG?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+#user = e3218f67d6a04062977c1e26992bb855
+#password = a62872b13fc7469184d9b8b959a032fa
+#devMode = true

@@ -13,11 +13,6 @@
                 <td><input class="easyui-textbox" type="text" name="id_field" value="${model.id_field}" data-options="required:true"></input></td>
             </tr>
             <tr>
-                <th>是否自增：</th>
-                <td>
-                	<label><input type="radio" class="box" name="is_auto" value="1" <#if model.is_auto==1>checked="checked"</#if> />是</label>
-                	<label><input type="radio" class="box" name="is_auto" value="0" <#if model.is_auto==2>checked="checked"</#if> />否</label>
-                </td>
                 <th>弹窗大小:</th>
                 <td>
                 	<input name="dialog_size" value="${model.dialog_size}" class="easyui-combobox" data-options="
@@ -33,11 +28,12 @@
                 </td>
                 <th></th>
                 <td></td>
+                <th></th>
+                <td></td>
             </tr>
         </table>
     </form>
-    <div class="easyui-tabs" data-options="border:false" style="height:450px;">
-        <div title="数据">
+    	<div class="easyui-panel" data-options="border:false" style="height:450px; border-top-width: 1px;">
             <table id="dg" class="easyui-datagrid" style="height:450px;" 
                     data-options="
                     	rownumbers:true,
@@ -64,48 +60,25 @@
                     	<th data-options="field:'id', checkbox:true"></th>
                         <th data-options="field:'field_name',width:100,editor:'textbox'">字段名称</th>
                         <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
-                        <th data-options="field:'data_type',width:80,align:'right',editor:{type:'textbox',required:true}">数据类型</th>
-                        <th data-options="field:'is_show_list',width:60,align:'right',
-                                editor:{
+                        <th data-options="field:'data_type',width:80,editor:{type:'textbox',required:true}">数据类型</th>
+                        <th data-options="field:'input_type',width:90,
+                        		editor:{
                                     type:'combobox',
                                     options:{
                                         valueField:'value',
                                         textField:'text',
-                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
+                                        data: [{value:'easyui-textbox', text:'textbox'}, {value:'easyui-combobox', text:'combobox'}, 
+                                        	   {value:'easyui-datebox', text:'datebox'},{value:'easyui-datetimebox', text:'datetimebox'},
+                                        	   {value:'easyui-numberspinner', text:'numberspinner'}
+                                        	  ],
                                         required:true
                                     }
-                                }">列表显示</th>
-                        <th data-options="field:'is_allow_add',width:60,align:'right',
-                                editor:{
-                                    type:'combobox',
-                                    options:{
-                                        valueField:'value',
-                                        textField:'text',
-                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
-                                        required:true
-                                    }
-                                }">允许增加</th>
-                        <th data-options="field:'is_allow_update',width:60,align:'right',
-                                editor:{
-                                    type:'combobox',
-                                    options:{
-                                        valueField:'value',
-                                        textField:'text',
-                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
-                                        required:true
-                                    }
-                                }">允许编辑</th>                
-                        <th data-options="field:'is_search',width:60,align:'right',
-                                editor:{
-                                    type:'combobox',
-                                    options:{
-                                        valueField:'value',
-                                        textField:'text',
-                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
-                                        required:true
-                                    }
-                                }">是否搜索</th>
-                        <th data-options="field:'search_type',width:60,align:'right',
+                                }">控件类型</th>
+                        <th data-options="field:'is_show_list',width:60,hidden:true,editor:{type:'checkbox'}">列表显示</th>
+                        <th data-options="field:'is_allow_add',width:60,hidden:true,editor:{type:'checkbox'}">允许增加</th>
+                        <th data-options="field:'is_allow_update',width:60,hidden:true,editor:{type:'checkbox'}">允许编辑</th>                
+                        <th data-options="field:'is_search',width:60,hidden:true,editor:{type:'checkbox'}">是否搜索</th>
+                        <th data-options="field:'search_type',width:60,hidden:true,
                                 editor:{
                                     type:'combobox',
                                     options:{
@@ -115,16 +88,7 @@
                                         required:true
                                     }
                                 }">搜索类型</th> 
-                        <th data-options="field:'is_allow_null',width:60,align:'right',
-                                editor:{
-                                    type:'combobox',
-                                    options:{
-                                        valueField:'value',
-                                        textField:'text',
-                                        data: [{value:1, text:'是'}, {value:'0', text:'否'}],
-                                        required:true
-                                    }
-                                }">允许为空</th>               
+                        <th data-options="field:'is_allow_null',width:60,editor:{type:'checkbox',options:{align:'center'}}">允许为空</th>               
                         <th data-options="field:'column_length',width:40,editor:'textbox'">列宽</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
                         <th data-options="field:'order_num',width:50,align:'center',editor:'textbox'">顺序</th>
@@ -132,6 +96,8 @@
                 </thead>
             </table>
             <div id="tb" style="height:auto">
+			    <a href="###" onclick="showHeadField(1)" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" style="padding: 0px 4px;">数据</a>
+			    <a href="###" onclick="showHeadField(2)" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" style="padding: 0px 4px;">页面</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">增加</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
             </div>
@@ -196,11 +162,7 @@
                 }
             </script>
         </div>
-        <div title="页面" style="padding:10px">
-            <p style="font-size:14px">开发中...</p>
-        </div>
-    </div>
-    </div>
+       </div> 
 </div>
 <script>
 top.window.subPage.save = save;
@@ -234,6 +196,32 @@ function submitForm(){
 }
 function clearForm(){
     $('#ff').form('clear');
+}
+
+var headFieldList = [
+	{field:"field_name", type: 1},
+	{field:"is_allow_null", type: 1},
+	{field:"column_length", type: 1},
+	{field:"dict_sql", type: 1},
+	{field:"order_num", type: 1},
+	{field:"data_type", type: 1},
+	
+	{field:"is_show_list", type: 2},
+	{field:"is_allow_add", type: 2},
+	{field:"is_allow_update", type: 3},
+	{field:"is_search", type: 2},
+	{field:"search_type", type: 2}
+];
+function showHeadField(type) {
+	type = type || 1;
+	var dg = $("#dg");
+	$.each(headFieldList, function(i, item) {
+		if(item.type == type) {
+			dg.datagrid("showColumn", item.field);
+		}else {
+			dg.datagrid("hideColumn", item.field);
+		}
+	});
 }
 </script>   
 <#include "/common/foot.html"/>

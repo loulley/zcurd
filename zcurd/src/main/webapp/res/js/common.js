@@ -32,7 +32,7 @@ function showMsg(msg) {
  */
 function showWarnMsg(msg) {
 	top.window.$.messager.show({
-        title: '警告',
+        title: '错误消息',
         msg: '<div class="messager-icon messager-warning"></div><div style="padding-top: 10px;">' + (msg || "消息内容！") + "</div>",
         timeout: 3000,
         showType: 'slide'
@@ -81,7 +81,41 @@ function openWindow(title, url, options) {
  */
 function closeWindow() {
     $("#dialogWindow").window("close");
-    $("#dialogWindow iframe").attr("src", "#");
 }
 
+
+//扩展easyui-datagrid的edit模式
+$.extend($.fn.datagrid.defaults.editors, {
+	//支持checkbox
+    checkbox: {
+        init: function(container, options){
+        	var align = "center";
+        	if(options && options.align) {
+        		align = options.align;
+        	}
+        	container.attr("align", align);
+            var input = $('<input type="checkbox" class="datagrid-editable-checkbox">').appendTo(container);
+            return input;
+        },
+        destroy: function(target){
+            $(target).remove();
+        },
+        getValue: function(target){
+            return $(target).is(":checked") ? 1 : 0;
+        },
+        setValue: function(target, value){
+        	if(value == 1) {
+        		$(target).click();
+        	}
+        },
+        resize: function(target, width){
+            //$(target)._outerWidth(width);
+        }
+    }
+});
+
+//全局ajax事件处理
+$(window).ajaxError(function(handler){
+	showWarnMsg("操作失败，服务器出现错误！");
+});
 
