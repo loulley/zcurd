@@ -203,20 +203,20 @@ public class ZcurdService {
 	}
 	
 	public void genForm(String tableName) {
-		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA='zcurd' and a.table_name=?";
-		Record dbHead = Db.findFirst(sqlHead, new String[]{tableName});
-		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME")).set("form_name", dbHead.getStr("TABLE_COMMENT"));
-		if(StringUtil.isEmpty(head.getStr("form_name"))) {
-			head.set("form_name", head.getStr("table_name"));
-		}
-		head.save();
-		
 		String dbName = (String) Db.execute(new ICallback() {
 			@Override
 			public Object call(Connection conn) throws SQLException {
 				return conn.getCatalog();
 			}
 		});
+		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA=? and a.table_name=?";
+		Record dbHead = Db.findFirst(sqlHead, new String[]{dbName, tableName});
+		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME")).set("form_name", dbHead.getStr("TABLE_COMMENT"));
+		if(StringUtil.isEmpty(head.getStr("form_name"))) {
+			head.set("form_name", head.getStr("table_name"));
+		}
+		head.save();
+		
 		String sql = "select * from information_schema.columns a where a.TABLE_SCHEMA=? and a.table_name=?";
 		List<Record> fieldList = Db.find(sql, new String[]{dbName, tableName});
 		for (Record record : fieldList) {
