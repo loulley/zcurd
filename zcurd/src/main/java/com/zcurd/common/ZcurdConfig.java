@@ -12,6 +12,7 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.FreeMarkerRender;
+import com.zcurd.common.handler.ZcurdHandler;
 import com.zcurd.controller.LoginController;
 import com.zcurd.controller.MenuController;
 import com.zcurd.controller.ZcurdController;
@@ -28,7 +29,7 @@ import freemarker.template.TemplateModelException;
 /**
  * API引导式配置
  */
-public class DemoConfig extends JFinalConfig {
+public class ZcurdConfig extends JFinalConfig {
 	
 	/**
 	 * 配置常量
@@ -81,6 +82,7 @@ public class DemoConfig extends JFinalConfig {
 	 * 配置处理器
 	 */
 	public void configHandler(Handlers me) {
+		me.add(new ZcurdHandler());
 		
 	}
 	
