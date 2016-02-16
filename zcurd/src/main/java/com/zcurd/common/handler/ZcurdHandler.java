@@ -18,7 +18,7 @@ public class ZcurdHandler extends Handler {
 			String[] params = target.split("/");
 			if(params.length > 3) {
 				target = pre + params[3];
-				//request.getParameterMap().put("headId", new String[]{params[2]});
+				request.setAttribute("headId", params[2]);
 				for (int i = 4; i < params.length; i++) {
 					target += params[i];
 				}

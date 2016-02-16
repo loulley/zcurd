@@ -17,6 +17,10 @@ import com.zcurd.common.StringUtil;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 
+/**
+ * 在线表单相关业务
+ * @author 钟世云 2016.2.5
+ */
 public class ZcurdService {
 	
 	public Page<Map<String, Object>> find(int headId, Map<String, String[]> paraMap, int pageNumber, int pageSize) {

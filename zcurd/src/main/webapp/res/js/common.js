@@ -119,3 +119,11 @@ $(window).ajaxError(function(handler){
 	showWarnMsg("操作失败，服务器出现错误！");
 });
 
+//删除页面没有权限的按钮
+$(function() {
+	if(noAuthBtn) {
+		$.each(noAuthBtn.split(","), function(i, item) {
+			$("." + item).remove();
+		});
+	}
+});

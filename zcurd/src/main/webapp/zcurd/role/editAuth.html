@@ -1,0 +1,74 @@
+<#include "/common/head.html"/>
+
+<div id="cc" class="easyui-layout" data-options="fit:true" style="">
+    <div data-options="region:'west',split:true" title="菜单列表" style="width:300px;">
+       	<ul id="menuTree"></ul>
+    </div>
+    <div data-options="region:'center'">
+    	<div class="easyui-tabs" data-options="border:false,fit:true">
+	        <div title="按钮权限">
+	        	<iframe id="btnIframe" src="${basePath}/zcurd/150/listPage?menu_id=4" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+	        </div>
+	        <div title="数据权限" style="padding:10px">
+	        </div>
+	    </div>
+    </div>
+</div>
+
+<script>
+var menuBtnObj = {};
+var currMenuId = 0;
+
+
+$.post("getAllMenu", function(data) {
+	var menulist = [];
+	$.each(data, function(i, item) {
+		menulist.push({
+			id: item.id,
+			text: item.menu_name,
+			attributes: basePath + item.menu_url, 
+			parent_id: item.parent_id,
+			iconCls: item.icon
+		});
+	});
+	
+	for(var i = 0; i < menulist.length; i++) {
+		var children = menulist[i].children || [];
+		for(var j = 0; j < menulist.length; j++) {
+			if(menulist[j].parent_id == menulist[i].id) {
+				children.push(menulist[j]);
+			}
+		}
+		menulist[i].children = children;
+	}
+	
+	var treeData = [];
+	$.each(menulist, function(i, item) {
+		if(item.parent_id == 0) {
+			treeData.push(item);
+		}
+	});
+	$("#menuTree").tree({
+		data: [{id: 0, text: '全选', children: treeData}],
+		checkbox:true, 
+		onSelect: treeSelect
+	});
+});
+
+function treeSelect(node) {
+	currMenuId = node.id;
+	flushMenuBtnObj();
+	$("#btnIframe").attr("src", "${basePath}/zcurd/150/listPage?menu_id=" + node.id);
+	
+}
+
+function flushMenuBtnObj() {
+	var btnIds = [];
+	$.each(getDgSelections(), function(i, item) {
+		btnIds.push(item.id);
+	});
+	menuBtnObj[currMenuId] = btnIds;
+	log(menuBtnObj);
+}
+</script>
+<#include "/common/foot.html"/>

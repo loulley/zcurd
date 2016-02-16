@@ -7,6 +7,7 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.model.User;
 
 public class CommonController extends Controller {
 	
@@ -47,6 +48,10 @@ public class CommonController extends Controller {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", "fail");
 		renderJson(result);
+	}
+	
+	public User getSessionUser() {
+		return getSessionAttr("sysUser");
 	}
 
 }

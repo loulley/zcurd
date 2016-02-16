@@ -2,7 +2,6 @@ package com.zcurd.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
@@ -11,20 +10,17 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
-import com.jfinal.plugin.activerecord.Page;
 import com.zcurd.common.CommonController;
 import com.zcurd.common.DbMetaTool;
-import com.zcurd.common.ZurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
 
+/**
+ * 表单管理
+ * @author 钟世云 2016.2.5
+ */
 public class ZcurdHeadController extends CommonController {
-	
-	//主页
-	public void main() {
-		render("main.html");
-	}
 	
 	//表单列表
 	public void list() {
