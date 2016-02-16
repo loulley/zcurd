@@ -83,6 +83,25 @@ function closeWindow() {
     $("#dialogWindow").window("close");
 }
 
+/**
+ * 根据对象属性从集合中获得对象
+ * @param list
+ * @param attrName
+ * @param attrValue
+ * @returns	匹配到的第一个对象
+ */
+function getObjFromList(list, attrName, attrValue) {
+	if($.isArray(list)) {
+		for (var i = 0; i < list.length; i++) {
+			var item = list[i];
+			if(item[attrName] == attrValue) {
+				return item;
+			}
+		}
+	}
+	return null;
+}
+
 
 //扩展easyui-datagrid的edit模式
 $.extend($.fn.datagrid.defaults.editors, {

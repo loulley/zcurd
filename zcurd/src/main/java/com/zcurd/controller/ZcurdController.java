@@ -73,6 +73,17 @@ public class ZcurdController extends CommonController {
 		zcurdService.delete(getHeadId(), ids);
 	}
 	
+	//详情页面
+	public void detailPage() {
+		int headId = getHeadId();
+		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
+		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		setAttr("headId", headId);
+		setAttrs(metaMap);
+		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
+		render("detailPage.html");
+	}
+	
 	
 	/**
 	 * 从url中获取headId

@@ -14,7 +14,7 @@ import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 
 /**
- * 登陆相关业务
+ * 登陆、权限业务
  * @author 钟世云 2016.2.5
  */
 public class LoginService {
@@ -80,6 +80,9 @@ public class LoginService {
 		for (MenuBtn menuBtn : userBtnList) {
 			String methodName = menuBtn.getStr("method_name");
 			Menu menu = userMenuMap.get(menuBtn.getInt("menu_id"));
+			if(menu == null) {	//有按钮权限，无菜单权限
+				continue;
+			}
 			String menuUrl = menu.getStr("menu_url");
 			if(StringUtil.isNotEmpty(methodName) && StringUtil.isNotEmpty(menuUrl)) {
 				for (String method : methodName.split(",")) {

@@ -1,13 +1,18 @@
 <#include "/common/head.html"/>
 
-<div id="cc" class="easyui-layout" data-options="fit:true" style="">
-    <div data-options="region:'west',split:true" title="菜单列表" style="width:300px;">
-       	<ul id="menuTree"></ul>
+<div id="cc" class="easyui-layout" data-options="fit:true,border:false" style="">
+    <div data-options="region:'west',split:true,border:false" style="width:250px;">
+    	<div class="easyui-panel" title="菜单列表" data-options="fit:true,border:false,tools:'#tt'">
+	       	<ul id="menuTree"></ul>
+    	</div>
+    	<div id="tt">
+	        <a href="javascript:void(0)" title="保存" class="icon-save" onclick="javascript:saveAuth()"></a>
+	    </div>
     </div>
-    <div data-options="region:'center'">
+    <div data-options="region:'center',border:false">
     	<div class="easyui-tabs" data-options="border:false,fit:true">
 	        <div title="按钮权限">
-	        	<iframe id="btnIframe" src="${basePath}/zcurd/150/listPage?menu_id=4" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
+	        	<iframe id="btnIframe" src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
 	        </div>
 	        <div title="数据权限" style="padding:10px">
 	        </div>
@@ -18,18 +23,62 @@
 <script>
 var menuBtnObj = {};
 var currMenuId = 0;
+var roleId = "${roleId!}";
 
+<#list btnIds as item>
+var oneMenuBtns = menuBtnObj[${item.menu_id}] || [];
+oneMenuBtns.push(${item.id});
+menuBtnObj[${item.menu_id}] = oneMenuBtns;
+</#list>
 
-$.post("getAllMenu", function(data) {
+//保存权限
+function saveAuth() {
+	if(!roleId) {
+		showWarnMsg("请选择角色！");
+		return;
+	}
+	
+	flushMenuBtnObj();
+	//获得选中菜单
+	var menuIds = "";
+	$.each($('#menuTree').tree('getChecked'), function(i, item) {
+		log(item);
+		if(!item.children == undefined || item.children.length == 0) {
+			menuIds += "," + item.id;
+		}
+	});
+	menuIds = menuIds.replace(",", "");
+	//获得选中按钮
+	var btnIds = "";
+	for(key in menuBtnObj) {
+		$.each(menuBtnObj[key], function(i, item) {
+			btnIds += "," + item;
+		});
+	}
+	btnIds = btnIds.replace(",", "");
+	
+	var param = {roleId: roleId, menuIds: menuIds, btnIds: btnIds};
+	$.post("editAuth", param, function(data) {
+		if(data.result == "success") {
+			showMsg("保存成功！");
+		}
+	});
+}
+
+$.post("getAllMenu?roleId=" + roleId, function(data) {
 	var menulist = [];
-	$.each(data, function(i, item) {
-		menulist.push({
+	$.each(data.menuList, function(i, item) {
+		var menu = {
 			id: item.id,
 			text: item.menu_name,
 			attributes: basePath + item.menu_url, 
 			parent_id: item.parent_id,
 			iconCls: item.icon
-		});
+		};
+		if(getObjFromList(data.menuIds, "menu_id", item.id)) {
+			menu.checked = true;
+		}
+		menulist.push(menu);
 	});
 	
 	for(var i = 0; i < menulist.length; i++) {
@@ -51,24 +100,52 @@ $.post("getAllMenu", function(data) {
 	$("#menuTree").tree({
 		data: [{id: 0, text: '全选', children: treeData}],
 		checkbox:true, 
+		onBeforeSelect: treeBeforeSelect, 
 		onSelect: treeSelect
 	});
 });
 
+function treeBeforeSelect(node) {
+    if(node.children && node.children.length > 0) {
+        if(node.state == "open") {
+            $(this).tree("collapse", node.target);
+        }else {
+            $(this).tree("expand", node.target);
+        }
+        return false;
+    } 
+}
+
 function treeSelect(node) {
-	currMenuId = node.id;
 	flushMenuBtnObj();
+	currMenuId = node.id;
 	$("#btnIframe").attr("src", "${basePath}/zcurd/150/listPage?menu_id=" + node.id);
-	
 }
 
 function flushMenuBtnObj() {
 	var btnIds = [];
-	$.each(getDgSelections(), function(i, item) {
+	var data = getDgSelections();
+	if(!data) {
+		return;
+	}
+	$.each(data, function(i, item) {
 		btnIds.push(item.id);
 	});
-	menuBtnObj[currMenuId] = btnIds;
+	if(btnIds.length > 0) {
+		menuBtnObj[currMenuId] = btnIds;
+	}else {
+		delete menuBtnObj[currMenuId];
+	}
 	log(menuBtnObj);
+}
+
+//获得子页选中的按钮，些方法会在子页面中覆盖
+function getDgSelections() {
+	return null;
+}
+
+function getCurrMenuBtns() {
+	return menuBtnObj[currMenuId];
 }
 </script>
 <#include "/common/foot.html"/>

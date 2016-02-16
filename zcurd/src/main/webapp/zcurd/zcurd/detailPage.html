@@ -1,0 +1,88 @@
+<#include "/common/head.html"/>
+
+ <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+    <div style="padding:0px">
+    <form id="ff" class="easyui-form" method="post">
+        <table cellpadding="5" width="100%">
+        	<#assign columnSize=head.dialog_size?split("x")[0]?number />
+        	<#if columnSize lt 500>
+        		<#assign columnSize=1 />
+        	<#elseif columnSize gte 500 && columnSize lt 800 >
+       			<#assign columnSize=2 />
+        	<#else>
+        		<#assign columnSize=3 />
+        	</#if>
+        	
+           	<#list updateFieldList as item>
+           		<#assign easyui_type="easyui-textbox" />
+	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
+	        		<#assign easyui_type="easyui-datebox" />
+        		</#if>
+        		
+           		<#if item_index == 0 || (item_index + 0) % columnSize == 0>
+            <tr>
+           		</#if>
+           		<th><span>${item.column_name}：</span></th>
+               	<td>
+               		<#if item.input_type == 'easyui-combobox'>
+            			<#list item.dict.keySet() as key><#if model[item.field_name]?? && (model[item.field_name] + "")==key>${item.dict.get(key)}</#if></#list>
+               		<#else>
+               			${model[item.field_name]!''}
+               		</#if>
+           		</td>
+           		
+           		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
+            </tr>
+           		</#if>
+           	</#list>
+           	<#if updateFieldList.size() % columnSize != 0>
+           		<#if (3 - updateFieldList.size() % columnSize) == 1>
+                <td></td>
+	           	</#if>
+	           	<#if (3 - updateFieldList.size() % columnSize) == 2>
+                <td></td>
+                <td></td>
+	           	</#if>
+            </tr>
+           	</#if>
+        </table>
+    </form>
+    </div>
+</div>
+<script>
+top.window.subPage.save = save;
+function save(successFunc) {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			if(successFunc) {
+				successFunc();
+			}
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	    "headId": ${headId}, 
+	    "id": ${model[head.id_field]},
+		<#list updateFieldList as item>
+       	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if updateFieldList.size()!=item_index>, </#if>
+		</#list>
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+<#list jsList as item>
+	<#if item.page == "update">
+${item.js_content!};
+	</#if>
+</#list>
+</script>
+<#include "/common/foot.html"/>

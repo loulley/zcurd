@@ -22,7 +22,7 @@ public class Menu extends Model<Menu> {
 			"where a.user_id=? order by c.order_num";
 		return find(sql, userId);
 	}
-
+	
 	public List<Menu> getSubMenuList() {
 		return subMenuList;
 	}

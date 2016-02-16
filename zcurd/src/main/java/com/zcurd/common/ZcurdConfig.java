@@ -49,7 +49,7 @@ public class ZcurdConfig extends JFinalConfig {
 	 */
 	public void configRoute(Routes me) {
 		me.add("/login", LoginController.class, "/zcurd/login");
-		me.add("/zcurd", ZcurdController.class, "/zcurd");
+		me.add("/zcurd", ZcurdController.class, "/zcurd/zcurd");
 		me.add("/zcurdHead", ZcurdHeadController.class, "/zcurd");
 		me.add("/menu", MenuController.class, "/zcurd/menu");
 		me.add("/main", MainController.class, "/zcurd");
