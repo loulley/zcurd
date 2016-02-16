@@ -84,14 +84,14 @@ $(function() {
 //预览
 function preview(index) {
 	var row = datagrid.datagrid("getRows")[index];
-	top.window.addMainTab("[预览]" + row.form_name, "../zcurd/listPage?headId=" + row.id);
+	top.window.addMainTab("[预览]" + row.form_name, "${basePath}/zcurd/" + row.id + "/listPage");
 }
 
 //复制地址
 function copyUrl(obj, index) {
 	var row = datagrid.datagrid("getRows")[index];
 	$('#fe_text' + index).remove();
-	$('<textarea id="fe_text' + index + '"></textarea>').text("/zcurd/listPage?headId=" + row.id).hide().appendTo("body");
+	$('<textarea id="fe_text' + index + '"></textarea>').text("/zcurd/" + row.id + "/listPage").hide().appendTo("body");
 	var clip = new ZeroClipboard(obj, {
   		moviePath: "${basePath}/res/js/ZeroClipboard/ZeroClipboard.swf"
 	});
@@ -130,7 +130,7 @@ function extendBtn() {
 		showWarnMsg("请选择一条数据！");
 		return;
 	}
-	top.addMainTab("扩展按钮", "${basePath}/zcurd/listPage?headId=137&head_id=" + ids[0]);
+	top.addMainTab("扩展按钮", "${basePath}/zcurd/137/listPage?head_id=" + ids[0]);
 }
 
 /**
@@ -145,7 +145,7 @@ function extendJs() {
 		showWarnMsg("请选择一条数据！");
 		return;
 	}
-	top.addMainTab("扩展JS", "${basePath}/zcurd/listPage?headId=138&head_id=" + ids[0]);
+	top.addMainTab("扩展JS", "${basePath}/zcurd/138/listPage?head_id=" + ids[0]);
 }
 
 //搜索
@@ -177,14 +177,14 @@ function update() {
 		datagrid.datagrid("load");
 	}
 	var id = rowsSel[0].id;
-	top.openWindow("编辑", "updatePage?id=" + id, {width: 850, height: 600});
+	top.openWindow("编辑", "${basePath}/zcurdHead/updatePage?id=" + id, {width: 850, height: 600});
 }
 
 function genForm() {
 	top.window.subPage.loadCurrDatagrid = function() {
 		datagrid.datagrid("load");
 	}
-	top.openWindow("生成表单", "genFormPage");
+	top.openWindow("生成表单", "${basePath}/zcurdHead/genFormPage");
 }
 </script>
 

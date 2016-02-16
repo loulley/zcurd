@@ -52,7 +52,7 @@ function login() {
 		$.post("${basePath}/login/login", param, function(data) {
 			if(data.result == "success") {
 				$('#ff').submit();
-				location.href = "zcurdHead/main";
+				location.href = "main";
 			}else {
 				showWarnMsg(data.msg);
 			}

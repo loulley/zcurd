@@ -60,7 +60,7 @@ $(function() {
  * 加载菜单
  */
 function loadTree() {
-	$.post(basePath + "/menu/listAll", function(data) {
+	$.post(basePath + "/login/getMenu", function(data) {
 		var menulist = [];
 		$.each(data, function(i, item) {
 			menulist.push({
@@ -123,7 +123,7 @@ function addMainTab(text, url) {
 	if(!mainTabs.tabs("exists", text)) {
 		mainTabs.tabs('add',{
             title: text,
-            content:'<iframe src="' + url + '" class="easyui-panel" data-options="fit:true,border:false" border="0"></iframe>',
+            content:'<iframe src="' + url + '" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>',
             closable:true
         });
     }else {

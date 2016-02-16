@@ -13,11 +13,15 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.zcurd.common.handler.ZcurdHandler;
+import com.zcurd.common.interceptor.AuthInterceptor;
 import com.zcurd.controller.LoginController;
+import com.zcurd.controller.MainController;
 import com.zcurd.controller.MenuController;
+import com.zcurd.controller.RoleController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
+import com.zcurd.model.MenuBtn;
 import com.zcurd.model.User;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -48,6 +52,8 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/zcurd", ZcurdController.class, "/zcurd");
 		me.add("/zcurdHead", ZcurdHeadController.class, "/zcurd");
 		me.add("/menu", MenuController.class, "/zcurd/menu");
+		me.add("/main", MainController.class, "/zcurd");
+		me.add("/role", RoleController.class, "/zcurd/role");
 	}
 	
 	/**
@@ -67,6 +73,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("zcurd_head_btn", ZcurdHeadBtn.class);
 		arp.addMapping("zcurd_head_js", ZcurdHeadJs.class);
 		arp.addMapping("sys_menu", Menu.class);
+		arp.addMapping("sys_menu_btn", MenuBtn.class);
 		arp.addMapping("sys_user", User.class);
 		
 	}
@@ -76,6 +83,7 @@ public class ZcurdConfig extends JFinalConfig {
 	 */
 	public void configInterceptor(Interceptors me) {
 		me.add(new SessionInViewInterceptor());
+		me.add(new AuthInterceptor());
 	}
 	
 	/**

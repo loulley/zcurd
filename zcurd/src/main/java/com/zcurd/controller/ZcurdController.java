@@ -7,10 +7,14 @@ import com.zcurd.common.CommonController;
 import com.zcurd.common.ZurdTool;
 import com.zcurd.service.ZcurdService;
 
+/**
+ * 在线表单
+ * @author 钟世云 2016.2.5
+ */
 public class ZcurdController extends CommonController {
 	
 	public void listPage() {
-		int headId = getParaToInt("headId");
+		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
@@ -19,7 +23,7 @@ public class ZcurdController extends CommonController {
 	}
 	
 	public void listData() {
-		int headId = getParaToInt("headId");
+		int headId = getHeadId();
 		Map<String, String[]> paraMap = getParaMap();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		renderDatagrid(zcurdService.find(headId, paraMap, getParaToInt("page", 1), getParaToInt("rows", 10)));
@@ -27,7 +31,7 @@ public class ZcurdController extends CommonController {
 	
 	//增加页面
 	public void addPage() {
-		int headId = getParaToInt("headId");
+		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
@@ -39,13 +43,13 @@ public class ZcurdController extends CommonController {
 	public void add() {
 		Map<String, String[]> paraMap = getParaMap();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.add(getParaToInt("headId"), paraMap);
+		zcurdService.add(getHeadId(), paraMap);
 		renderSuccess();
 	}
 	
 	//修改页面
 	public void updatePage() {
-		int headId = getParaToInt("headId");
+		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
@@ -58,7 +62,7 @@ public class ZcurdController extends CommonController {
 	public void update() {
 		Map<String, String[]> paraMap = getParaMap();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.update(getParaToInt("headId"), getParaToInt("id"), paraMap);
+		zcurdService.update(getHeadId(), getParaToInt("id"), paraMap);
 		renderSuccess();
 	}
 	
@@ -66,7 +70,20 @@ public class ZcurdController extends CommonController {
 	public void delete() {
 		Integer[] ids = getParaValuesToInt("id[]");
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.delete(getParaToInt("headId"), ids);
+		zcurdService.delete(getHeadId(), ids);
 	}
+	
+	
+	/**
+	 * 从url中获取headId
+	 */
+	private int getHeadId() {
+		String headId = getAttr("headId");
+		/*if(headId == null) {
+			headId = getPara("headId");
+		}*/
+		return Integer.parseInt(headId);
+	}
+
 
 }
