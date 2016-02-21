@@ -1,6 +1,6 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+ <div id="zcurdHeadTable" class="easyui-panel detail_page update_page" data-options="fit:true,border:false">
     <div style="padding:0px">
     <form id="ff" class="easyui-form" method="post">
         <table cellpadding="5" width="100%">
@@ -24,6 +24,7 @@
            		</#if>
            		<th><span>${item.column_name}：</span></th>
                	<td>
+               	<#if item.is_allow_update == 1>
                		<#if item.input_type == 'easyui-combobox'>
                			<select class="easyui-combobox" data-options="<#if item.is_allow_null==0>required:true</#if>" name="${item.field_name}" style="width: 130px;">
 	            			<option value=""></option>
@@ -34,6 +35,9 @@
                		<#else>
                			<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
                		</#if>
+               	<#else>
+               		<span class="item">${model[item.field_name]!''}</span>	
+               	</#if>	
            		</td>
            		
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
@@ -71,9 +75,9 @@ function getParam() {
 	var param = {
 	    "headId": ${headId}, 
 	    "id": ${model[head.id_field]},
-		<#list updateFieldList as item>
+		<#list updateFieldList as item><#if item.is_allow_update == 1>
        	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if updateFieldList.size()!=item_index>, </#if>
-		</#list>
+		</#if></#list>
 	}
 	for(key in param) {
 		if(!param[key]) {

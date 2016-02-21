@@ -75,8 +75,9 @@
                                     }
                                 }">控件类型</th>
                         <th data-options="field:'is_show_list',width:60,hidden:true,editor:{type:'checkbox'}">列表显示</th>
-                        <th data-options="field:'is_allow_add',width:60,hidden:true,editor:{type:'checkbox'}">允许增加</th>
+                        <th data-options="field:'is_allow_detail',width:60,hidden:true,editor:{type:'checkbox'}">详情显示</th>
                         <th data-options="field:'is_allow_update',width:60,hidden:true,editor:{type:'checkbox'}">允许编辑</th>                
+                        <th data-options="field:'is_allow_add',width:60,hidden:true,editor:{type:'checkbox'}">允许增加</th>
                         <th data-options="field:'is_search',width:60,hidden:true,editor:{type:'checkbox'}">是否搜索</th>
                         <th data-options="field:'search_type',width:60,hidden:true,
                                 editor:{
@@ -206,8 +207,9 @@ var headFieldList = [
 	{field:"data_type", type: 1},
 	
 	{field:"is_show_list", type: 2},
+	{field:"is_allow_detail", type: 2},
+	{field:"is_allow_update", type: 2},
 	{field:"is_allow_add", type: 2},
-	{field:"is_allow_update", type: 3},
 	{field:"is_search", type: 2},
 	{field:"search_type", type: 2}
 ];

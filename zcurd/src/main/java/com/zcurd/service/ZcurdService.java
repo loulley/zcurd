@@ -73,32 +73,28 @@ public class ZcurdService {
 	public void add(int headId, Map<String, String[]> paraMap) {
 		Map<String, Object> mapmeta = getMetaData(headId);
 		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
-		
-		String sql = "insert into " + head.getStr("table_name") + " (";
-		String sqlValues = "(";
-		List<Object> param = new ArrayList<Object>();
-		for (String fieldName : paraMap.keySet()) {
-			if(fieldName.indexOf("model.") >= 0) {
-				param.add(paraMap.get(fieldName)[0]);
-				sql += fieldName.replace("model.", "") + ", ";
-				sqlValues += "?, ";
-			}
-		}
-		sql = sql.replaceAll(", $", "") + ")";
-		sql += " values " + sqlValues.replaceAll(", $", ")");
-		System.out.println(sql);
-		Db.update(sql, param.toArray());
-	}
-	
-	public void update(int headId, int id, Map<String, String[]> paraMap) {
-		Map<String, Object> mapmeta = getMetaData(headId);
-		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
 		List<ZcurdField> addFieldList = (List<ZcurdField>) mapmeta.get("addFieldList");
 
-		Record record = get(headId, id);
+		Record record = new Record();
 		for (ZcurdField field : addFieldList) {
 			String[] paramValues = paraMap.get("model." + field.getStr("field_name"));
 			record.set(field.getStr("field_name"), paramValues == null ? null : paramValues[0]);
+		}
+		Db.save(head.getStr("table_name"), head.getStr("id_field"), record);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void update(int headId, int id, Map<String, String[]> paraMap) {
+		Map<String, Object> mapmeta = getMetaData(headId);
+		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
+		List<ZcurdField> updateFieldList = (List<ZcurdField>) mapmeta.get("updateFieldList");
+
+		Record record = get(headId, id);
+		for (ZcurdField field : updateFieldList) {
+			if(field.getInt("is_allow_update") == 1) {
+				String[] paramValues = paraMap.get("model." + field.getStr("field_name"));
+				record.set(field.getStr("field_name"), paramValues == null ? null : paramValues[0]);
+			}
 		}
 		Db.update(head.getStr("table_name"), head.getStr("id_field"), record);
 	}
