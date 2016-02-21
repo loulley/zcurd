@@ -1,6 +1,5 @@
 <#include "/common/head.html"/>
-
- <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false">
+ <div id="zcurdHeadTable" class="easyui-panel detail_page" data-options="fit:true,border:false">
     <div style="padding:0px">
     <form id="ff" class="easyui-form" method="post">
         <table cellpadding="5" width="100%">
@@ -23,13 +22,13 @@
             <tr>
            		</#if>
            		<th><span>${item.column_name}：</span></th>
-               	<td>
+               	<td><span class="item">
                		<#if item.input_type == 'easyui-combobox'>
             			<#list item.dict.keySet() as key><#if model[item.field_name]?? && (model[item.field_name] + "")==key>${item.dict.get(key)}</#if></#list>
                		<#else>
                			${model[item.field_name]!''}
                		</#if>
-           		</td>
+           		</span></td>
            		
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
@@ -52,35 +51,12 @@
 <script>
 top.window.subPage.save = save;
 function save(successFunc) {
-	if($("#zcurdHeadTable").form('validate')) {
-		$.post("update", getParam(), function(data) {
-			if(successFunc) {
-				successFunc();
-			}
-			top.window.closeWindow();
-			top.window.subPage.loadCurrDatagrid();
-		});
-	}
-}
-function getParam() {
-	var param = {
-	    "headId": ${headId}, 
-	    "id": ${model[head.id_field]},
-		<#list updateFieldList as item>
-       	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if updateFieldList.size()!=item_index>, </#if>
-		</#list>
-	}
-	for(key in param) {
-		if(!param[key]) {
-			delete param[key];
-		}
-	}
-	return param;
+	top.window.closeWindow();
 }
 
 //扩展js
 <#list jsList as item>
-	<#if item.page == "update">
+	<#if item.page == "detail">
 ${item.js_content!};
 	</#if>
 </#list>

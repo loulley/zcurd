@@ -45,7 +45,7 @@ public class DbMetaTool {
 				if(zcurdField.getInt("is_allow_add") == 1) {
 					addFieldList.add(zcurdField);
 				}
-				if(zcurdField.getInt("is_allow_update") == 1) {
+				if(zcurdField.getInt("is_allow_update") == 1 || zcurdField.getInt("is_allow_detail") == 1) {
 					updateFieldList.add(zcurdField);
 				}
 			}

@@ -1,5 +1,4 @@
 <#include "/common/head.html"/>
-<script type="text/javascript" src="${basePath}/js/ZeroClipboard/ZeroClipboard.min.js"></script>
 <div class="easyui-layout" data-options="fit:true, border:false">
 	<div data-options="region:'center', border:false">
 	    <table id="dg"></table>
@@ -49,7 +48,6 @@ $(function() {
 	        {field:'icon', title: '图标', width:100},
 	        {field:'operate', title: '操作', width:120, formatter: 
 	        	function(value, row, index){
-	        		log(row);
 				  	return '<a class="operate" href="###" onclick="menuBtnPage(this)">按钮管理</a>' + 
 				  		   '<a class="operate" href="###" onclick="menuDataRulePage(this)">数据权限</a>'; 
 			  	}
@@ -82,6 +80,12 @@ $(function() {
 
 //按钮管理
 function menuBtnPage(obj) {
+	//点击按钮时，让row变成单选
+	var currIndex = $(obj).parents("tr:first").attr("node-id");
+	datagrid.datagrid("clearSelections");
+	datagrid.datagrid("selectRow", currIndex);
+	event.stopPropagation();
+	
 	var id = $(obj).parents("tr").find(":input[name='id']").val();
 	$("#subIframe").attr("src", "${basePath}/zcurd/136/listPage?menu_id=" + id);
 	

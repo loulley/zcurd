@@ -17,3 +17,6 @@ textarea {border: 1px solid rgb(149, 184, 231); border-radius: 4px;	}
 /**弹窗遮布背景**/
 .window-proxy-mask, .window-mask {background: #464646;}
 .window-mask{filter: alpha(opacity=60);opacity: 0.6;}
+
+.detail_page .item {color:gray; display: inline-block; min-width: 100px; max-width: 180px; word-wrap: break-word; word-break: normal; word-break:break-all; max-height: 100px; 
+	overflow-y: scroll;overflow-x: hidden; }
