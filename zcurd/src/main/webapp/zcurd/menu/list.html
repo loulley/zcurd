@@ -1,6 +1,4 @@
 <#include "/common/head.html"/>
-<div class="easyui-layout" data-options="fit:true, border:false">
-	<div data-options="region:'center', border:false">
 	    <table id="dg"></table>
 	    <div id="tb" style="padding:2px 5px;">
 	        <div class="wrap_search">
@@ -21,11 +19,6 @@
 	            </div>
 	        </div>
 	    </div>
-    </div>
-    <div data-options="region:'east',split:true, border:false" title="按钮列表" style="width:40%">
-    	<iframe id="subIframe" class="easyui-panel" data-options="fit:true,border:false"></iframe>
-    </div>
-</div>    
 <script type="text/javascript">
 var datagrid = $("#dg");
 $(function() {
@@ -45,13 +38,7 @@ $(function() {
 	    	{field:'id', checkbox:true},
 	    	{field:'menu_name', title: '菜单名称', width:140},
 	    	{field:'menu_url', title: '菜单地址', width:120},
-	        {field:'icon', title: '图标', width:100},
-	        {field:'operate', title: '操作', width:120, formatter: 
-	        	function(value, row, index){
-				  	return '<a class="operate" href="###" onclick="menuBtnPage(this)">按钮管理</a>' + 
-				  		   '<a class="operate" href="###" onclick="menuDataRulePage(this)">数据权限</a>'; 
-			  	}
-	        }
+	        {field:'icon', title: '图标', width:100}
 	    ]],
 	    loadFilter: function(data) {
 	    	//转换数据

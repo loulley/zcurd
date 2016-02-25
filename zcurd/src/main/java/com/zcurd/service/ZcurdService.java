@@ -54,10 +54,22 @@ public class ZcurdService {
 				Map<String, Object> dict = (Map<String, Object>) dictMap.get(fieldName);
 				//获取字典值（存在字典，值不为空）
 				if(dict != null && rowMap.get(fieldName) != null) {
-					Object dictValue = dict.get(rowMap.get(fieldName).toString());
+					String fieldValue = rowMap.get(fieldName).toString();
+					Object dictValue = dict.get(fieldValue);
 					if(dictValue != null) {
 						rowMap.put(fieldName, dictValue);
+					}else {
+						//数组情况
+						if(StringUtil.isNotEmpty(fieldValue)) {
+							String dictValues = "";
+							for (String str : fieldValue.split(",")) {
+								dictValues += "," + dict.get(str);
+							}
+							rowMap.put(fieldName, dictValues.replaceAll("^,", ""));
+						}
 					}
+					
+					
 				}
 			}
 			list.add(rowMap);

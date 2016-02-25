@@ -25,7 +25,7 @@
            		<th><span>${item.column_name}：</span></th>
                	<td>
                		<#if item.dict??>
-	            		<input class="easyui-combobox" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
+	            		<input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
 	            				valueField: 'id',
    								textField: 'text',
 	            				data: [

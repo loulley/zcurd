@@ -34,12 +34,12 @@ public class LoginController extends CommonController {
 		if(list.size() > 0) {
 			setSessionAttr("sysUser", list.get(0));
 			//用户菜单
-			setSessionAttr("menuList", loginService.getUserMenu(getSessionUser().getLong("id").intValue()));
+			setSessionAttr("menuList", loginService.getUserMenu(getSessionUser()));
 			//页面权限
 			List<String> noAuthUrl = loginService.getNoAuthUrl();
 			setSessionAttr("noAuthUrl", noAuthUrl);
 			//按钮权限
-			setSessionAttr("noAuthBtnUrl", loginService.getNoAuthBtnUrl());
+			setSessionAttr("noAuthBtnUrl", loginService.getNoAuthBtnUrl(getSessionUser()));
 			if("admin".equals(getSessionUser().get("user_name"))) {
 				setSessionAttr("noAuthUrl", null);
 				setSessionAttr("noAuthBtnUrl", null);
