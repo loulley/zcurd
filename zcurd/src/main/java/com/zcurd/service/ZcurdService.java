@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
+import com.zcurd.common.ZurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 
@@ -50,28 +51,8 @@ public class ZcurdService {
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		for (Record record : listRecord) {
 			Map<String, Object> rowMap = record.getColumns();
-			for (String fieldName : rowMap.keySet()) {
-				Map<String, Object> dict = (Map<String, Object>) dictMap.get(fieldName);
-				//获取字典值（存在字典，值不为空）
-				if(dict != null && rowMap.get(fieldName) != null) {
-					String fieldValue = rowMap.get(fieldName).toString();
-					Object dictValue = dict.get(fieldValue);
-					if(dictValue != null) {
-						rowMap.put(fieldName, dictValue);
-					}else {
-						//数组情况
-						if(StringUtil.isNotEmpty(fieldValue)) {
-							String dictValues = "";
-							for (String str : fieldValue.split(",")) {
-								dictValues += "," + dict.get(str);
-							}
-							rowMap.put(fieldName, dictValues.replaceAll("^,", ""));
-						}
-					}
-					
-					
-				}
-			}
+			//替换成字典中的值
+			ZurdTool.replaceDict(headId, rowMap);
 			list.add(rowMap);
 		}
 		

@@ -1,7 +1,7 @@
 <#include "/common/head.html"/>
 
  <div id="zcurdHeadTable" class="easyui-panel add_content" data-options="fit:true,border:false">
-    <div style="padding:0px">
+    <div style="padding:0px; height: 75px;">
     <form id="ff" method="post">
         <table cellpadding="5" width="100%">
             <tr>
@@ -33,7 +33,8 @@
             </tr>
         </table>
     </form>
-    	<div class="easyui-panel" data-options="border:false" style="height:450px; border-top-width: 1px;">
+    </div>
+    	<div class="easyui-panel" data-options="border:false,fit:true" style="border-top-width: 1px;">
             <table id="dg" class="easyui-datagrid" style="height:450px;" 
                     data-options="
                     	rownumbers:true,
@@ -162,7 +163,6 @@
                     alert(rows.length+' rows are changed!');
                 }
             </script>
-        </div>
        </div> 
 </div>
 <script>

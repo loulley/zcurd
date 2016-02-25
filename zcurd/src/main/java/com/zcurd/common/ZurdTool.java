@@ -15,11 +15,22 @@ public class ZurdTool {
 	public static Map<String, String> getQueryPara(Map<String, String[]> paraMap) {
 		Map<String, String> queryPara = new HashMap<String, String>();
 		for (String paraName : paraMap.keySet()) {
-			/*if(paraName.startsWith("queryParams[")) {
+			queryPara.put(paraName, paraMap.get(paraName)[0]);
+		}
+		return queryPara;
+	}
+	
+	/**
+	 * 获得DataGrid查询参数
+	 */
+	public static Map<String, String> getDataGridQueryPara(Map<String, String[]> paraMap) {
+		Map<String, String> queryPara = new HashMap<String, String>();
+		for (String paraName : paraMap.keySet()) {
+			if(paraName.startsWith("queryParams[")) {
 				String field = paraName.substring(12, paraName.length() - 1);
 				String value = paraMap.get(paraName)[0];
 				queryPara.put(field, value);
-			}*/
+			}
 			queryPara.put(paraName, paraMap.get(paraName)[0]);
 		}
 		return queryPara;
@@ -74,6 +85,46 @@ public class ZurdTool {
 			list.add(record.getColumns());
 		}
 		return list;
+	}
+	
+	/**
+	 * 替换成字典中的值
+	 */
+	public static Map<String, Object> replaceDict(Map<String, Object> dict, Map<String, Object> row, String fieldName) {
+		//获取字典值（存在字典，值不为空）
+		if(dict != null && row.get(fieldName) != null) {
+			String fieldValue = row.get(fieldName).toString();
+			Object dictValue = dict.get(fieldValue);
+			if(dictValue != null) {
+				row.put(fieldName, dictValue);
+			}else {
+				//数组情况
+				if(StringUtil.isNotEmpty(fieldValue)) {
+					String dictValues = "";
+					for (String str : fieldValue.split(",")) {
+						dictValues += "," + dict.get(str);
+					}
+					row.put(fieldName, dictValues.replaceAll("^,", ""));
+				}
+			}
+		}
+		return row;
+	}
+	
+	/**
+	 * 替换成字典中的值
+	 */
+	public static Map<String, Object> replaceDict(int headId, Map<String, Object> row) {
+		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
+		@SuppressWarnings("unchecked")
+		Map<String, Map<String, Object>> dictMap = (Map<String, Map<String, Object>>) mapmeta.get("dictMap");
+		
+		for (String fieldName : dictMap.keySet()) {
+			Map<String, Object> dict = (Map<String, Object>) dictMap.get(fieldName);
+			//替换成字典中的值
+			ZurdTool.replaceDict(dict, row, fieldName);
+		}
+		return row;
 	}
 
 }

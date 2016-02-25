@@ -78,9 +78,10 @@ public class ZcurdController extends CommonController {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		Map<String, Object> row = zcurdService.get(headId, getParaToInt("id")).getColumns();
 		setAttr("headId", headId);
 		setAttrs(metaMap);
-		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
+		setAttr("model", ZurdTool.replaceDict(headId, row));
 		render("detailPage.html");
 	}
 	
@@ -90,9 +91,6 @@ public class ZcurdController extends CommonController {
 	 */
 	private int getHeadId() {
 		String headId = getAttr("headId");
-		/*if(headId == null) {
-			headId = getPara("headId");
-		}*/
 		return Integer.parseInt(headId);
 	}
 

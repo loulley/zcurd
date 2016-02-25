@@ -51,16 +51,16 @@
           	</#list>
         </div>
         <div style="text-align: left; margin:6px;">
-            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
-            <a href="#" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
-            <a href="#" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
-            <a href="#" class="easyui-linkbutton detailBtn" iconCls="glyphicon-book" plain="true" onclick="detail()">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
             <#list topList as item>
             <a href="#" class="easyui-linkbutton" iconCls="'${item.icon!}' || icon-add" plain="true" onclick="btnClick${item.id}(' + index + ')">${item.btn_name}</a>
          	</#list>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
-                <a href="#" class="easyui-linkbutton" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
-                <a href="#" class="easyui-linkbutton" iconCls="glyphicon-repeat">重置</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-repeat">重置</a>
             </div>
         </div>
     </div>
@@ -151,7 +151,7 @@ function add() {
 function update() {
 	var rowsSel = datagrid.datagrid("getSelections");
 	if(rowsSel.length != 1) {
-		showWarnMsg("请选择一条数据！");
+		showWarnMsg("请选择需要编辑的一条数据！");
 		return;
 	}
 	var id = rowsSel[0].${head.id_field};
@@ -182,7 +182,7 @@ function del() {
 function detail() {
 	var rowsSel = datagrid.datagrid("getSelections");
 	if(rowsSel.length != 1) {
-		showWarnMsg("请选择一条数据！");
+		showWarnMsg("请选择需要查看的一条数据！");
 		return;
 	}
 	var id = rowsSel[0].${head.id_field};

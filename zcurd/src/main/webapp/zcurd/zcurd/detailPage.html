@@ -22,14 +22,7 @@
             <tr>
            		</#if>
            		<th><span>${item.column_name}：</span></th>
-               	<td><span class="item">
-               		<#if item.input_type == 'easyui-combobox'>
-            			<#list item.dict.keySet() as key><#if model[item.field_name]?? && (model[item.field_name] + "")==key>${item.dict.get(key)}</#if></#list>
-               		<#else>
-               			${model[item.field_name]!''}
-               		</#if>
-           		</span></td>
-           		
+               	<td><span class="item">${model[item.field_name]!''}</span></td>
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            		</#if>

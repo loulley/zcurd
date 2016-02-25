@@ -33,9 +33,11 @@ public class DbMetaTool {
 		
 		Map<String, Map<String, Object>> dictMap = new HashMap<String, Map<String, Object>>();
 		for (ZcurdField zcurdField : fieldList) {
-			if(StringUtil.isNotEmpty(zcurdField.getStr("dict_sql"))) {
-				dictMap.put(zcurdField.getStr("field_name"), getDictData(zcurdField.getStr("dict_sql")));
-				zcurdField.put("dict", getDictData(zcurdField.getStr("dict_sql")));
+			String dictSql = zcurdField.getStr("dict_sql");
+			if(StringUtil.isNotEmpty(dictSql)) {
+				Map<String, Object> dictData = getDictData(dictSql);
+				dictMap.put(zcurdField.getStr("field_name"), dictData);
+				zcurdField.put("dict", dictData);
 			}
 		}
 		List<ZcurdField> addFieldList = new ArrayList<ZcurdField>();
