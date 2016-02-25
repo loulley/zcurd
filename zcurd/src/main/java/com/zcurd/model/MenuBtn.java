@@ -1,8 +1,10 @@
 package com.zcurd.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Model;
+import com.zcurd.common.StringUtil;
 
 public class MenuBtn extends Model<MenuBtn> {
 	private static final long serialVersionUID = 1L;
@@ -12,12 +14,13 @@ public class MenuBtn extends Model<MenuBtn> {
 		return find("select * from sys_menu_btn");
 	}
 	
-	public List<MenuBtn> findByUserId(int userId) {
-		String sql = "select c.* from sys_user_role a " + 
-					 "left join sys_role_btn b on a.role_id=b.role_id " + 
-					 "left join sys_menu_btn c on b.btn_id=c.id " + 
-				 "where a.user_id=?";
-		return find(sql, userId);
+	public List<MenuBtn> findByUser(User user) {
+		List<MenuBtn> result = new ArrayList<MenuBtn>();
+		String roles = user.getStr("roles");
+		if(StringUtil.isNotEmpty(roles)) {
+			result = find("select distinct b.* from sys_role_btn a join sys_menu_btn b on a.btn_id=b.id where a.role_id in(" + roles + ")");
+		}
+		return result;
 	}
 
 }

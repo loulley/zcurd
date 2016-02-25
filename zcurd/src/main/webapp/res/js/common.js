@@ -102,6 +102,29 @@ function getObjFromList(list, attrName, attrValue) {
 	return null;
 }
 
+function getInputValue(inputName) {
+	var result = "";
+	$(":input[name='" + inputName + "']").each(function(i, item) {
+		result += "," + $(item).val();
+	});
+	return result.replace(",", "");
+}
+
+/**
+ * 使combobox变为多选
+ * @param inputIds 单个id或者数组
+ */
+function changeComboboxToMult(inputIds) {
+	if(!$.isArray(inputIds)) {
+		inputIds = [inputIds];
+	}
+	$.each(inputIds, function(i, item) {
+		var iptObj = $("#" + inputIds);
+		var data = iptObj. combobox("getData").splice(0, 1);
+		iptObj. combobox({multiple:true});
+	});
+}
+
 
 //扩展easyui-datagrid的edit模式
 $.extend($.fn.datagrid.defaults.editors, {

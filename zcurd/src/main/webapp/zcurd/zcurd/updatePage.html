@@ -26,12 +26,17 @@
                	<td>
                	<#if item.is_allow_update == 1>
                		<#if item.input_type == 'easyui-combobox'>
-               			<select class="easyui-combobox" data-options="<#if item.is_allow_null==0>required:true</#if>" name="${item.field_name}" style="width: 130px;">
-	            			<option value=""></option>
-	            			<#list item.dict.keySet() as key>
-            				<option value="${key}" <#if model[item.field_name]?? && (model[item.field_name] + "")==key>selected</#if> >${item.dict.get(key)}</option>
-	            			</#list>
-               			</select>
+               			<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
+               				<#if item.is_allow_null==0>required:true,</#if>
+               				valueField: 'id',
+        					textField: 'text',
+        					data:[
+	                			{id:'', text:''}
+	                			<#list item.dict.keySet() as key>
+	                			,{id:'${key}', text:'${item.dict.get(key)}'}
+		            			</#list>
+	               			]
+               			"/>
                		<#else>
                			<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
                		</#if>
@@ -76,7 +81,7 @@ function getParam() {
 	    "headId": ${headId}, 
 	    "id": ${model[head.id_field]},
 		<#list updateFieldList as item><#if item.is_allow_update == 1>
-       	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if updateFieldList.size()!=item_index>, </#if>
+       	    "model.${item.field_name}": getInputValue("${item.field_name}")<#if updateFieldList.size()!=item_index>, </#if>
 		</#if></#list>
 	}
 	for(key in param) {

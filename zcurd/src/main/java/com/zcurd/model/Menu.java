@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Model;
+import com.zcurd.common.StringUtil;
 
 public class Menu extends Model<Menu> {
 	private static final long serialVersionUID = 1L;
@@ -15,12 +16,13 @@ public class Menu extends Model<Menu> {
 		return find("select * from sys_menu order by order_num asc");
 	}
 	
-	public List<Menu> findByUserId(int userId) {
-		String sql = "select c.* from sys_user_role a " + 
-				"join sys_role_menu b on a.role_id=b.role_id " + 
-				"join sys_menu c on b.menu_id=c.id " + 
-			"where a.user_id=? order by c.order_num";
-		return find(sql, userId);
+	public List<Menu> findByUser(User user) {
+		List<Menu> result = new ArrayList<Menu>();
+		String roles = user.getStr("roles");
+		if(StringUtil.isNotEmpty(roles)) {
+			result = find("select distinct b.* from sys_role_menu a join sys_menu b on a.menu_id=b.id where a.role_id in(" + roles + ")");
+		}
+		return result;
 	}
 	
 	public List<Menu> getSubMenuList() {
