@@ -10,23 +10,25 @@
   font-family: 'Glyphicons Halflings';
   font-style: normal;
   font-weight: normal;
-  line-height: 1;
   font-size: 12px;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.l-btn-icon, .menu-icon{
+.l-btn-icon, .menu-icon, .tree-icon{
   padding-left: 2px;
   font-family: 'Glyphicons Halflings';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #848484;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
 }
-#tb .l-btn-icon {	
+.tree-icon {
+	padding-left: 0px;
 }
-
 .glyphicon-asterisk:before {
   content: "\2a";
 }
