@@ -23,6 +23,7 @@ import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
+import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.User;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -76,6 +77,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("zcurd_head_js", ZcurdHeadJs.class);
 		arp.addMapping("sys_menu", Menu.class);
 		arp.addMapping("sys_menu_btn", MenuBtn.class);
+		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
 		arp.addMapping("sys_user", User.class);
 		
 	}

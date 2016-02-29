@@ -13,7 +13,7 @@
 		            	<span class="search_item">
 			            	<span class="item_text">${item.column_name}: </span>
 			            	<span class="item_obj">
-			            		<input class="easyui-combobox" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:100px" data-options="
+			            		<input class="easyui-combobox" name="${item.field_name}" id="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:100px" data-options="
 			            				valueField: 'id',
         								textField: 'text',
 			            				data: [
@@ -60,7 +60,7 @@
          	</#list>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-repeat">重置</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
             </div>
         </div>
     </div>

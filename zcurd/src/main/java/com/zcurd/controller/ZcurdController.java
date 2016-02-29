@@ -4,7 +4,11 @@ import java.util.Map;
 
 import com.jfinal.aop.Duang;
 import com.zcurd.common.CommonController;
+import com.zcurd.common.DBTool;
+import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZurdTool;
+import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
 
 /**
@@ -24,9 +28,22 @@ public class ZcurdController extends CommonController {
 	
 	public void listData() {
 		int headId = getHeadId();
-		Map<String, String[]> paraMap = getParaMap();
-		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		renderDatagrid(zcurdService.find(headId, paraMap, getParaToInt("page", 1), getParaToInt("rows", 10)));
+		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
+		
+		Object[] queryParams = getQueryParams();
+		String[] properties = (String[]) queryParams[0];
+		String[] symbols = (String[]) queryParams[1];
+		Object[] values = (Object[]) queryParams[2];
+		
+		String orderBy = getOrderBy();
+		if(StringUtil.isEmpty(orderBy)) {
+			orderBy = head.getIdField() + " desc";
+		}
+		
+		renderDatagrid(
+				ZurdTool.replaceDict(headId, DBTool.findByMultProperties(head.getTableName(), properties, symbols, values, orderBy, getPager())), 
+				DBTool.countByMultProperties(head.getTableName(), properties, symbols, values));
 	}
 	
 	//增加页面

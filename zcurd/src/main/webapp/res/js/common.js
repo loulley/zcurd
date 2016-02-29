@@ -2,11 +2,21 @@ if(!top.window.subPage) {
 	top.window.subPage = {};
 }
 
-
 $(function() {
 	//去掉加载页面时，遮挡的div
-	//$("#loadFloat").remove();
 	$("body").css("visibility", "visible");
+	
+	//回车刷新
+	if(!location.href.endsWith("login") && !location.href.endsWith("main")) {
+		document.onkeydown = function() {
+			if(event.keyCode==13) {
+				if(window.zcurdSearch) {
+					zcurdSearch();
+				}
+				return false;                               
+			}
+		}
+	}
 });
 
 function log(obj) {
@@ -81,6 +91,13 @@ function openWindow(title, url, options) {
  */
 function closeWindow() {
     $("#dialogWindow").window("close");
+}
+
+/**
+ * 刷新页面
+ */
+function flushPage() {
+	location.replace(location);
 }
 
 /**

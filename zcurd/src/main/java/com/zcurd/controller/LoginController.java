@@ -40,6 +40,8 @@ public class LoginController extends CommonController {
 			setSessionAttr("noAuthUrl", noAuthUrl);
 			//按钮权限
 			setSessionAttr("noAuthBtnUrl", loginService.getNoAuthBtnUrl(getSessionUser()));
+			//数据权限
+			setSessionAttr("noAuthDatarule", loginService.getNoAuthDatarule(getSessionUser()));
 			if("admin".equals(getSessionUser().get("user_name"))) {
 				setSessionAttr("noAuthUrl", null);
 				setSessionAttr("noAuthBtnUrl", null);

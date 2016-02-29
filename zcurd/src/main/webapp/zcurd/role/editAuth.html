@@ -14,7 +14,8 @@
 	        <div title="按钮权限">
 	        	<iframe id="btnIframe" src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
 	        </div>
-	        <div title="数据权限" style="padding:10px">
+	        <div title="数据权限" data-options="border:false,fit:true">
+	        	<iframe id="dataruleIframe" src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
 	        </div>
 	    </div>
     </div>
@@ -22,6 +23,7 @@
 
 <script>
 var menuBtnObj = {};
+var menuDataruleObj = {};
 var currMenuId = 0;
 var roleId = "${roleId!}";
 
@@ -120,6 +122,7 @@ function treeSelect(node) {
 	flushMenuBtnObj();
 	currMenuId = node.id;
 	$("#btnIframe").attr("src", "${basePath}/zcurd/150/listPage?menu_id=" + node.id);
+	$("#dataruleIframe").attr("src", "${basePath}/zcurd/152/listPage?menu_id=" + node.id);
 }
 
 function flushMenuBtnObj() {

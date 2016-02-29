@@ -126,5 +126,16 @@ public class ZurdTool {
 		}
 		return row;
 	}
+	
+	/**
+	 * 替换成字典中的值
+	 */
+	public static List<Map<String, Object>> replaceDict(int headId, List<Record> list) {
+		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		for (Record record : list) {
+			result.add(replaceDict(headId, record.getColumns()));
+		}
+		return result;
+	}
 
 }

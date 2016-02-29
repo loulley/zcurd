@@ -11,6 +11,14 @@ public class ZcurdHead extends Model<ZcurdHead> {
 	private static final long serialVersionUID = 1L;
 	public static final ZcurdHead me = new ZcurdHead();
 	
+	public String getTableName() {
+		return getStr("table_name");
+	}
+	
+	public String getIdField() {
+		return getStr("id_field");
+	}
+	
 	public Page<ZcurdHead> paginate(Map<String, String[]> paraMap, int pageNumber, int pageSize) {
 		List<Object> paras = new ArrayList<Object>();
 		String where = convertParaMap2SqlWhere(paraMap, paras);

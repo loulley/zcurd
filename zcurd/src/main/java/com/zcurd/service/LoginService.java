@@ -14,6 +14,7 @@ import com.zcurd.common.StringUtil;
 import com.zcurd.common.util.UrlUtil;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
+import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.User;
 
 /**
@@ -117,6 +118,33 @@ public class LoginService {
 		result.put("pageBtnMap", pageBtnMap);
 		return result;
 	}
+	
+	/**
+	 * 数据权限
+	 */
+	public Map<String, List<MenuDatarule>> getNoAuthDatarule(User user) {
+		Map<Integer, Menu> userMenuMap = new HashMap<Integer, Menu>();
+		for (Menu menu : userMenuList) {
+			userMenuMap.put(menu.getInt("id"), menu);
+		}
+		
+		Map<String, List<MenuDatarule>> pageDataruleMap = new HashMap<String, List<MenuDatarule>>();
+		List<MenuDatarule> userDataruleList = MenuDatarule.me.findByUser(user);
+		for (MenuDatarule menuDatarule : userDataruleList) {
+			String menuUrl = userMenuMap.get(menuDatarule.getInt("menu_id")).getStr("menu_url");
+			if(StringUtil.isNotEmpty(menuUrl)) {
+				menuUrl = UrlUtil.formatBaseUrl(menuUrl);
+				List<MenuDatarule> dataruleList = pageDataruleMap.get(menuUrl);
+				if(dataruleList == null) {
+					dataruleList = new ArrayList<MenuDatarule>();
+				}
+				dataruleList.add(menuDatarule);
+				pageDataruleMap.put(menuUrl, dataruleList);
+			}
+		}
+		return pageDataruleMap;
+	}
+	
 	
 	/**
 	 * 获得菜单的所有父菜单
