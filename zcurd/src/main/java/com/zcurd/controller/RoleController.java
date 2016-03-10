@@ -22,7 +22,9 @@ public class RoleController extends CommonController {
 		int roleId = getParaToInt("roleId");
 		setAttr("roleId", roleId);
 		List<Record> btnIds = Db.find("select b.menu_id, b.id from sys_role_btn a join sys_menu_btn b on a.btn_id=b.id where role_id=?", roleId);
+		List<Record> dataruleIds = Db.find("select b.menu_id, b.id from sys_role_datarule a join sys_menu_datarule b on a.datarule_id=b.id where role_id=?", roleId);
 		setAttr("btnIds", btnIds);
+		setAttr("dataruleIds", dataruleIds);
 		render("editAuth.html");
 	}
 	
@@ -30,9 +32,10 @@ public class RoleController extends CommonController {
 	public void editAuth() {
 		String menuIds = getPara("menuIds");
 		String btnIds = getPara("btnIds");
+		String dataruleIds = getPara("dataruleIds");
 		int roleId = getParaToInt("roleId");
 		RoleService roleService = Duang.duang(RoleService.class);
-		roleService.saveAuth(menuIds, btnIds, roleId);
+		roleService.saveAuth(menuIds, btnIds, dataruleIds, roleId);
 		renderSuccess();
 	}
 	
