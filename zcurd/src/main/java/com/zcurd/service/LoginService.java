@@ -177,12 +177,16 @@ public class LoginService {
 	private List<MenuBtn> getDifference(List<MenuBtn> list1, List<MenuBtn> list2) {
 		List<MenuBtn> result = new ArrayList<MenuBtn>();
 		for (MenuBtn menuBtn1 : list1) {
+			boolean flag = true;
 			for (MenuBtn menuBtn2 : list2) {
 				if(menuBtn1.getInt("id") == menuBtn2.getInt("id")) {
-					continue;
+					flag = false;
+					break;
 				}
 			}
-			result.add(menuBtn1);
+			if(flag) {
+				result.add(menuBtn1);
+			}
 		}
 		return result;
 	}

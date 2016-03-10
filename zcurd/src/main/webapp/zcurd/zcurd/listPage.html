@@ -35,14 +35,14 @@
 			        		<span class="search_item search_between">
 				                <span class="item_text">${item.column_name}: </span>
 				                <span class="item_obj">
-				                    <input class="${easyui_type}" name="_start_${item.field_name}" value="${queryPara[item.field_name!]!}"/> ～ <input class="${easyui_type}" name="_end_${item.field_name}" value="${queryPara[item.field_name!]!}"/>
+				                    <input class="${easyui_type}" name="_start_${item.field_name}" id="_start_${item.field_name}" value="${queryPara[item.field_name!]!}"/> ～ <input class="${easyui_type}" name="_end_${item.field_name}" id="_end_${item.field_name}" value="${queryPara[item.field_name!]!}"/>
 				                </span>
 				            </span>
 			            <#else>
 			            	<span class="search_item">
 				            	<span class="item_text">${item.column_name}: </span>
 				            	<span class="item_obj">
-				            		<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}"/>
+				            		<input class="${easyui_type}" type="text" name="${item.field_name}" id="${item.field_name}" value="${queryPara[item.field_name!]!}"/>
 				            	</span>    
 				            </span>
 			        	</#if>
@@ -55,6 +55,7 @@
             <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
             <a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
             <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
             <#list topList as item>
             <a href="#" class="easyui-linkbutton" iconCls="'${item.icon!}' || icon-add" plain="true" onclick="btnClick${item.id}(' + index + ')">${item.btn_name}</a>
          	</#list>
@@ -187,6 +188,14 @@ function detail() {
 	}
 	var id = rowsSel[0].${head.id_field};
 	top.openWindow("${head.form_name}-详情", "${basePath}/zcurd/${head.id}/detailPage?id=" + id, {size: '${head.dialog_size!}'});
+}
+
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "exportCsv?" + $.param(param);
 }
 
 //按钮事件

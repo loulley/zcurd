@@ -186,3 +186,13 @@ $(function() {
 		});
 	}
 });
+
+//处理页面没有【数据权限】的按钮
+$(function() {
+	if(authField) {
+		$.each(authField.split(","), function(i, item) {
+			$("#" + item + ",#_start_" + item + ",#_end_" + item).textbox({disabled:true});
+			
+		});
+	}
+});

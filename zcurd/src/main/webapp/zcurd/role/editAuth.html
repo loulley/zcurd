@@ -33,6 +33,13 @@ oneMenuBtns.push(${item.id});
 menuBtnObj[${item.menu_id}] = oneMenuBtns;
 </#list>
 
+<#list dataruleIds as item>
+var oneMenuDatarules = menuDataruleObj[${item.menu_id}] || [];
+oneMenuDatarules.push(${item.id});
+menuDataruleObj[${item.menu_id}] = oneMenuDatarules;
+</#list>
+
+
 //保存权限
 function saveAuth() {
 	if(!roleId) {
@@ -50,7 +57,7 @@ function saveAuth() {
 		}
 	});
 	menuIds = menuIds.replace(",", "");
-	//获得选中按钮
+	//获得按钮权限
 	var btnIds = "";
 	for(key in menuBtnObj) {
 		$.each(menuBtnObj[key], function(i, item) {
@@ -58,8 +65,16 @@ function saveAuth() {
 		});
 	}
 	btnIds = btnIds.replace(",", "");
+	//获得数据权限
+	var dataruleIds = "";
+	for(key in menuDataruleObj) {
+		$.each(menuDataruleObj[key], function(i, item) {
+			dataruleIds += "," + item;
+		});
+	}
+	dataruleIds = dataruleIds.replace(",", "");
 	
-	var param = {roleId: roleId, menuIds: menuIds, btnIds: btnIds};
+	var param = {roleId: roleId, menuIds: menuIds, btnIds: btnIds, dataruleIds: dataruleIds};
 	$.post("editAuth", param, function(data) {
 		if(data.result == "success") {
 			showMsg("保存成功！");
@@ -126,6 +141,7 @@ function treeSelect(node) {
 }
 
 function flushMenuBtnObj() {
+	//按钮权限
 	var btnIds = [];
 	var data = getDgSelections();
 	if(!data) {
@@ -140,15 +156,36 @@ function flushMenuBtnObj() {
 		delete menuBtnObj[currMenuId];
 	}
 	log(menuBtnObj);
+	//数据权限
+	var dataruleIds = [];
+	var data2 = getDgSelections2();
+	if(!data2) {
+		return;
+	}
+	$.each(data2, function(i, item) {
+		dataruleIds.push(item.id);
+	});
+	if(dataruleIds.length > 0) {
+		menuDataruleObj[currMenuId] = dataruleIds;
+	}else {
+		delete menuDataruleObj[currMenuId];
+	}
+	log(menuDataruleObj);
 }
 
 //获得子页选中的按钮，些方法会在子页面中覆盖
 function getDgSelections() {
 	return null;
 }
+function getDgSelections2() {
+	return null;
+}
 
 function getCurrMenuBtns() {
 	return menuBtnObj[currMenuId];
+}
+function getCurrMenuDatarules() {
+	return menuDataruleObj[currMenuId];
 }
 </script>
 <#include "/common/foot.html"/>

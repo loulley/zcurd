@@ -1,5 +1,7 @@
 package com.zcurd.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.jfinal.aop.Duang;
@@ -8,6 +10,8 @@ import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZurdTool;
+import com.zcurd.ext.render.csv.CsvRender;
+import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
 
@@ -102,6 +106,37 @@ public class ZcurdController extends CommonController {
 		render("detailPage.html");
 	}
 	
+	//导出csv
+	public void exportCsv() {
+		int headId = getHeadId();
+		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
+		List<ZcurdField> fieldList = (List<ZcurdField>) mapmeta.get("fieldList");
+		
+		Object[] queryParams = getQueryParams();
+		String[] properties = (String[]) queryParams[0];
+		String[] symbols = (String[]) queryParams[1];
+		Object[] values = (Object[]) queryParams[2];
+		
+		String orderBy = getOrderBy();
+		if(StringUtil.isEmpty(orderBy)) {
+			orderBy = head.getIdField() + " desc";
+		}
+		
+		List<Map<String, Object>> list = ZurdTool.replaceDict(headId, DBTool.findByMultProperties(head.getTableName(), properties, symbols, values));
+		List<String> headers = new ArrayList<String>();
+		List<String> clomuns = new ArrayList<String>();
+		for (ZcurdField zcurdField : fieldList) {
+			if(zcurdField.getInt("is_show_list") == 1) {
+				headers.add(zcurdField.getStr("column_name"));
+				clomuns.add(zcurdField.getStr("field_name"));
+			}
+		}
+		CsvRender csvRender = new CsvRender(headers, list);
+		csvRender.clomuns(clomuns);
+		csvRender.fileName(head.getStr("form_name"));
+		render(csvRender);
+	}
 	
 	/**
 	 * 从url中获取headId

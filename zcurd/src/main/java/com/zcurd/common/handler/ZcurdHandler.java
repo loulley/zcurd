@@ -29,7 +29,7 @@ public class ZcurdHandler extends Handler {
 					for (MenuDatarule menuDatarule : menuDataruleList) {
 						authField += "," + menuDatarule.getFieldName();
 					}
-					request.setAttribute("authField", authField.replace(",", ""));
+					request.setAttribute("authField", authField.replaceAll("^,", ""));
 				}
 			}
 		}	

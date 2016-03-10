@@ -15,7 +15,7 @@ public class RoleService {
 	 * 保存权限
 	 */
 	@Before(Tx.class)
-	public void saveAuth(String menuIds, String btnIds, int roleId) {
+	public void saveAuth(String menuIds, String btnIds, String dataruleIds, int roleId) {
 		//保存菜单权限
 		Db.update("delete from sys_role_menu where role_id=?", roleId);
 		if(StringUtil.isNotEmpty(menuIds)) {
@@ -30,6 +30,13 @@ public class RoleService {
 				Db.update("INSERT INTO sys_role_btn (role_id, btn_id) VALUES (?, ?)", new Object[]{roleId, btnId});
 			}
 		}
+		//保存数据权限
+		Db.update("delete from sys_role_datarule where role_id=?", roleId);
+		if(StringUtil.isNotEmpty(dataruleIds)) {
+			for (String dataruleId : dataruleIds.split(",")) {
+				Db.update("INSERT INTO sys_role_datarule (role_id, datarule_id) VALUES (?, ?)", new Object[]{roleId, dataruleId});
+			}
+		}		
 	}
 
 }
