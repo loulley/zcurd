@@ -19,7 +19,7 @@
 			            				data: [
 			            					{id:'', text:''}
 			            					<#list item.dict.keySet() as key>
-			            					,{id:${key}, text:'${item.dict.get(key)}'}
+			            					,{id:'${key}', text:'${item.dict.get(key)}'}
 					            			</#list>
 			            				]
 			            			" />
@@ -110,6 +110,7 @@ var dgOptions = {
 	           ]]
 	};
 $(function() {
+	handleAuthDataRule();
 	datagrid.datagrid(dgOptions);
 });
 

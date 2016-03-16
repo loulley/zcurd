@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.vo.ZcurdMeta;
 
-public class ZurdTool {
+public class ZcurdTool {
 	
 	/**
 	 * 获得查询参数
@@ -115,14 +116,13 @@ public class ZurdTool {
 	 * 替换成字典中的值
 	 */
 	public static Map<String, Object> replaceDict(int headId, Map<String, Object> row) {
-		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
-		@SuppressWarnings("unchecked")
-		Map<String, Map<String, Object>> dictMap = (Map<String, Map<String, Object>>) mapmeta.get("dictMap");
+		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
+		Map<String, Map<String, Object>> dictMap = mapmeta.getDictMap();
 		
 		for (String fieldName : dictMap.keySet()) {
 			Map<String, Object> dict = (Map<String, Object>) dictMap.get(fieldName);
 			//替换成字典中的值
-			ZurdTool.replaceDict(dict, row, fieldName);
+			ZcurdTool.replaceDict(dict, row, fieldName);
 		}
 		return row;
 	}
@@ -136,6 +136,30 @@ public class ZurdTool {
 			result.add(replaceDict(headId, record.getColumns()));
 		}
 		return result;
+	}
+	
+	public static Map<String, Object> convert2Map(ZcurdMeta zcurdMeta) {
+		Map<String, Object> metaData = new HashMap<String, Object>();
+		metaData.put("head", zcurdMeta.getHead());
+		metaData.put("fieldList", zcurdMeta.getFieldList());
+		metaData.put("dictMap", zcurdMeta.getDictMap());
+		metaData.put("addFieldList", zcurdMeta.getAddFieldList());
+		metaData.put("updateFieldList", zcurdMeta.getUpdateFieldList());
+		metaData.put("btnList", zcurdMeta.getBtnList());
+		metaData.put("topList", zcurdMeta.getTopList());
+		metaData.put("lineList", zcurdMeta.getLineList());
+		metaData.put("jsList", zcurdMeta.getJsList());
+		return metaData;
+	}
+	
+	/**
+	 * 获得数据源名称
+	 */
+	public static String getDbSource(String dbSource) {
+		if(StringUtil.isEmpty(dbSource)) {
+			dbSource = "zcurd";
+		}
+		return dbSource;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.zcurd.common;
+package com.zcurd.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.common.Pager;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.User;
 
@@ -90,6 +91,18 @@ public class CommonController extends Controller {
 				}else if(field.startsWith("_end_")) {
 					field = field.replaceAll("^_end_", "");
 					symbol = "<=";
+				}
+				
+				//模糊搜索处理
+				if(value.startsWith("*") && value.endsWith("*")) {
+					value = "%" + value.substring(1, value.length() - 1) + "%";
+					symbol = "like";
+				}else if(value.startsWith("*")) {
+					value = "%" + value.substring(1);
+					symbol = "like";
+				}else if(value.endsWith("*")) {
+					value = value.substring(0, value.length() - 1) + "%";
+					symbol = "like";
 				}
 				
 				properties.add(field);

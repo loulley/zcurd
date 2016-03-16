@@ -7,7 +7,6 @@ import java.util.Map;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.zcurd.common.CommonController;
 import com.zcurd.model.Menu;
 import com.zcurd.service.RoleService;
 

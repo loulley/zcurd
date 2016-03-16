@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.aop.Duang;
-import com.zcurd.common.CommonController;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
-import com.zcurd.common.ZurdTool;
+import com.zcurd.common.ZcurdTool;
 import com.zcurd.ext.render.csv.CsvRender;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
+import com.zcurd.vo.ZcurdMeta;
 
 /**
  * 在线表单
@@ -24,16 +24,16 @@ public class ZcurdController extends CommonController {
 	public void listPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
-		setAttrs(metaMap);
-		setAttr("queryPara", ZurdTool.getQueryPara(getParaMap()));
+		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
 	}
 	
 	public void listData() {
 		int headId = getHeadId();
-		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
-		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
+		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = mapmeta.getHead();
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -46,18 +46,18 @@ public class ZcurdController extends CommonController {
 		}
 		
 		renderDatagrid(
-				ZurdTool.replaceDict(headId, DBTool.findByMultProperties(head.getTableName(), properties, symbols, values, orderBy, getPager())), 
-				DBTool.countByMultProperties(head.getTableName(), properties, symbols, values));
+				ZcurdTool.replaceDict(headId, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
+				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values));
 	}
 	
 	//增加页面
 	public void addPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
-		setAttrs(metaMap);
-		setAttr("queryPara", ZurdTool.getQueryPara(getParaMap()));
+		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
 	}
 	
 	//增加
@@ -72,9 +72,9 @@ public class ZcurdController extends CommonController {
 	public void updatePage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
-		setAttrs(metaMap);
+		setAttrs(ZcurdTool.convert2Map(metaMap));
 		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
 		render("updatePage.html");
 	}
@@ -98,20 +98,20 @@ public class ZcurdController extends CommonController {
 	public void detailPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		Map<String, Object> metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
 		Map<String, Object> row = zcurdService.get(headId, getParaToInt("id")).getColumns();
 		setAttr("headId", headId);
-		setAttrs(metaMap);
-		setAttr("model", ZurdTool.replaceDict(headId, row));
+		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttr("model", ZcurdTool.replaceDict(headId, row));
 		render("detailPage.html");
 	}
 	
 	//导出csv
 	public void exportCsv() {
 		int headId = getHeadId();
-		Map<String, Object> mapmeta = DbMetaTool.getMetaData(headId);
-		ZcurdHead head = (ZcurdHead) mapmeta.get("head");
-		List<ZcurdField> fieldList = (List<ZcurdField>) mapmeta.get("fieldList");
+		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = mapmeta.getHead();
+		List<ZcurdField> fieldList = mapmeta.getFieldList();
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -123,7 +123,8 @@ public class ZcurdController extends CommonController {
 			orderBy = head.getIdField() + " desc";
 		}
 		
-		List<Map<String, Object>> list = ZurdTool.replaceDict(headId, DBTool.findByMultProperties(head.getTableName(), properties, symbols, values));
+		List<Map<String, Object>> list = ZcurdTool.replaceDict(headId, 
+				DBTool.findByMultPropertiesDbSource(ZcurdTool.getDbSource(head.getDbSource()), head.getTableName(), properties, symbols, values));
 		List<String> headers = new ArrayList<String>();
 		List<String> clomuns = new ArrayList<String>();
 		for (ZcurdField zcurdField : fieldList) {

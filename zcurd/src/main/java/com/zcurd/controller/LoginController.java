@@ -3,7 +3,6 @@ package com.zcurd.controller;
 import java.util.List;
 
 import com.jfinal.aop.Duang;
-import com.zcurd.common.CommonController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.User;
 import com.zcurd.service.LoginService;
@@ -46,6 +45,7 @@ public class LoginController extends CommonController {
 				setSessionAttr("noAuthUrl", null);
 				setSessionAttr("noAuthBtnUrl", null);
 				setSessionAttr("pageBtnMap", null);
+				setSessionAttr("noAuthDatarule", null);
 			}
 			renderSuccess();
 		}else {

@@ -68,7 +68,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add(c3p0Plugin);
 		
 		// 配置ActiveRecord插件
-		ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0Plugin);
+		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd", c3p0Plugin);
 		arp.setShowSql(true);
 		me.add(arp);
 		arp.addMapping("zcurd_head", ZcurdHead.class);
@@ -80,6 +80,12 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
 		arp.addMapping("sys_user", User.class);
 		
+		//业务数据库-空气净化器
+		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("air_jdbcUrl"), PropKit.get("air_user"), PropKit.get("air_password").trim());
+		me.add(c3p0PluginAir);
+		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("air", c3p0PluginAir);
+		arpAir.setShowSql(true);
+		me.add(arpAir);
 	}
 	
 	/**

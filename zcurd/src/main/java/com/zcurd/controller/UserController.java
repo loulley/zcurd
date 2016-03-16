@@ -1,6 +1,5 @@
 package com.zcurd.controller;
 
-import com.zcurd.common.CommonController;
 import com.zcurd.model.User;
 
 public class UserController extends CommonController {
