@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.zcurd.common.util.UrlUtil;
+
 public class LoginFilter implements Filter {
 
 	@Override
@@ -24,11 +26,18 @@ public class LoginFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse)res;
 		HttpSession session = request.getSession();
 		
-		String currUrl = request.getRequestURI();
+		String currUrl = UrlUtil.formatUrl(request.getRequestURI());
+		String contextPath = request.getContextPath();
 		//排除登陆页面和res目录
-		if(!currUrl.endsWith("login") && !currUrl.startsWith(request.getContextPath() + "/res")) {
+		if(!currUrl.endsWith("login") && !currUrl.startsWith(contextPath + "/res")) {
 			if(session.getAttribute("sysUser") == null) {
 				response.sendRedirect(request.getContextPath() + "/login");//如果session为空表示用户没有登录就重定向到login页面
+				return;
+			}
+			
+			//首页跳转到main页面
+			if(currUrl.equals(contextPath) || currUrl.equals(contextPath + "/index")) {
+				response.sendRedirect(request.getContextPath() + "/main");
 				return;
 			}
 		}

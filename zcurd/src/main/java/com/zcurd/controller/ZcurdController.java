@@ -19,7 +19,7 @@ import com.zcurd.vo.ZcurdMeta;
  * 在线表单
  * @author 钟世云 2016.2.5
  */
-public class ZcurdController extends CommonController {
+public class ZcurdController extends BaseController {
 	
 	public void listPage() {
 		int headId = getHeadId();
