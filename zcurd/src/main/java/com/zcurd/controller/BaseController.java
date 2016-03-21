@@ -12,7 +12,7 @@ import com.zcurd.common.Pager;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.User;
 
-public class CommonController extends Controller {
+public class BaseController extends Controller {
 	
 	public void renderDatagrid(Page<?> pageData) {
 		Map<String, Object> datagrid = new HashMap<String, Object>();

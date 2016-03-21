@@ -11,7 +11,7 @@ import com.zcurd.service.LoginService;
  * 登陆
  * @author 钟世云 2016.2.5
  */
-public class LoginController extends CommonController {
+public class LoginController extends BaseController {
 	
 	public void index() {
 		render("login.html");

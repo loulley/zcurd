@@ -20,7 +20,7 @@ import com.zcurd.service.ZcurdService;
  * 表单管理
  * @author 钟世云 2016.2.5
  */
-public class ZcurdHeadController extends CommonController {
+public class ZcurdHeadController extends BaseController {
 	
 	//表单列表
 	public void list() {
