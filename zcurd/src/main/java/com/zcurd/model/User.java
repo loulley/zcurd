@@ -11,7 +11,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.zcurd.common.StringUtil;
-import com.zcurd.common.ZurdTool;
+import com.zcurd.common.ZcurdTool;
 
 public class User extends Model<User> {
 	private static final long serialVersionUID = 1L;
@@ -19,11 +19,11 @@ public class User extends Model<User> {
 	
 	public Page<Map<String, Object>> paginate(Map<String, String[]> paraMap, int pageNumber, int pageSize) {
 		List<Object> paras = new ArrayList<Object>();
-		String sqlWhere = ZurdTool.convertParaMap2SqlWhere(paraMap, paras);
+		String sqlWhere = ZcurdTool.convertParaMap2SqlWhere(paraMap, paras);
 		
 		String sqlFrom = " from sys_user";
 		String sqllimit = " limit " + (pageNumber - 1) * pageSize + ", " + pageSize;
-		String sqlOrderBy = ZurdTool.convertParaMap2SqlOrderBy(paraMap);
+		String sqlOrderBy = ZcurdTool.convertParaMap2SqlOrderBy(paraMap);
 		if(StringUtil.isEmpty(sqlOrderBy)) {
 			sqlOrderBy = " order by id desc ";
 		}

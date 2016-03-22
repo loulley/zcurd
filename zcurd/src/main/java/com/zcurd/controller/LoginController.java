@@ -3,7 +3,6 @@ package com.zcurd.controller;
 import java.util.List;
 
 import com.jfinal.aop.Duang;
-import com.zcurd.common.CommonController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.User;
 import com.zcurd.service.LoginService;
@@ -12,7 +11,7 @@ import com.zcurd.service.LoginService;
  * 登陆
  * @author 钟世云 2016.2.5
  */
-public class LoginController extends CommonController {
+public class LoginController extends BaseController {
 	
 	public void index() {
 		render("login.html");
@@ -46,6 +45,7 @@ public class LoginController extends CommonController {
 				setSessionAttr("noAuthUrl", null);
 				setSessionAttr("noAuthBtnUrl", null);
 				setSessionAttr("pageBtnMap", null);
+				setSessionAttr("noAuthDatarule", null);
 			}
 			renderSuccess();
 		}else {

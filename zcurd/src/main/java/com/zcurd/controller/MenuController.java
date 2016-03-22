@@ -1,9 +1,8 @@
 package com.zcurd.controller;
 
-import com.zcurd.common.CommonController;
 import com.zcurd.model.Menu;
 
-public class MenuController extends CommonController {
+public class MenuController extends BaseController {
 	
 	public void listAll() {
 		renderJson(Menu.me.findAll());

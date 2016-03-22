@@ -12,13 +12,14 @@ import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.model.ZcurdHeadBtn;
 import com.zcurd.model.ZcurdHeadJs;
+import com.zcurd.vo.ZcurdMeta;
 
 public class DbMetaTool {
 	
-	private static Map<Integer, Map<String, Object>> metaDataMap = new Hashtable<Integer, Map<String,Object>>();
+	private static Map<Integer, ZcurdMeta> metaDataMap = new Hashtable<Integer, ZcurdMeta>();
 
-	public static Map<String, Object> getMetaData(int headId) {
-		Map<String, Object> metaData = metaDataMap.get(headId);
+	public static ZcurdMeta getMetaData(int headId) {
+		ZcurdMeta metaData = metaDataMap.get(headId);
 		if(metaData == null) {
 			metaData = getMetaDataFromDb(headId);
 			metaDataMap.put(headId, metaData);
@@ -26,8 +27,7 @@ public class DbMetaTool {
 		return metaData;
 	}
 	
-	private static Map<String, Object> getMetaDataFromDb(int headId) {
-		Map<String, Object> metaData = new HashMap<String, Object>();
+	private static ZcurdMeta getMetaDataFromDb(int headId) {
 		ZcurdHead head = ZcurdHead.me.findById(headId);
 		List<ZcurdField> fieldList = ZcurdField.me.findByHeadId(head.getLong("id").intValue());
 		
@@ -70,16 +70,17 @@ public class DbMetaTool {
 		}
 		List<ZcurdHeadJs> jsList = ZcurdHeadJs.me.findByHeadId(headId);
 		
-		metaData.put("head", head);
-		metaData.put("fieldList", fieldList);
-		metaData.put("dictMap", dictMap);
-		metaData.put("addFieldList", addFieldList);
-		metaData.put("updateFieldList", updateFieldList);
-		metaData.put("btnList", btnList);
-		metaData.put("topList", topList);
-		metaData.put("lineList", lineList);
-		metaData.put("jsList", jsList);
-		return metaData;
+		ZcurdMeta zcurdMeta = new ZcurdMeta();
+		zcurdMeta.setHead(head);
+		zcurdMeta.setFieldList(fieldList);
+		zcurdMeta.setDictMap(dictMap);
+		zcurdMeta.setAddFieldList(addFieldList);
+		zcurdMeta.setUpdateFieldList(updateFieldList);
+		zcurdMeta.setBtnList(btnList);
+		zcurdMeta.setTopList(topList);
+		zcurdMeta.setLineList(lineList);
+		zcurdMeta.setJsList(jsList);
+		return zcurdMeta;
 	}
 	
 	public static void updateMetaData(int headId) {

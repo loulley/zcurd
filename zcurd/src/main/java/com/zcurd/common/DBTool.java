@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 
 public class DBTool{
+	public static final DBTool me = new DBTool();
+	
 	
 	public static List<Record> findByMultProperties(String table, String[] properties, Object[] values) {
 		return findByMultProperties(table, properties, values, null, null);
@@ -23,6 +26,18 @@ public class DBTool{
 			symbols[i] = "=";
 		}
 		return findByMultProperties(null, table, properties, symbols, values, orderBy, pager);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, null);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, Pager pager) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, pager);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, orderBy, pager);
 	}
 	
 	public static List<Record> findByMultProperties(String table, String[] properties, String[] symbols, Object[] values) {
@@ -46,6 +61,10 @@ public class DBTool{
 	}
 	
 	public static List<Record> findByMultProperties(String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
+		return findByMultPropertiesDbSource(null, fields, table, properties, symbols, values, null, pager);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
 		StringBuilder sb = new StringBuilder("select ");
 		if(fields == null || fields.length == 0) {
 			fields = new String[]{"*"};
@@ -58,7 +77,7 @@ public class DBTool{
 		}
 		sb.append(" from " + table + " where 1=1");
 		for (int i = 0; i < properties.length; i++) {
-			sb.append(" and " + properties[i] + symbols[i] + "?");
+			sb.append(" and " + properties[i] + " " + symbols[i] + " ?");
 		}
 		if(StringUtil.isNotEmpty(orderBy)) {
 			sb.append(" order by " + orderBy);
@@ -66,8 +85,7 @@ public class DBTool{
 		if(pager != null) {
 			sb.append(" limit " + pager.getStartRow() + ", " + pager.getRows());
 		}
-		System.out.println(sb);
-		return Db.find(sb.toString(), values);
+		return Db.use(ZcurdTool.getDbSource(dbSource)).find(sb.toString(), values);
 	}
 	
 	public static int countByMultProperties(String table, String[] properties, Object[] values) {
@@ -79,13 +97,20 @@ public class DBTool{
 	}
 	
 	public static int countByMultProperties(String table, String[] properties, String[] symbols, Object[] values) {
+		return countByMultPropertiesDbSource(null, table, properties, symbols, values);
+	}
+	
+	public static int countByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values) {
 		StringBuilder sb = new StringBuilder("select count(*)");
 		sb.append(" from " + table + " where 1=1");
 		for (int i = 0; i < properties.length; i++) {
-			sb.append(" and " + properties[i] + symbols[i] + "?");
+			sb.append(" and " + properties[i] + " " + symbols[i] + " ?");
 		}
-		System.out.println(sb);
-		return Db.queryLong(sb.toString(), values).intValue();
+		return Db.use(ZcurdTool.getDbSource(dbSource)).queryLong(sb.toString(), values).intValue();
+	}
+	
+	public static DbPro use(String dbSource) {
+		return Db.use(ZcurdTool.getDbSource(dbSource));
 	}
 	
 	public static void main(String[] args) {

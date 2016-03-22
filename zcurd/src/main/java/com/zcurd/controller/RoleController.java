@@ -7,7 +7,6 @@ import java.util.Map;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.zcurd.common.CommonController;
 import com.zcurd.model.Menu;
 import com.zcurd.service.RoleService;
 
@@ -15,7 +14,7 @@ import com.zcurd.service.RoleService;
  * 角色权限
  * @author 钟世云 2016.2.5
  */
-public class RoleController extends CommonController {
+public class RoleController extends BaseController {
 	
 	//编辑权限页面
 	public void editAuthPage() {

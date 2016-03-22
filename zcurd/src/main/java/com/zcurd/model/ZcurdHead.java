@@ -19,6 +19,10 @@ public class ZcurdHead extends Model<ZcurdHead> {
 		return getStr("id_field");
 	}
 	
+	public String getDbSource() {
+		return getStr("db_source");
+	}
+	
 	public Page<ZcurdHead> paginate(Map<String, String[]> paraMap, int pageNumber, int pageSize) {
 		List<Object> paras = new ArrayList<Object>();
 		String where = convertParaMap2SqlWhere(paraMap, paras);

@@ -10,7 +10,7 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
-import com.zcurd.common.CommonController;
+import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -20,7 +20,7 @@ import com.zcurd.service.ZcurdService;
  * 表单管理
  * @author 钟世云 2016.2.5
  */
-public class ZcurdHeadController extends CommonController {
+public class ZcurdHeadController extends BaseController {
 	
 	//表单列表
 	public void list() {
@@ -72,23 +72,23 @@ public class ZcurdHeadController extends CommonController {
 	
 	//生成表单页面
 	public void genFormData() {
-		String dbName = (String) Db.execute(new ICallback() {
+		String dbSource = getPara("db_source");
+		String dbName = (String) DBTool.use(dbSource).execute(new ICallback() {
 			@Override
 			public Object call(Connection conn) throws SQLException {
 				return conn.getCatalog();
 			}
 		});
-		String sql = "select TABLE_SCHEMA, TABLE_TYPE, a.TABLE_NAME, TABLE_COMMENT, CREATE_TIME, ifnull(formCount, 0) as 'formCount' from information_schema.TABLES a left join (" +
-						"select table_name, count(*) as 'formCount' from zcurd_head group by table_name " + 
-					 ") b on a.table_name=b.table_name where a.TABLE_SCHEMA='" + dbName + "' order by formCount";
-		renderDatagrid(Db.find(sql));
+		String sql = "select TABLE_SCHEMA, TABLE_TYPE, a.TABLE_NAME, TABLE_COMMENT, CREATE_TIME from information_schema.TABLES a where a.TABLE_SCHEMA='" + dbName + "'";
+		renderDatagrid(DBTool.use(dbSource).find(sql));
 	}
 	
 	//生成表单
 	public void genForm() {
 		String tableName = getPara("tableName");
+		String dbSource = getPara("db_source");
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.genForm(tableName);
+		zcurdService.genForm(tableName, dbSource);
 		renderSuccess();
 	}
 	
