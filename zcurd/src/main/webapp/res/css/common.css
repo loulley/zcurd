@@ -1,4 +1,4 @@
-body{padding: 0px; margin: 0px; font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";}
+body{padding: 0px; margin: 0px; font-family: Arial, Helvetica, sans-serif; font-size: 12px;}
 a{text-decoration: none;color: inherit;}
 a:hover{color: blue;}
 .wrap_search .search_item, .wrap_search .search_item .item_text, .wrap_search .search_item .item_obj{display: inline-block;height: 28px; line-height: 28px; overflow: hidden;}
