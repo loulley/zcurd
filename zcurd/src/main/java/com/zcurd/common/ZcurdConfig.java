@@ -14,6 +14,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.zcurd.common.handler.ZcurdHandler;
 import com.zcurd.common.interceptor.AuthInterceptor;
+import com.zcurd.controller.CommonController;
 import com.zcurd.controller.LoginController;
 import com.zcurd.controller.MainController;
 import com.zcurd.controller.MenuController;
@@ -57,6 +58,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/main", MainController.class, "/zcurd");
 		me.add("/role", RoleController.class, "/zcurd/role");
 		me.add("/user", UserController.class, "/zcurd/user");
+		me.add("/common", CommonController.class);
 	}
 	
 	/**
@@ -81,9 +83,9 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_user", User.class);
 		
 		//业务数据库-空气净化器
-		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("air_jdbcUrl"), PropKit.get("air_user"), PropKit.get("air_password").trim());
+		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("bus1_jdbcUrl"), PropKit.get("bus1_user"), PropKit.get("bus1_password").trim());
 		me.add(c3p0PluginAir);
-		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("air", c3p0PluginAir);
+		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("bus1", c3p0PluginAir);
 		arpAir.setShowSql(true);
 		me.add(arpAir);
 	}

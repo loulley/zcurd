@@ -26,10 +26,11 @@
     	<span class="search_item" style="padding: 4px;">
             <span class="item_text">数据源: </span>
             <span class="item_obj">
-                <select class="easyui-combobox" type="text" id=db_source name="db_source">
-                	<option value="">默认</option>
-                	<option value="air">空气净化器</option>
-                </select>
+                <input class="easyui-combobox" type="text" id=db_source name="db_source" value="zcurd" data-options="
+                    	url: '${basePath}/common/getDictData?queryParams[dict_type]=db_source',
+                    	valueField:'dict_key',
+                		textField:'dict_value'
+                "/>
             </span>    
         </span>
         <span class="search_item" style="padding: 4px;">

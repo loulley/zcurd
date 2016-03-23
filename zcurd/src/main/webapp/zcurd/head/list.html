@@ -19,10 +19,11 @@
             <span class="search_item">
                 <span class="item_text">数据源:</span>
                 <span class="item_obj">
-                    <select class="easyui-combobox" name="db_source" panelHeight="auto" style="width:100px">
-                        <option value="">默认</option>
-                        <option value="air">空气净化器</option>
-                    </select>
+                    <select class="easyui-combobox" name="db_source" panelHeight="auto" style="width:100px" data-options="
+                    	url: '${basePath}/common/getDictData?queryParams[dict_type]=db_source',
+                    	valueField:'dict_key',
+                		textField:'dict_value'
+                   	"></select>
                 </span>
             </span>
             <span class="search_item search_between">
@@ -152,7 +153,6 @@ function extendJs() {
 //搜索
 function zcurdSearch() {
 	var param = zcurdGetParam();
-	log(param);
 	datagrid.datagrid("load", {
 		queryParams: param
 	})

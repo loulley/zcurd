@@ -3,10 +3,10 @@ user = root
 password = 123456
 devMode = true
 
-air_jdbcUrl = jdbc:mysql://127.0.0.1/db_airpurifier?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-air_user = root
-air_password = 123456
-air_devMode = true
+bus1_jdbcUrl = jdbc:mysql://127.0.0.1/db_airpurifier?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+bus1_user = root
+bus1_password = 123456
+bus1_devMode = true
 
 #jdbcUrl = jdbc:mysql://sqld.duapp.com:4050/RNgzmIUDlqijbJEoUHYG?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
 #user = e3218f67d6a04062977c1e26992bb855

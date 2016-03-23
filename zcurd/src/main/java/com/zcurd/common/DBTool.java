@@ -28,18 +28,6 @@ public class DBTool{
 		return findByMultProperties(null, table, properties, symbols, values, orderBy, pager);
 	}
 	
-	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values) {
-		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, null);
-	}
-	
-	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, Pager pager) {
-		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, pager);
-	}
-	
-	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
-		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, orderBy, pager);
-	}
-	
 	public static List<Record> findByMultProperties(String table, String[] properties, String[] symbols, Object[] values) {
 		return findByMultProperties(null, table, properties, symbols, values, null, null);
 	}
@@ -52,6 +40,10 @@ public class DBTool{
 		return findByMultProperties(null, table, properties, symbols, values, orderBy, pager);
 	}
 	
+	public static List<Record> findByMultProperties(String[] fields, String table, String[] properties, Object[] values) {
+		return findByMultProperties(fields, table, properties, null, values, null, null);
+	}
+	
 	public static List<Record> findByMultProperties(String[] fields, String table, String[] properties, String[] symbols, Object[] values) {
 		return findByMultProperties(fields, table, properties, symbols, values, null, null);
 	}
@@ -62,6 +54,20 @@ public class DBTool{
 	
 	public static List<Record> findByMultProperties(String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
 		return findByMultPropertiesDbSource(null, fields, table, properties, symbols, values, null, pager);
+	}
+	
+	
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, null);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, Pager pager) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, null, pager);
+	}
+	
+	public static List<Record> findByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
+		return findByMultPropertiesDbSource(dbSource, null, table, properties, symbols, values, orderBy, pager);
 	}
 	
 	public static List<Record> findByMultPropertiesDbSource(String dbSource, String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
