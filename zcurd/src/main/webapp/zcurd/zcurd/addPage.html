@@ -37,7 +37,7 @@
 	            				<#if item.is_allow_null==0>,required:true</#if>
 	            			" />        	
 			        <#elseif item.data_type=='text'>
-			        	<textarea name="${item.field_name}" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 130px;"></textarea>
+			        	<textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 125px;"></textarea>
 			        <#else>
                			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
 			        </#if>
@@ -47,13 +47,13 @@
             </tr>
            		</#if>
            	</#list>
-           	<#if addFieldList.size() % 3 != 0>
-           		<#if (3 - addFieldList.size() % columnSize) == 1>
-                <td></td>
+           	<#if addFieldList.size() % columnSize != 0>
+           		<#if (columnSize - addFieldList.size() % columnSize) == 1>
+                <td colspan="2"></td>
 	           	</#if>
-	           	<#if (3 - addFieldList.size() % columnSize) == 2>
-                <td></td>
-                <td></td>
+	           	<#if (columnSize - addFieldList.size() % columnSize) == 2>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
 	           	</#if>
             </tr>
            	</#if>
@@ -63,12 +63,9 @@
 </div>
 <script>
 top.window.subPage.save = save;
-function save(successFunc) {
+function save() {
 	if($("#ff").form('enableValidation').form('validate')) {
 		$.post("add", getParam(), function(data) {
-			if(successFunc) {
-				successFunc();
-			}
 			top.window.closeWindow();
 			top.window.subPage.loadCurrDatagrid();
 		});

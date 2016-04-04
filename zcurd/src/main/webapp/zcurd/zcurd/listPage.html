@@ -159,7 +159,7 @@ function update() {
 	var id = rowsSel[0].${head.id_field};
 	top.window.subPage.loadCurrDatagrid = function() {
 		showMsg("更新成功！");
-		datagrid.datagrid("load");
+		datagrid.datagrid("reload");
 	}
 	top.openWindow("${head.form_name}-编辑", "${basePath}/zcurd/${head.id}/updatePage?id=" + id, {size: '${head.dialog_size!}'});
 }
@@ -176,7 +176,7 @@ function del() {
 	confirmMsg("确认删除？", function() {
 		$.post("delete", {id: ids}, function(data) {
 			showMsg("删除成功！");
-			datagrid.datagrid("load");
+			datagrid.datagrid("reload");
 		});
 	});
 }

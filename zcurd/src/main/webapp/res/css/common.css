@@ -8,11 +8,13 @@ a:hover{color: blue;}
 .wrap_search .search_item.search_between{display: inline-block; width: 400px;}
 .wrap_search input,select{width: 100px;}
 .combobox-item, .combobox-group{min-height: 12px;}
-table th{font-weight: normal; color: #383838; text-align: right;}
+table{border-collapse: collapse;}
+table th,table td{border-bottom: 1px solid #DADADA;}
+table th{font-weight: normal; color: #383838; text-align: right; background: #EFEFEF;}
 table th span{display: inline-block; width: 100px;}
 .add_content input.box{width: 13px;}
 .datagrid-btable .operate{padding: 2px;}
-textarea {border: 1px solid rgb(149, 184, 231); border-radius: 4px;	}
+textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
 
 /**弹窗遮布背景**/
 .window-proxy-mask, .window-mask {background: #464646;}

@@ -50,12 +50,12 @@
            		</#if>
            	</#list>
            	<#if updateFieldList.size() % columnSize != 0>
-           		<#if (3 - updateFieldList.size() % columnSize) == 1>
-                <td></td>
+           		<#if (columnSize - updateFieldList.size() % columnSize) == 1>
+                <td colspan="2"></td>
 	           	</#if>
-	           	<#if (3 - updateFieldList.size() % columnSize) == 2>
-                <td></td>
-                <td></td>
+	           	<#if (columnSize - updateFieldList.size() % columnSize) == 2>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
 	           	</#if>
             </tr>
            	</#if>
@@ -65,12 +65,9 @@
 </div>
 <script>
 top.window.subPage.save = save;
-function save(successFunc) {
+function save() {
 	if($("#zcurdHeadTable").form('validate')) {
 		$.post("update", getParam(), function(data) {
-			if(successFunc) {
-				successFunc();
-			}
 			top.window.closeWindow();
 			top.window.subPage.loadCurrDatagrid();
 		});

@@ -81,7 +81,10 @@ function openWindow(title, url, options) {
     	iconCls:'icon-save',
     	title: title || '增加',
     	width: options.width || 700,
-    	height: options.height || 450
+    	height: options.height || 450,
+    	onClose: function() {
+    		$("#dialogWindow iframe").removeAttr("src");
+    	}
     });
     $("#dialogWindow").window("center");
 }
