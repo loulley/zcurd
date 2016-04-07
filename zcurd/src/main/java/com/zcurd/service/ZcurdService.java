@@ -145,20 +145,30 @@ public class ZcurdService {
 		
 		String sql = "select * from information_schema.columns a where a.TABLE_SCHEMA=? and a.table_name=?";
 		List<Record> fieldList = DBTool.use(dbSource).find(sql, new String[]{dbName, tableName});
-		for (Record record : fieldList) {
+		int orderNum = 2;	//主键排在第一行
+		for (int i = 0; i < fieldList.size(); i++) {
+			Record record = fieldList.get(i);
 			String column_name = record.getStr("COLUMN_COMMENT");
 			if(StringUtil.isEmpty(column_name)) {
 				column_name = record.getStr("COLUMN_NAME");
 			}
-			//主键
-			if("PRI".equals(record.getStr("COLUMN_KEY"))) {
-				head.set("id_field", record.getStr("COLUMN_NAME")).update();
-			}
+			
 			ZcurdField field = new ZcurdField()
 				.set("head_id", head.getLong("id").intValue())
 				.set("field_name", record.getStr("COLUMN_NAME"))
 				.set("column_name", column_name)
-				.set("data_type", record.getStr("DATA_TYPE"));
+				.set("data_type", record.getStr("DATA_TYPE"))
+				.set("order_num", orderNum);
+			orderNum++;
+			
+			//主键
+			if("PRI".equals(record.getStr("COLUMN_KEY"))) {
+				head.set("id_field", record.getStr("COLUMN_NAME")).update();
+				//主键排在第一行
+				field.set("order_num", 1);
+				orderNum--;
+			}
+			
 			//不允许为空
 			if("NO".equals(record.getStr("IS_NULLABLE"))) {
 				field.set("is_allow_null", 0);
@@ -169,7 +179,7 @@ public class ZcurdService {
 			if(dataType.equals("timestamp") || dataType.equals("date") || dataType.equals("datetime")) {
 				inputType = "easyui-datebox";
 			}else if(dataType.equals("text")) {
-				inputType = "easyui-textbox";	//TODO 扩展支持area和富文本编辑
+				inputType = "textarea";
 			}else if(dataType.endsWith("int") || dataType.equals("long")) {
 				inputType = "easyui-numberspinner";
 			}

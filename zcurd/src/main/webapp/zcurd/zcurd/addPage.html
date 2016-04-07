@@ -3,7 +3,7 @@
  <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
     <div style="padding:0px">
     <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
-        <table cellpadding="5" width="100%">
+        <table class="table1" cellpadding="5" width="100%">
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
         		<#assign columnSize=1 />
@@ -13,19 +13,14 @@
         		<#assign columnSize=3 />
         	</#if>
         	
-           	<#list addFieldList as item>
-           		<#assign easyui_type="easyui-textbox" />
-	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
-	        		<#assign easyui_type="easyui-datebox" />
-        		</#if>
-        		
-           		<#if item_index == 0 || (item_index + 0) % columnSize == 0>
+        <#list addFieldList as item>
+           	<#if item_index == 0 || (item_index + 0) % columnSize == 0>
             <tr>
-           		</#if>
+           	</#if>
            		<th><span>${item.column_name}：</span></th>
                	<td>
-               		<#if item.dict??>
-	            		<input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
+            <#if item.input_type == 'easyui-combobox'>
+	            	<input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
 	            				valueField: 'id',
    								textField: 'text',
 	            				data: [
@@ -35,28 +30,27 @@
 			            			</#list>
 	            				]
 	            				<#if item.is_allow_null==0>,required:true</#if>
-	            			" />        	
-			        <#elseif item.data_type=='text'>
-			        	<textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="" cols="" style="width: 125px;"></textarea>
-			        <#else>
-               			<input class="${easyui_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
-			        </#if>
+	            	" />        	
+			<#elseif item.input_type == 'textarea'>	
+			        <textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="2" style="width: 125px;"></textarea>
+			<#else>
+               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
+			</#if>
            		</td>
-           		
-           		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
-            </tr>
-           		</#if>
-           	</#list>
-           	<#if addFieldList.size() % columnSize != 0>
-           		<#if (columnSize - addFieldList.size() % columnSize) == 1>
-                <td colspan="2"></td>
-	           	</#if>
-	           	<#if (columnSize - addFieldList.size() % columnSize) == 2>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-	           	</#if>
+           	<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            	</#if>
+        </#list>
+        <#if addFieldList.size() % columnSize != 0>
+           	<#if (columnSize - addFieldList.size() % columnSize) == 1>
+            <td colspan="2"></td>
+	        </#if>
+	        <#if (columnSize - addFieldList.size() % columnSize) == 2>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+	        </#if>
+            </tr>
+        </#if>
         </table>
     </form>
     </div>

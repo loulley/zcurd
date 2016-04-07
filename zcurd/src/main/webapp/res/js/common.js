@@ -196,8 +196,8 @@ $(function() {
 function handleAuthDataRule() {
 	if(authField) {
 		$.each(authField.split(","), function(i, item) {
-			$("#" + item + ",#_start_" + item + ",#_end_" + item).textbox({disabled:true});
-			
+			//$("#" + item + ",#_start_" + item + ",#_end_" + item).textbox({disabled:true});
+			$("#" + item + ",#_start_" + item + ",#_end_" + item).parents(".search_item:first").remove();
 		});
 	}
 }

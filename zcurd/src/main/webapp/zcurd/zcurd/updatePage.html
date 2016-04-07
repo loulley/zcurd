@@ -3,7 +3,8 @@
  <div id="zcurdHeadTable" class="easyui-panel detail_page update_page" data-options="fit:true,border:false">
     <div style="padding:0px">
     <form id="ff" class="easyui-form" method="post">
-        <table cellpadding="5" width="100%">
+        <table class="table1" cellpadding="5" width="100%">
+        	<#-- 计算一行显示多少列 start -->
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
         		<#assign columnSize=1 />
@@ -12,21 +13,17 @@
         	<#else>
         		<#assign columnSize=3 />
         	</#if>
+        	<#-- 计算一行显示多少列 end -->
         	
-           	<#list updateFieldList as item>
-           		<#assign easyui_type="easyui-textbox" />
-	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
-	        		<#assign easyui_type="easyui-datebox" />
-        		</#if>
-        		
-           		<#if item_index == 0 || (item_index + 0) % columnSize == 0>
+       	<#list updateFieldList as item>
+           	<#if item_index == 0 || item_index % columnSize == 0>
             <tr>
-           		</#if>
+           	</#if>
            		<th><span>${item.column_name}：</span></th>
                	<td>
-               	<#if item.is_allow_update == 1>
-               		<#if item.input_type == 'easyui-combobox'>
-               			<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
+            <#if item.is_allow_update == 1>
+               	<#if item.input_type == 'easyui-combobox'>
+               		<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" style="width: 130px;" data-options="
                				<#if item.is_allow_null==0>required:true,</#if>
                				valueField: 'id',
         					textField: 'text',
@@ -36,29 +33,31 @@
 	                			,{id:'${key}', text:'${item.dict.get(key)}'}
 		            			</#list>
 	               			]
-               			"/>
-               		<#else>
-               			<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
-               		</#if>
+               		"/>
+               	<#elseif item.input_type == 'textarea'>	
+               		<textarea name="${item.field_name}" rows="2" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 125px;">${model[item.field_name]!''}</textarea>
                	<#else>
+               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
+               	</#if>
+             <#else>
                		<span class="item">${model[item.field_name]!''}</span>	
-               	</#if>	
+             </#if>	
            		</td>
            		
-           		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
-            </tr>
-           		</#if>
-           	</#list>
-           	<#if updateFieldList.size() % columnSize != 0>
-           		<#if (columnSize - updateFieldList.size() % columnSize) == 1>
-                <td colspan="2"></td>
-	           	</#if>
-	           	<#if (columnSize - updateFieldList.size() % columnSize) == 2>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-	           	</#if>
+           	<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            	</#if>
+         </#list>
+         <#if updateFieldList.size() % columnSize != 0>
+           	<#if (columnSize - updateFieldList.size() % columnSize) == 1>
+                <td colspan="2"></td>
+	        </#if>
+	        <#if (columnSize - updateFieldList.size() % columnSize) == 2>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+	        </#if>
+            </tr>
+        </#if>
         </table>
     </form>
     </div>

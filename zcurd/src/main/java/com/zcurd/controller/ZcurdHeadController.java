@@ -79,7 +79,7 @@ public class ZcurdHeadController extends BaseController {
 				return conn.getCatalog();
 			}
 		});
-		String sql = "select TABLE_SCHEMA, TABLE_TYPE, a.TABLE_NAME, TABLE_COMMENT, CREATE_TIME from information_schema.TABLES a where a.TABLE_SCHEMA='" + dbName + "'";
+		String sql = "select TABLE_SCHEMA, TABLE_TYPE, a.TABLE_NAME, TABLE_COMMENT, CREATE_TIME from information_schema.TABLES a where a.TABLE_SCHEMA='" + dbName + "' order by CREATE_TIME desc";
 		renderDatagrid(DBTool.use(dbSource).find(sql));
 	}
 	

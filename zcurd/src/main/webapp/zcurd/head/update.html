@@ -1,16 +1,16 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdHeadTable" class="easyui-panel add_content" data-options="fit:true,border:false">
-    <div style="padding:0px; height: 75px;">
-    <form id="ff" method="post">
+ <div id="zcurdHeadTable" class="easyui-layout add_content" data-options="fit:true, border:false">
+    <div data-options="region:'north', border:false" style="height: 72px;">
+    	<form id="ff" method="post">
         <table cellpadding="5" width="100%">
             <tr>
                 <th>表单名称:</th>
-                <td><input class="easyui-textbox" type="text" name="form_name" value="${model.form_name}" data-options="required:true"></input></td>
+                <td><input class="easyui-textbox" type="text" name="form_name" value="${model.form_name}" data-options="required:true" style="width: 120px;"></input></td>
                 <th>数据表名称:</th>
-                <td><input class="easyui-textbox" type="text" name="table_name" value="${model.table_name}" data-options="required:true"></input></td>
+                <td><input class="easyui-textbox" type="text" name="table_name" value="${model.table_name}" data-options="required:true" style="width: 120px;"></input></td>
                 <th>主键:</th>
-                <td><input class="easyui-textbox" type="text" name="id_field" value="${model.id_field}" data-options="required:true"></input></td>
+                <td><input class="easyui-textbox" type="text" name="id_field" value="${model.id_field}" data-options="required:true" style="width: 120px;"></input></td>
             </tr>
             <tr>
                 <th>弹窗大小:</th>
@@ -24,7 +24,7 @@
                 			{id:'800x500', text:'800x500'},
                 			{id:'900x600', text:'900x600'}
                			]
-               		" />
+               		" style="width: 120px;"/>
                 </td>
                 <th></th>
                 <td></td>
@@ -32,13 +32,13 @@
                 <td></td>
             </tr>
         </table>
-    </form>
+    	</form>
     </div>
-    	<div class="easyui-panel" data-options="border:false,fit:true" style="border-top-width: 1px;">
-            <table id="dg" class="easyui-datagrid" style="height:450px;" 
+   	<div data-options="region:'center', border:false" style="border-top-width: 1px;">
+            <table id="dg" class="easyui-datagrid"
                     data-options="
+                    	fit:true,
                     	rownumbers:true,
-                        fit: true,
                         border: false,
                         toolbar: '#tb',
                         url: 'listField?head_id=${model.id}',
@@ -68,9 +68,9 @@
                                     options:{
                                         valueField:'value',
                                         textField:'text',
-                                        data: [{value:'easyui-textbox', text:'textbox'}, {value:'easyui-combobox', text:'combobox'}, 
-                                        	   {value:'easyui-datebox', text:'datebox'},{value:'easyui-datetimebox', text:'datetimebox'},
-                                        	   {value:'easyui-numberspinner', text:'numberspinner'}
+                                        data: [{value:'easyui-textbox', text:'textbox'}, {value:'easyui-combobox', text:'combobox'}
+                                        	   ,{value:'easyui-datebox', text:'datebox'},{value:'easyui-datetimebox', text:'datetimebox'}
+                                        	   ,{value:'textarea', text:'textarea'},{value:'easyui-numberspinner', text:'numberspinner'}
                                         	  ],
                                         required:true
                                     }
@@ -104,15 +104,10 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
             </div>
             <script type="text/javascript">
-        
                 var editIndex = undefined;
                 function endEditing(){
                     if (editIndex == undefined){return true}
                     if ($('#dg').datagrid('validateRow', editIndex)){
-                        //var ed = $('#dg').datagrid('getEditor', {index:editIndex,field:'productid'});
-                        //var productname = $(ed.target).combobox('getText');
-                        //$('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
-                        //$('#dg').datagrid('endEdit', editIndex);
                         editIndex = undefined;
                         return true;
                     } else {
