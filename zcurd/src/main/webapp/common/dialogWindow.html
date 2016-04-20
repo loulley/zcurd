@@ -1,4 +1,4 @@
-<div id="dialogWindow">
+<div id="dialogWindow" data-options="border:'thin',collapsible:false,minimizable: false">
     <div class="easyui-layout" data-options="fit:true,border:false">
         <div data-options="region:'center',border:false" style="padding:0px;">
             <iframe src="" class="easyui-panel" data-options="fit:true,border:false" frameborder="0"></iframe>
@@ -8,4 +8,8 @@
             <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:closeWindow()" style="width:80px">取消</a>            
         </div>
     </div>
+</div>
+
+<div id="popupWindow" data-options="width:500,height:300,border:'thin',cls:'c9',collapsible:false,shadow:false,minimizable: false,maximizable: false" style="display: none;">
+	<iframe src="" class="easyui-panel" data-options="fit:true, border:false" frameborder="0"></iframe>
 </div>
