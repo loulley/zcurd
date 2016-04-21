@@ -16,6 +16,11 @@ $(function() {
 			}
 		}
 	}
+	
+	//列表页面，如果没有搜索条件，则删除隐藏搜索按钮
+	if($("#tb .wrap_search .search_item").size() == 0) {
+		$("#tb #searchBtnWrap").hide();
+	}
 });
 
 function log(obj) {
