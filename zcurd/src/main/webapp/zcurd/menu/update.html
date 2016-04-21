@@ -1,9 +1,8 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdTable" class="easyui-panel" data-options="fit:true,border:false">
-    <div style="padding:0px">
-    <form id="ff" method="post">
-        <table cellpadding="5" width="100%">
+ <div class="easyui-panel updatePage" data-options="fit:true,border:false">
+    <form id="ff" method="post" class="easyui-form" data-options="novalidate:true">
+        <table class="table1">
             <tr>
            		<th>菜单名称：</th>
                	<td>
@@ -21,7 +20,7 @@
            		</td>
            		<th>图标：</th>
                	<td>
-            		<input class="easyui-textbox" type="text" name="icon" value="${model.icon!}"></input>
+            		<input type="text" name="icon" value="${model.icon!}" onclick='top.window.openPopup(this, "请选择图标", "${basePath}/common/iconsPage", {width: 540, height: 400})'></input>
            		</td>
             </tr>
             <tr>
@@ -34,7 +33,6 @@
             </tr>
         </table>
     </form>
-    </div>
 </div>
 <script>
 $(function() {
@@ -61,7 +59,7 @@ $(function() {
 			menulist[i].children = children;
 		}
 		
-		var treeData = [];
+		var treeData = [{id:"0", text:'一级菜单', iconCls:'glyphicon-asterisk'}];
 		$.each(menulist, function(i, item) {
 			if(item.parent_id == 0) {
 				treeData.push(item);
@@ -71,11 +69,18 @@ $(function() {
 			data: treeData
 		});
 	});
+	
+	$(document).click(function() {
+		var target = event.target || event.srcElement;
+		if($(target).attr("name") != 'icon') {
+			top.window.closePopup();
+		}
+	});
 });
 
 top.window.subPage.save = save;
 function save(successFunc) {
-	if($("#zcurdTable").form('validate')) {
+	if($("#ff").form('enableValidation').form('validate')) {
 		$.post("update", getParam(), function(data) {
 			if(successFunc) {
 				successFunc();

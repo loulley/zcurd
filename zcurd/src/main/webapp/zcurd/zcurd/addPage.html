@@ -1,9 +1,8 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
-    <div style="padding:0px">
+ <div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
     <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
-        <table class="table1" cellpadding="5" width="100%">
+        <table class="table1">
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
         		<#assign columnSize=1 />
@@ -20,7 +19,7 @@
            		<th><span>${item.column_name}：</span></th>
                	<td>
             <#if item.input_type == 'easyui-combobox'>
-	            	<input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" style="width:130px" data-options="
+	            	<input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="
 	            				valueField: 'id',
    								textField: 'text',
 	            				data: [
@@ -32,9 +31,9 @@
 	            				<#if item.is_allow_null==0>,required:true</#if>
 	            	" />        	
 			<#elseif item.input_type == 'textarea'>	
-			        <textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="2" style="width: 125px;"></textarea>
+			        <textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="2"></textarea>
 			<#else>
-               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
+               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="<#if item.is_allow_null==0>required:true</#if>"></input>
 			</#if>
            		</td>
            	<#if item_index != 0 && (item_index + 1) % columnSize == 0>
@@ -53,7 +52,6 @@
         </#if>
         </table>
     </form>
-    </div>
 </div>
 <script>
 top.window.subPage.save = save;

@@ -1,24 +1,12 @@
 <#include "/common/head.html"/>
-	    <table id="dg"></table>
-	    <div id="tb" style="padding:2px 5px;">
-	        <div class="wrap_search">
-	            <span class="search_item">
-	                <span class="item_text">菜单名称: </span>
-	                <span class="item_obj">
-	                    <input class="easyui-textbox" type="text" name="form_name" />
-	                </span>    
-	            </span>
-	        </div>
-	        <div style="text-align: left; margin:6px;">
-	            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加</a>
-	            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">编辑</a>
-	            <a href="#" class="easyui-linkbutton" iconCls="icon-clear" plain="true" onclick="del()">删除</a>
-	            <div style="float:right; padding-right:40px;">
-	                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="zcurdSearch(this)">搜索</a>
-	                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="flushPage()">重置</a>
-	            </div>
-	        </div>
-	    </div>
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
+           	<a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
+           	<a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
+        </div>
+    </div>
 <script type="text/javascript">
 var datagrid = $("#dg");
 $(function() {
@@ -35,74 +23,22 @@ $(function() {
     	toolbar:'#tb',
     	singleSelect:false,
     	columns:[[
-	    	{field:'id', checkbox:true},
-	    	{field:'menu_name', title: '菜单名称', width:140},
-	    	{field:'menu_url', title: '菜单地址', width:120},
-	        {field:'icon', title: '图标', width:100}
+	    	{field:'menu_name', title: '菜单名称', width:150},
+	    	{field:'menu_url', title: '菜单地址', width:150},
+	        {field:'icon', title: '图标', width:150},
+	        {field:'order_num', title: '排序', width:80}
 	    ]],
 	    loadFilter: function(data) {
-	    	//转换数据
-			var menulist = data;	
-			for(var i = 0; i < menulist.length; i++) {
-				var children = menulist[i].children || [];
-				for(var j = 0; j < menulist.length; j++) {
-					if(menulist[j].parent_id == menulist[i].id) {
-						children.push(menulist[j]);
-					}
-				}
-				if(children.length > 0) {
-					menulist[i].children = children;
-				}
-			}
-			var treeData = [];
-			$.each(menulist, function(i, item) {
-				if(item.parent_id == 0) {
-					treeData.push(item);
-				}
-			});
-			return treeData;
+	    	$.each(data, function(i, item) {
+	    		item.iconCls = item.icon;
+	    		if(item.parent_id > 0) {
+		    		item._parentId = item.parent_id;
+	    		}
+	    	});
+	    	return {rows: data, total: 0};
 	    }
 	});
 });
-
-//按钮管理
-function menuBtnPage(obj) {
-	//点击按钮时，让row变成单选
-	var currIndex = $(obj).parents("tr:first").attr("node-id");
-	datagrid.datagrid("clearSelections");
-	datagrid.datagrid("selectRow", currIndex);
-	event.stopPropagation();
-	
-	var id = $(obj).parents("tr").find(":input[name='id']").val();
-	$("#subIframe").attr("src", "${basePath}/zcurd/136/listPage?menu_id=" + id);
-	
-}
-
-//数据权限
-function menuDataRulePage(obj) {
-	var id = $(obj).parents("tr").find(":input[name='id']").val();
-	$("#subIframe").attr("src", "${basePath}/zcurd/136/listPage?menu_id=" + id);
-	
-}
-
-//搜索
-function zcurdSearch() {
-	var param = zcurdGetParam();
-	log(param);
-	datagrid.datagrid("load", {
-		queryParams: param
-	})
-}
-
-function zcurdGetParam() {
-	var param = {};
-	$("#tb :input[name]").each(function(i, item) {
-		if($(item).val()) {
-			param[$(item).attr("name")] = $(item).val();	
-		}
-	});
-	return param;
-}
 
 function add() {
 	top.window.subPage.loadCurrDatagrid = function() {

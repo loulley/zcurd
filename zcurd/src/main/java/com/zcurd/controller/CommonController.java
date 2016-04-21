@@ -23,5 +23,10 @@ public class CommonController extends BaseController {
 		
 		renderJson(DBTool.findByMultProperties("sys_dict", properties, symbols, values));
 	}	
+	
+	//图标页面
+	public void iconsPage() {
+		render("common/icons.html");
+	}
 
 }

@@ -1,40 +1,37 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdTable" class="easyui-panel" data-options="fit:true,border:false">
-    <div style="padding:0px">
-    <form id="ff" method="post">
-        <table cellpadding="5" width="100%">
+ <div class="easyui-panel addPage" data-options="fit:true,border:false">
+    <form id="ff" method="post" class="easyui-form" data-options="novalidate:true">
+        <table class="table1">
             <tr>
-           		<th>菜单名称：</th>
+           		<th><span>菜单名称：</span></th>
                	<td>
             		<input class="easyui-textbox"  data-options="required:true" type="text" name="menu_name"></input>
            		</td>
-           		<th>菜单地址：</th>
+           		<th><span>菜单地址：</span></th>
                	<td>
             		<input class="easyui-textbox" type="text" name="menu_url"></input>
            		</td>
             </tr>
         	<tr>
-           		<th>上级菜单：</th>
+           		<th><span>上级菜单：</span></th>
                	<td>
             		<input id="parent_id" class="easyui-textbox" type="text" name="parent_id"></input>
            		</td>
-           		<th>图标：</th>
+           		<th><span>图标：</span></th>
                	<td>
-            		<input class="easyui-textbox" type="text" name="icon"></input>
+            		<input type="text" name="icon" onclick='top.window.openPopup(this, "请选择图标", "${basePath}/common/iconsPage", {width: 540, height: 400})'></input>
            		</td>
             </tr>
             <tr>
-           		<th>顺序：</th>
+           		<th><span>顺序：</span></th>
                	<td>
             		<input class="easyui-textbox" type="text" name="order_num"></input>
            		</td>
-           		<th></th>
-               	<td></td>
+               	<td colspan="2"></td>
             </tr>
         </table>
     </form>
-    </div>
 </div>
 <script>
 $(function() {
@@ -68,22 +65,28 @@ $(function() {
 			menulist[i].children = children;
 		}
 		
-		var treeData = [{id:"0", text:'一级菜单', iconCls:'icon-search'}];
+		var treeData = [{id:"0", text:'一级菜单', iconCls:'glyphicon-asterisk'}];
 		$.each(menulist, function(i, item) {
 			if(item.parent_id == 0) {
 				treeData.push(item);
 			}
 		});
-		log(treeData);
 		$("#parent_id").combotree({
 			data: treeData
 		});
+	});
+	
+	$(document).click(function() {
+		var target = event.target || event.srcElement;
+		if($(target).attr("name") != 'icon') {
+			top.window.closePopup();
+		}
 	});
 });
 
 top.window.subPage.save = save;
 function save(successFunc) {
-	if($("#zcurdTable").form('validate')) {
+	if($("#ff").form('enableValidation').form('validate')) {
 		$.post("add", getParam(), function(data) {
 			if(successFunc) {
 				successFunc();

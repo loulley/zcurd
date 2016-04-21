@@ -1,6 +1,5 @@
-if(!top.window.subPage) {
-	top.window.subPage = {};
-}
+var subPage = {};	//用于弹窗，如增删改查页面
+var popup = {};		//用于弹层
 
 $(function() {
 	//去掉加载页面时，遮挡的div
@@ -84,9 +83,60 @@ function openWindow(title, url, options) {
     	height: options.height || 450,
     	onClose: function() {
     		$("#dialogWindow iframe").removeAttr("src");
+    		//关闭popup
+    		try {
+    			$("#popupWindow").window("close");
+    		} catch(err) {
+    			//没有弹层
+    		}
+    		
     	}
     });
     $("#dialogWindow").window("center");
+}
+
+/**
+ * 打开一个弹层，用于选择一些信息（如城市等）
+ * @param ipt	需要弹层的input或其它元素
+ * @param title	弹层标题
+ * @param url	页面ulr
+ * @param options	其它参数（参考easyui-window）
+ */
+function openPopup(ipt, title, url, options) {
+	ipt = $(ipt);
+	popup.ipt = ipt;
+	var os1 = $("#dialogWindow").offset();
+	var os2 = ipt.offset();
+	
+	
+	if(!url || popup.currUrl != url) {
+		$("#popupWindow iframe").attr("src", url);
+	}
+	if(!options) {
+		options = {};
+	}
+	options.title = title || "popup";
+	options.top = os1.top + os2.top + ipt.outerHeight();
+	options.left = os1.left + os2.left;
+	options.onClose = function() {
+		//回调关闭事件
+		if(top.window.popup.close) {
+			top.window.popup.close();
+		}
+	}
+	//回调显示事件
+	if(top.window.popup.show) {
+		top.window.popup.show();
+	}
+    $("#popupWindow").window(options);
+    popup.currUrl = url;
+}
+
+/**
+ * 关闭弹层
+ **/
+function closePopup() {
+	$("#popupWindow").window("close");
 }
 
 /**

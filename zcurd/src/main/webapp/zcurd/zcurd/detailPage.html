@@ -1,8 +1,7 @@
 <#include "/common/head.html"/>
- <div id="zcurdHeadTable" class="easyui-panel detail_page" data-options="fit:true,border:false">
-    <div style="padding:0px">
+ <div class="easyui-panel detailPage" data-options="fit:true,border:false">
     <form id="ff" class="easyui-form" method="post">
-        <table class="table1" cellpadding="5" width="100%">
+        <table class="table1">
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
         		<#assign columnSize=1 />
@@ -22,7 +21,7 @@
             <tr>
            		</#if>
            		<th><span>${item.column_name}：</span></th>
-               	<td><span class="item">${model[item.field_name]!''}</span></td>
+               	<td><span class="valueSpan">${model[item.field_name]!''}</span></td>
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            		</#if>
@@ -39,7 +38,6 @@
            	</#if>
         </table>
     </form>
-    </div>
 </div>
 <script>
 top.window.subPage.save = save;

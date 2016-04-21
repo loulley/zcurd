@@ -7,20 +7,29 @@ a:hover{color: blue;}
 .wrap_search .search_item .item_obj{}
 .wrap_search .search_item.search_between{display: inline-block; width: 400px;}
 .wrap_search input,select{width: 100px;}
+
 .combobox-item, .combobox-group{min-height: 12px;}
+
 table{border-collapse: collapse;}
 table th{font-weight: normal; color: #383838; text-align: right; }
-table th span{display: inline-block; width: 100px;}
 
 .table1 th{background: #EFEFEF;}
 .table1 th, .table1 td{border-bottom: 1px solid #DADADA;}
+
+.addPage table, .updatePage table, .detailPage table{width: 100%;}
+.addPage table td, .updatePage table td, .detailPage table td {padding: 5px;}
+.addPage table th, .updatePage table th, .detailPage table th {padding: 5px;}
+.addPage table th span, .updatePage table th span, .detailPage table th span {display: inline-block; width: 100px;}
+.addPage table td input, .updatePage table td input {width: 130px; line-height: 18px; border: 1px solid #D3D3D3; border-radius: 5px;}
+.addPage table td textarea, .updatePage table td textarea {width: 126px; line-height: 18px; border: 1px solid #D3D3D3; border-radius: 5px;}
+.detailPage .valueSpan{display: inline-block; min-width: 140px; max-width: 220px; word-break:break-all;}
 
 .add_content input.box{width: 13px;}
 .datagrid-btable .operate{padding: 2px;}
 textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
 
 /**弹窗遮布背景**/
-.window-proxy-mask, .window-mask {background: #464646;}
+.window-proxy-mask, .window-mask {background: #000000;}
 .window-mask{filter: alpha(opacity=60);opacity: 0.6;}
 
 .detail_page .item {display: inline-block; min-width: 100px; max-width: 180px;}

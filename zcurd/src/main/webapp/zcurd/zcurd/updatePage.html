@@ -1,9 +1,8 @@
 <#include "/common/head.html"/>
 
- <div id="zcurdHeadTable" class="easyui-panel detail_page update_page" data-options="fit:true,border:false">
-    <div style="padding:0px">
+ <div class="easyui-panel updatePage" data-options="fit:true,border:false">
     <form id="ff" class="easyui-form" method="post">
-        <table class="table1" cellpadding="5" width="100%">
+        <table class="table1">
         	<#-- 计算一行显示多少列 start -->
         	<#assign columnSize=head.dialog_size?split("x")[0]?number />
         	<#if columnSize lt 500>
@@ -23,7 +22,7 @@
                	<td>
             <#if item.is_allow_update == 1>
                	<#if item.input_type == 'easyui-combobox'>
-               		<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" style="width: 130px;" data-options="
+               		<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
                				<#if item.is_allow_null==0>required:true,</#if>
                				valueField: 'id',
         					textField: 'text',
@@ -35,9 +34,9 @@
 	               			]
                		"/>
                	<#elseif item.input_type == 'textarea'>	
-               		<textarea name="${item.field_name}" rows="2" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 125px;">${model[item.field_name]!''}</textarea>
+               		<textarea name="${item.field_name}" rows="2" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea>
                	<#else>
-               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>" style="width: 130px;"></input>
+               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>"></input>
                	</#if>
              <#else>
                		<span class="item">${model[item.field_name]!''}</span>	
@@ -60,7 +59,6 @@
         </#if>
         </table>
     </form>
-    </div>
 </div>
 <script>
 top.window.subPage.save = save;

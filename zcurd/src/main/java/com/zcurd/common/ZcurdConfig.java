@@ -58,7 +58,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/main", MainController.class, "/zcurd");
 		me.add("/role", RoleController.class, "/zcurd/role");
 		me.add("/user", UserController.class, "/zcurd/user");
-		me.add("/common", CommonController.class);
+		me.add("/common", CommonController.class, "/zcurd");
 	}
 	
 	/**

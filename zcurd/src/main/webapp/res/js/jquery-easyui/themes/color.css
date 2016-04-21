@@ -190,6 +190,26 @@ a.c8:hover{
 .c8>.dialog-button{
 	border-bottom-color: #4b72a4;
 }
+.c9,.c9:hover,.c9>.panel-header{
+	border-color: #0092DC;
+    background: #0092DC;
+    border-radius: 0px;
+}
+a.c9:hover{
+	background: #449d44;
+	filter: none;
+}
+.c9>.panel-header>.panel-title{color: white; font-weight: normal;}
+.c9>.panel-body{
+	border-color: #3c8b3c;
+}
+.c9>.dialog-toolbar,.c1>.dialog-button{
+	border-left-color: #3c8b3c;
+	border-right-color: #3c8b3c;
+}
+.c9>.dialog-button{
+	border-bottom-color: #3c8b3c;
+}
 .c1>.panel-header>.panel-title,.c2>.panel-header>.panel-title,
 .c5>.panel-header>.panel-title,.c6>.panel-header>.panel-title,.c8>.panel-header>.panel-title{
 	color: #fff;
