@@ -115,21 +115,38 @@ public class DBTool{
 		return Db.use(ZcurdTool.getDbSource(dbSource)).queryLong(sb.toString(), values).intValue();
 	}
 	
+	public static List<Object> findDbSource(String dbSource, String selectSQL, String[] properties, String[] symbols, Object[] values) {
+		StringBuilder sb = new StringBuilder(selectSQL);
+		if(selectSQL.toLowerCase().indexOf("where") < 0) {
+			sb.append(" where");
+		}
+		sb.append(" 1=1");
+		for (int i = 0; i < properties.length; i++) {
+			sb.append(" and " + properties[i] + " " + symbols[i] + " ?");
+		}
+		
+		List<Object> result = Db.use(ZcurdTool.getDbSource(dbSource)).query(sb.toString(), values);
+		return result;
+	}
+	
 	public static DbPro use(String dbSource) {
 		return Db.use(ZcurdTool.getDbSource(dbSource));
 	}
 	
 	public static void main(String[] args) {
 		C3p0Plugin c3p0Plugin = new C3p0Plugin("jdbc:mysql://127.0.0.1/zcurd?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull", "root", "123456");
-		ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0Plugin); 
+		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd", c3p0Plugin); 
 		c3p0Plugin.start();
 		arp.start();
 		
-		List<Record> list = findByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0});
+		/*List<Record> list = findByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0});
 		for (Record record : list) {
 			System.out.println(record);
 		}
-		System.out.println(countByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0}));
+		System.out.println(countByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0}));*/
+		
+		List<Object> list = findDbSource(null, "select sum(id), avg(id) from sys_menu", new String[]{"id"}, new String[]{"<"}, new Object[]{5});
+		System.out.println(list);
 	}
 
 }

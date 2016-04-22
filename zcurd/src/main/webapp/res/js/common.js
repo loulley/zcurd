@@ -17,7 +17,7 @@ $(function() {
 		}
 	}
 	
-	//列表页面，如果没有搜索条件，则删除隐藏搜索按钮
+	//列表页面，如果没有搜索条件，则隐藏搜索按钮
 	if($("#tb .wrap_search .search_item").size() == 0) {
 		$("#tb #searchBtnWrap").hide();
 	}
@@ -82,7 +82,6 @@ function openWindow(title, url, options) {
     $("#dialogWindow").window({
     	closed:false,
     	modal:true,
-    	iconCls:'icon-save',
     	title: title || '增加',
     	width: options.width || 700,
     	height: options.height || 450,

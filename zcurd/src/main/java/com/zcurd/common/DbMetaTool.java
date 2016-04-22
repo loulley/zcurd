@@ -42,7 +42,12 @@ public class DbMetaTool {
 		}
 		List<ZcurdField> addFieldList = new ArrayList<ZcurdField>();
 		List<ZcurdField> updateFieldList = new ArrayList<ZcurdField>();
+		List<ZcurdField> footerFieldList = new ArrayList<ZcurdField>();
 		for (ZcurdField zcurdField : fieldList) {
+			if(zcurdField.getIsShowList() == 1 && zcurdField.getIsSum() == 1) {
+				footerFieldList.add(zcurdField);
+			}
+			
 			if(!zcurdField.getStr("field_name").equals(head.getStr("id_field"))) {
 				if(zcurdField.getInt("is_allow_add") == 1) {
 					addFieldList.add(zcurdField);
@@ -76,6 +81,7 @@ public class DbMetaTool {
 		zcurdMeta.setDictMap(dictMap);
 		zcurdMeta.setAddFieldList(addFieldList);
 		zcurdMeta.setUpdateFieldList(updateFieldList);
+		zcurdMeta.setFooterFieldList(footerFieldList);
 		zcurdMeta.setBtnList(btnList);
 		zcurdMeta.setTopList(topList);
 		zcurdMeta.setLineList(lineList);

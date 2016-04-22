@@ -32,6 +32,7 @@ public class ZcurdController extends BaseController {
 	
 	public void listData() {
 		int headId = getHeadId();
+		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = mapmeta.getHead();
 		
@@ -47,7 +48,8 @@ public class ZcurdController extends BaseController {
 		
 		renderDatagrid(
 				ZcurdTool.replaceDict(headId, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
-				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values));
+				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values), 
+				zcurdService.getFooter(mapmeta, properties, symbols, values));
 	}
 	
 	//增加页面

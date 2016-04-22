@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +62,34 @@ public class ZcurdService {
 			Db.use(ZcurdTool.getDbSource(head.getDbSource())).deleteById(head.getStr("table_name"), head.getStr("id_field"), id);
 		}
 		DbMetaTool.updateMetaData(headId);
+	}
+	
+	public List<Map<String, Object>> getFooter(ZcurdMeta mapmeta, String[] properties, String[] symbols, Object[] values) {
+		List<Map<String, Object>> footer = new ArrayList<>();
+		ZcurdHead head = mapmeta.getHead();
+		List<ZcurdField> footFieldList = mapmeta.getFooterFieldList();
+		
+		if(footFieldList.size() > 0) {
+			StringBuilder sql = new StringBuilder("select ");
+			for (int i = 0; i < footFieldList.size(); i++) {
+				ZcurdField field = footFieldList.get(i);
+				if(i > 0) {
+					sql.append(",");
+				}
+				sql.append(" sum(" + field.getStr("field_name") + ")");
+			}
+			sql.append(" from " + head.getTableName());
+			
+			List<Object> list = DBTool.findDbSource(head.getDbSource(), sql.toString(), properties, symbols, values);
+			Object[] result = (Object[]) list.get(0);
+			
+			Map<String, Object> sumMap = new HashMap<String, Object>();
+			for (int i = 0; i < footFieldList.size(); i++) {
+				sumMap.put(footFieldList.get(i).getStr("field_name"), "<span style='color:blue;'>合计：" + result[i] + "</span>");
+			}
+			footer.add(sumMap);
+		}
+		return footer;
 	}
 	
 	

@@ -9,6 +9,14 @@ public class ZcurdField extends Model<ZcurdField> {
 	private static final long serialVersionUID = 1L;
 	public static final ZcurdField me = new ZcurdField();
 	
+	public int getIsShowList() {
+		return getInt("is_show_list");
+	}
+	
+	public int getIsSum() {
+		return getInt("is_sum");
+	}
+	
 	public Page<ZcurdField> paginate(int pageNumber, int pageSize, int headId) {
 		return paginate(pageNumber, pageSize, "select * ", "from zcurd_field where head_id=? order by order_num", new Object[]{headId});
 	}

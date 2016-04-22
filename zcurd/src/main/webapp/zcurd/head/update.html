@@ -90,6 +90,7 @@
                                         required:true
                                     }
                                 }">搜索类型</th> 
+                        <th data-options="field:'is_sum',width:60,hidden:true,editor:{type:'checkbox'}">是否汇总</th>
                         <th data-options="field:'is_allow_null',width:60,editor:{type:'checkbox',options:{align:'center'}}">允许为空</th>               
                         <th data-options="field:'column_length',width:40,editor:'textbox'">列宽</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
@@ -206,7 +207,8 @@ var headFieldList = [
 	{field:"is_allow_update", type: 2},
 	{field:"is_allow_add", type: 2},
 	{field:"is_search", type: 2},
-	{field:"search_type", type: 2}
+	{field:"search_type", type: 2},
+	{field:"is_sum", type: 2}
 ];
 function showHeadField(type) {
 	type = type || 1;

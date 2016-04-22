@@ -19,10 +19,11 @@ public class ZcurdMeta {
 	private Map<String, Map<String, Object>> dictMap;
 	private List<ZcurdField> addFieldList;
 	private List<ZcurdField> updateFieldList;
-	private List<ZcurdHeadBtn> btnList;		//扩展按钮
-	private List<ZcurdHeadBtn> topList;	//顶部按钮
-	private List<ZcurdHeadBtn> lineList;	//行内按钮
-	private List<ZcurdHeadJs> jsList;		//扩展js
+	private List<ZcurdField> footerFieldList;	//footer列
+	private List<ZcurdHeadBtn> btnList;			//扩展按钮
+	private List<ZcurdHeadBtn> topList;			//顶部按钮
+	private List<ZcurdHeadBtn> lineList;		//行内按钮
+	private List<ZcurdHeadJs> jsList;			//扩展js
 	
 	public ZcurdHead getHead() {
 		return head;
@@ -77,5 +78,11 @@ public class ZcurdMeta {
 	}
 	public void setLineList(List<ZcurdHeadBtn> lineList) {
 		this.lineList = lineList;
+	}
+	public List<ZcurdField> getFooterFieldList() {
+		return footerFieldList;
+	}
+	public void setFooterFieldList(List<ZcurdField> footerFieldList) {
+		this.footerFieldList = footerFieldList;
 	}
 }
