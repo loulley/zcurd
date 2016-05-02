@@ -9,9 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.ICallback;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
@@ -25,6 +28,7 @@ import com.zcurd.vo.ZcurdMeta;
  * @author 钟世云 2016.2.5
  */
 public class ZcurdService {
+	private static final Logger log = Logger.getLogger(ZcurdService.class);
 	
 	public void add(int headId, Map<String, String[]> paraMap) {
 		ZcurdMeta mapmeta = getMetaData(headId);
@@ -109,30 +113,106 @@ public class ZcurdService {
 		return ZcurdHead.me.findById(headId);
 	}
 	
-	/**
-	 * jdbc方式获取结构信息（关系数据库通用）。有个问题，获取不到表的注释
-	 */
-	public void genFormByMetaData(final String tableName) {
-		Db.execute(new ICallback() {
+	public void genForm(final String tableName, String dbSource) {
+		final String dbs = ZcurdTool.getDbSource(dbSource);
+		Db.use(dbs).execute(new ICallback() {
 			@Override
 			public Object call(Connection conn) throws SQLException {
 				DatabaseMetaData metaData = conn.getMetaData();
-				System.out.println(conn.getCatalog());
-				ResultSet tableRet = metaData.getTables(null, "%", tableName, new String[]{"TABLE"}); 
-				while (tableRet.next())
-					System.out.println(tableRet.getString("REMARKS"));
+				String dbName = conn.getCatalog();
+				
+				ResultSet pkRSet = metaData.getPrimaryKeys(dbName, null, tableName);
+				while (pkRSet.next()) {
+					
+					//获得表注释（jdbc无法获取到)
+					String form_name = null;
+					try {
+						String sql = "select TABLE_COMMENT from information_schema.TABLES a where a.TABLE_SCHEMA=? and a.table_name=?";
+						form_name = Db.queryStr(sql, new Object[]{dbName, tableName});
+					}catch(Exception e) {
+						log.warn("获得表注释失败", e);
+					}
+					if(StringUtil.isEmpty(form_name)) {
+						form_name = pkRSet.getString(3);
+					}
+					
+					ZcurdHead head = new ZcurdHead()
+						.set("table_name", pkRSet.getObject(3))
+						.set("form_name", form_name)
+						.set("id_field", pkRSet.getObject(4))
+						.set("db_source", dbs);
+					head.save();
+					
+					ResultSet colRet = metaData.getColumns(dbName, "%", tableName, "%");
+					int orderNum = 2;
+					while (colRet.next()) {
+						String field_name = colRet.getString("COLUMN_NAME");
+						String column_name = colRet.getString("REMARKS");
+						if(StringUtil.isEmpty(column_name)) {
+							column_name = field_name;
+						}
+						
+						ZcurdField field = new ZcurdField()
+							.set("head_id", head.getLong("id").intValue())
+							.set("field_name", field_name)
+							.set("column_name", column_name)
+							.set("data_type", colRet.getString("TYPE_NAME"))
+							.set("order_num", orderNum)
+							.set("is_allow_null", colRet.getInt("NULLABLE"));
+						orderNum++;
+						
+						//主键
+						if(field_name.equals(head.getIdField())) {
+							field.set("order_num", 1);
+							orderNum--;
+						}
+						
+						//控件类型
+						String dataType = field.getStr("data_type");
+						String inputType = "easyui-textbox";
+						if(dataType.equals("timestamp") || dataType.equals("date") || dataType.equals("datetime")) {
+							inputType = "easyui-datebox";
+						}else if(dataType.equals("text")) {
+							inputType = "textarea";
+						}else if(dataType.endsWith("int") || dataType.equals("long")) {
+							inputType = "easyui-numberspinner";
+						}
+						field.set("input_type", inputType);
+						field.save();
+					}
+				}
+				return null;
+			}
+		});
+	}
+	
+	public static void main(String[] args) {
+		C3p0Plugin c3p0Plugin = new C3p0Plugin("jdbc:mysql://127.0.0.1/zcurd?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull", "root", "123456");
+		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd", c3p0Plugin); 
+		c3p0Plugin.start();
+		arp.start();
+		
+		final String tableName = "blog";
+		Db.use("zcurd").execute(new ICallback() {
+			@Override
+			public Object call(Connection conn) throws SQLException {
+				DatabaseMetaData metaData = conn.getMetaData();
+				System.out.println("数据库：" + conn.getCatalog());
+				
+				//获取tableName表列信息
+				ResultSet tableSet = metaData.getTables(null, "%", "%", new String[]{"TABLE"});
+				while(tableSet.next()) {
+					System.out.println(tableSet.getString("TABLE_NAME") + "	" + tableSet.getString("REMARKS"));
+				}
 
-				String columnName;
-				String columnType;
 				ResultSet colRet = metaData.getColumns(null, "%", tableName, "%");
 				while (colRet.next()) {
-					columnName = colRet.getString("COLUMN_NAME");
-					columnType = colRet.getString("TYPE_NAME");
+					String columnName = colRet.getString("COLUMN_NAME");
+					String columnType = colRet.getString("TYPE_NAME");
 					int datasize = colRet.getInt("COLUMN_SIZE");
 					int digits = colRet.getInt("DECIMAL_DIGITS");
 					int nullable = colRet.getInt("NULLABLE");
-					System.out.println(columnName + " " + columnType + " "
-							+ datasize + " " + digits + " " + nullable + " " + colRet.getString("REMARKS"));
+					System.out.println("字段：" + columnName + "\t" + columnType + "\t" + datasize + "\t" + digits + "\t" + nullable + "\t" + colRet.getString("REMARKS"));
 				}
 				
 				ResultSet pkRSet = metaData.getPrimaryKeys(null, null, tableName);
@@ -147,75 +227,9 @@ public class ZcurdService {
 					System.err.println("****** ******* ******");
 				}
 				
-				ZcurdHead head = new ZcurdHead();
-				head.set("table_name", tableName);
-				
 				return null;
 			}
 		});
-	}
-	
-	public void genForm(String tableName, String dbSource) {
-		dbSource = ZcurdTool.getDbSource(dbSource);
-		String dbName = (String) DBTool.use(dbSource).execute(new ICallback() {
-			@Override
-			public Object call(Connection conn) throws SQLException {
-				return conn.getCatalog();
-			}
-		});
-		String sqlHead = "select * from information_schema.TABLES a where a.TABLE_SCHEMA=? and a.table_name=?";
-		Record dbHead = DBTool.use(dbSource).findFirst(sqlHead, new String[]{dbName, tableName});
-		ZcurdHead head = new ZcurdHead().set("table_name", dbHead.getStr("TABLE_NAME"))
-				.set("form_name", dbHead.getStr("TABLE_COMMENT"))
-				.set("db_source", dbSource);
-		if(StringUtil.isEmpty(head.getStr("form_name"))) {
-			head.set("form_name", head.getStr("table_name"));
-		}
-		head.save();
-		
-		String sql = "select * from information_schema.columns a where a.TABLE_SCHEMA=? and a.table_name=?";
-		List<Record> fieldList = DBTool.use(dbSource).find(sql, new String[]{dbName, tableName});
-		int orderNum = 2;	//主键排在第一行
-		for (int i = 0; i < fieldList.size(); i++) {
-			Record record = fieldList.get(i);
-			String column_name = record.getStr("COLUMN_COMMENT");
-			if(StringUtil.isEmpty(column_name)) {
-				column_name = record.getStr("COLUMN_NAME");
-			}
-			
-			ZcurdField field = new ZcurdField()
-				.set("head_id", head.getLong("id").intValue())
-				.set("field_name", record.getStr("COLUMN_NAME"))
-				.set("column_name", column_name)
-				.set("data_type", record.getStr("DATA_TYPE"))
-				.set("order_num", orderNum);
-			orderNum++;
-			
-			//主键
-			if("PRI".equals(record.getStr("COLUMN_KEY"))) {
-				head.set("id_field", record.getStr("COLUMN_NAME")).update();
-				//主键排在第一行
-				field.set("order_num", 1);
-				orderNum--;
-			}
-			
-			//不允许为空
-			if("NO".equals(record.getStr("IS_NULLABLE"))) {
-				field.set("is_allow_null", 0);
-			}
-			//控件类型
-			String dataType = field.getStr("data_type");
-			String inputType = "easyui-textbox";
-			if(dataType.equals("timestamp") || dataType.equals("date") || dataType.equals("datetime")) {
-				inputType = "easyui-datebox";
-			}else if(dataType.equals("text")) {
-				inputType = "textarea";
-			}else if(dataType.endsWith("int") || dataType.equals("long")) {
-				inputType = "easyui-numberspinner";
-			}
-			field.set("input_type", inputType);
-			field.save();
-		}
 	}
 
 }

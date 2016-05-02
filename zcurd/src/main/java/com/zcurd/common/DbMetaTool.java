@@ -93,7 +93,7 @@ public class DbMetaTool {
 		metaDataMap.remove(headId);
 	}
 	
-	private static Map<String, Object> getDictData(String dictSql) {
+	public static Map<String, Object> getDictData(String dictSql) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Record> listRecord = Db.find("select 'key', 'text' union all select * from (" + dictSql + ") a");
 		for (int i = 1; i < listRecord.size(); i++) {

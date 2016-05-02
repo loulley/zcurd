@@ -25,6 +25,16 @@ public class ZcurdController extends BaseController {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		
+		//更新dictData数据
+		for (ZcurdField zcurdField : metaMap.getFieldList()) {
+			String dictSql = zcurdField.getStr("dict_sql");
+			if(StringUtil.isNotEmpty(dictSql)) {
+				Map<String, Object> dictData = DbMetaTool.getDictData(dictSql);
+				zcurdField.put("dict", dictData);
+			}
+		}
+		
 		setAttr("headId", headId);
 		setAttrs(ZcurdTool.convert2Map(metaMap));
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
