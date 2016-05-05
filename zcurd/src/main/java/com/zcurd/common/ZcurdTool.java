@@ -149,6 +149,7 @@ public class ZcurdTool {
 		metaData.put("topList", zcurdMeta.getTopList());
 		metaData.put("lineList", zcurdMeta.getLineList());
 		metaData.put("jsList", zcurdMeta.getJsList());
+		metaData.put("footerFieldList", zcurdMeta.getFooterFieldList());
 		return metaData;
 	}
 	

@@ -1,5 +1,8 @@
 package com.zcurd.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -12,9 +15,15 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.ZcurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
+import com.zcurd.vo.ZcurdMeta;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 /**
  * 表单管理
@@ -103,7 +112,23 @@ public class ZcurdHeadController extends BaseController {
 		renderSuccess();
 	}
 	
+	//字段列表
 	public void listField() {
 		renderDatagrid(ZcurdField.me.paginate(getParaToInt("page", 1), getParaToInt("rows", 500), getParaToInt("head_id")));
+	}
+	
+	//代码生成
+	public void genCode() throws IOException, TemplateException {
+		int headId =  getParaToInt("headId");
+		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
+		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		
+		@SuppressWarnings("deprecation")
+		Configuration cfg = new Configuration();
+		cfg.setDirectoryForTemplateLoading(new File("C:\\Users\\admin\\git\\zcurd\\zcurd\\src\\main\\webapp\\zcurd\\zcurd")); 
+		
+		Template t = cfg.getTemplate("listPage.html"); 
+		t.process(ZcurdTool.convert2Map(metaMap), new OutputStreamWriter(System.out)); 
+		
 	}
 }

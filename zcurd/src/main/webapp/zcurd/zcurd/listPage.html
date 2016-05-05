@@ -89,7 +89,7 @@ var dgOptions = {
     	pagination:true,
     	multiSort:true,
         queryParams: getInitParam(),
-        showFooter: true, 
+        <#if footerFieldList.size() gt 0>showFooter: true, </#if>
         columns: [[
 		         {field:'${head.id_field}', checkbox:true}
 				 <#list fieldList as item>
