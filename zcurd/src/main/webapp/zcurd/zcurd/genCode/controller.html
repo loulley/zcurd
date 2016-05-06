@@ -1,0 +1,85 @@
+package com.busi.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.busi.model.${className};
+import com.zcurd.common.DBTool;
+import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.StringUtil;
+import com.zcurd.common.ZcurdTool;
+import com.zcurd.controller.BaseController;
+import com.zcurd.ext.render.csv.CsvRender;
+import com.zcurd.model.ZcurdField;
+import com.zcurd.model.ZcurdHead;
+import com.zcurd.vo.ZcurdMeta;
+
+/**
+ * ${head.form_name}
+ */
+public class ${className}Controller extends BaseController {
+	
+	public void listPage() {
+		render("list.html");
+	}
+	
+	public void listData() {
+		Object[] queryParams = getQueryParams();
+		String[] properties = (String[]) queryParams[0];
+		String[] symbols = (String[]) queryParams[1];
+		Object[] values = (Object[]) queryParams[2];
+		
+		String orderBy = getOrderBy();
+		if(StringUtil.isEmpty(orderBy)) {
+			orderBy = "${head.id_field} desc";
+		}
+		
+		renderDatagrid(
+			DBTool.findByMultPropertiesDbSource("${head.db_source}", "${head.table_name}", properties, symbols, values, orderBy, getPager()), 
+			DBTool.countByMultPropertiesDbSource("${head.db_source}", "${head.table_name}", properties, symbols, values)
+		);
+	}
+	
+	//增加页面
+	public void addPage() {
+		render("add.html");
+	}
+	
+	//增加
+	public void add() {
+		getModel(${className}.class, "model").save();
+		renderSuccess();
+	}
+	
+	//修改页面
+	public void updatePage() {
+		setAttr("model", ${className}.me.findById(getPara("${head.id_field}")));
+		render("update.html");
+	}
+	
+	//修改
+	public void update() {
+		${className} model = ${className}.me.findById(getPara("model.${head.id_field}"));
+<#list updateFieldList as item>
+	<#if item.is_allow_update == 1>
+		model.set("${item.field_name}", getPara("model.${item.field_name}"));
+	</#if>
+</#list>		
+		model.update();
+		renderSuccess();
+	}
+	
+	//删除
+	public void delete() {
+	}
+	
+	//详情页面
+	public void detailPage() {
+		render("detail.html");
+	}
+	
+	//导出csv
+	public void exportCsv() {
+	}
+}

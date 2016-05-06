@@ -185,6 +185,13 @@ function getInputValue(inputName) {
 }
 
 /**
+ * 如：当前页面为stockHistoryLog/listPage，则getCurrUrl(addPage)返回stockHistoryLog/addPage
+ */
+function getCurrUrl(method) {
+	return window.location.pathname.replace(/\w+$/, method);
+}
+
+/**
  * 使combobox变为多选
  * @param inputIds 单个id或者数组
  */

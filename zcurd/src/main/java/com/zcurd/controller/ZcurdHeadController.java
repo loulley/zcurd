@@ -1,8 +1,9 @@
 package com.zcurd.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -13,6 +14,8 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
+import com.jfinal.render.FreeMarkerRender;
+import com.jfinal.render.RenderException;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.ZcurdTool;
@@ -122,13 +125,41 @@ public class ZcurdHeadController extends BaseController {
 		int headId =  getParaToInt("headId");
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		ZcurdHead head = metaMap.getHead();
+		String tableName = head.getTableName();
+		String className = tableName.substring(0, 1).toUpperCase() + tableName.substring(1);
+		int index = className.indexOf("_");
+		while(index > 0) {
+			String s = className.substring(index + 1, index + 2);
+			className = className.replace("_" + s, s.toUpperCase());
+			index = className.indexOf("_");
+		}
 		
-		@SuppressWarnings("deprecation")
-		Configuration cfg = new Configuration();
-		cfg.setDirectoryForTemplateLoading(new File("C:\\Users\\admin\\git\\zcurd\\zcurd\\src\\main\\webapp\\zcurd\\zcurd")); 
+		Map<String, Object> mateDate = ZcurdTool.convert2Map(metaMap);
+		mateDate.put("className", className);
 		
-		Template t = cfg.getTemplate("listPage.html"); 
-		t.process(ZcurdTool.convert2Map(metaMap), new OutputStreamWriter(System.out)); 
-		
+        //gen(mateDate, "/zcurd/zcurd/genCode/listPage.html", "F:/genCode/list.html");
+        gen(mateDate, "/zcurd/zcurd/genCode/controller.html", "F:/genCode/" + className + "Controller.java");
+        //gen(mateDate, "/zcurd/zcurd/genCode/addPage.html", "F:/genCode/add.html");
+        gen(mateDate, "/zcurd/zcurd/genCode/updatePage.html", "F:/genCode/update.html");
+        
+        renderSuccess("代码生成成功！");
 	}
+	
+	private void gen(Map<String, Object> mateDate, String tempFile, String genFile) throws FileNotFoundException {
+		Configuration config = FreeMarkerRender.getConfiguration();
+		PrintWriter pw = new PrintWriter(new File(genFile));
+        try {
+			Template template = config.getTemplate(tempFile);
+			template.process(mateDate, pw);
+		} catch (Exception e) {
+			throw new RenderException(e);
+		}
+		finally {
+			if (pw != null) {
+				pw.close();
+			}
+		}
+	}
+	
 }

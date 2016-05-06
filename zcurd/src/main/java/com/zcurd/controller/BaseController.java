@@ -21,11 +21,11 @@ public class BaseController extends Controller {
 		renderJson(datagrid);
 	}
 	
-	public void renderDatagrid(List<Map<String, Object>> list, int total) {
+	public void renderDatagrid(List<?> list, int total) {
 		renderDatagrid(list, total, null);
 	}
 	
-	public void renderDatagrid(List<Map<String, Object>> list, int total, List<Map<String, Object>> footer) {
+	public void renderDatagrid(List<?> list, int total, List<Map<String, Object>> footer) {
 		Map<String, Object> datagrid = new HashMap<String, Object>();
 		datagrid.put("rows", list);
 		datagrid.put("total", total);
