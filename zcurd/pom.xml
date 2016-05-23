@@ -93,6 +93,13 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>javaee</groupId>
+		    <artifactId>javaee-api</artifactId>
+		    <version>5</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 	
 	<build>
