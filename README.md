@@ -24,12 +24,10 @@ QQ群交流群：497019074
 
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/103936_9ae072a4_487886.png "登陆")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104031_5efc6db6_487886.png "表单配置")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174400_3bb28c9b_487886.png "表单配置")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104131_78d66ffc_487886.png "编辑表单")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174427_257f3d26_487886.png "编辑表单")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104229_e43412dd_487886.png "主从表单")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174517_98c76dfa_487886.png "权限管理")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104333_f007f180_487886.png "增加页面")
-
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104408_d01370fc_487886.png "全屏")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174632_cfa0bac7_487886.png "编辑菜单")
