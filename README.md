@@ -22,7 +22,7 @@ QQ群交流群：497019074
 * 3、运行sql文件，生成数据库。（resource目下的sql文件，选择最新的那个）
 * 4、配置数据库连接，启动项目。
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/103936_9ae072a4_487886.png "登陆")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174738_2de676da_487886.png "在这里输入图片标题")
 
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174400_3bb28c9b_487886.png "表单配置")
 
