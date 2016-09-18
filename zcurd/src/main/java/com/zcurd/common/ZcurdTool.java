@@ -158,7 +158,7 @@ public class ZcurdTool {
 	 */
 	public static String getDbSource(String dbSource) {
 		if(StringUtil.isEmpty(dbSource)) {
-			dbSource = "zcurd";
+			dbSource = "zcurd_base";
 		}
 		return dbSource;
 	}

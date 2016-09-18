@@ -104,6 +104,10 @@ function copyUrl(obj, index) {
 
 //删除
 function del() {
+	//TODO 线上体验使用，可删除
+	showWarnMsg("为能够正常体验，不允许删除。");
+	return;
+	
 	var ids = [];
 	$.each(datagrid.datagrid("getSelections"), function(i, item) {
 		ids.push(item.id);
@@ -132,7 +136,7 @@ function extendBtn() {
 		showWarnMsg("请选择一条数据！");
 		return;
 	}
-	top.addMainTab("扩展按钮", "${basePath}/zcurd/137/listPage?head_id=" + ids[0]);
+	top.addMainTab("扩展按钮", "${basePath}/zcurd/1/listPage?head_id=" + ids[0]);
 }
 
 /**
@@ -147,7 +151,7 @@ function extendJs() {
 		showWarnMsg("请选择一条数据！");
 		return;
 	}
-	top.addMainTab("扩展JS", "${basePath}/zcurd/138/listPage?head_id=" + ids[0]);
+	top.addMainTab("扩展JS", "${basePath}/zcurd/2/listPage?head_id=" + ids[0]);
 }
 
 //搜索

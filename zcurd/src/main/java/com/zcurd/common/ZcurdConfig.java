@@ -70,11 +70,11 @@ public class ZcurdConfig extends JFinalConfig {
 	 */
 	public void configPlugin(Plugins me) {
 		// 配置C3p0数据库连接池插件
-		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());
+		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("base_jdbcUrl"), PropKit.get("base_user"), PropKit.get("base_password").trim());
 		me.add(c3p0Plugin);
 		
 		// 配置ActiveRecord插件
-		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd", c3p0Plugin);
+		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd_base", c3p0Plugin);
 		arp.setShowSql(true);
 		me.add(arp);
 		arp.addMapping("zcurd_head", ZcurdHead.class);
@@ -86,10 +86,10 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
 		arp.addMapping("sys_user", User.class);
 		
-		//业务数据库-空气净化器
-		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("bus1_jdbcUrl"), PropKit.get("bus1_user"), PropKit.get("bus1_password").trim());
+		//业务数据库
+		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("busi_jdbcUrl"), PropKit.get("busi_user"), PropKit.get("busi_password").trim());
 		me.add(c3p0PluginAir);
-		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("bus1", c3p0PluginAir);
+		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("zcurd_busi", c3p0PluginAir);
 		arpAir.setShowSql(true);
 		arpAir.addMapping("stock_history_log", StockHistoryLog.class);
 		

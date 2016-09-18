@@ -53,6 +53,12 @@ public class ZcurdHeadController extends BaseController {
 	
 	//修改
 	public void update() {
+		//TODO 线上体验使用，可删除
+		if(getModel(ZcurdHead.class, "model").getLong("id") < 10000) {
+			renderFailed("为能够正常体验，框架基础数据不允许修改！");
+			return;
+		}
+		
 		final String fields = getPara("rowsStr");
 		final JSONArray jsonObjs = JSONObject.parseArray(fields);
 		Db.tx(new IAtom(){
@@ -106,6 +112,10 @@ public class ZcurdHeadController extends BaseController {
 	
 	//删除
 	public void delete() {
+		//TODO 线上体验使用，可删除
+		if(1 == 1) {
+			renderFailed("为保证有数据可体验，不允许删除。");
+		}
 		Integer[] ids = getParaValuesToInt("id[]");
 		for (Integer id : ids) {
 			ZcurdHead.me.deleteById(id);

@@ -6,7 +6,7 @@ $(function() {
 	$("body").css("visibility", "visible");
 	
 	//回车刷新
-	if(!location.href.endsWith("login") && !location.href.endsWith("main")) {
+	if(!/login$/.test(location.href) && !/main/.test(location.href)) {
 		document.onkeydown = function() {
 			if(event.keyCode==13) {
 				if(window.zcurdSearch) {
@@ -240,6 +240,12 @@ $.extend($.fn.datagrid.defaults.editors, {
 //全局ajax事件处理
 $(window).ajaxError(function(handler){
 	showWarnMsg("操作失败，服务器出现错误！");
+});
+$(window).ajaxSuccess(function(evt, request, settings){
+	var s = request.responseText;
+	if(s && s.indexOf('{"result":"fail"') != -1) {
+		showWarnMsg(s.substring(25, s.length - 2));
+	}
 });
 
 //删除页面没有权限的按钮
