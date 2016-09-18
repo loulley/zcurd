@@ -156,7 +156,7 @@ public class ZcurdService {
 							.set("head_id", head.getLong("id").intValue())
 							.set("field_name", field_name)
 							.set("column_name", column_name)
-							.set("data_type", colRet.getString("TYPE_NAME"))
+							.set("data_type", colRet.getString("TYPE_NAME").toLowerCase())
 							.set("order_num", orderNum)
 							.set("is_allow_null", colRet.getInt("NULLABLE"));
 						orderNum++;
