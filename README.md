@@ -1,4 +1,4 @@
-j2ee快速开发平台 zcurd
+java快速开发平台 zcurd
 ===============
 zcurd是一个通用的后台管理系统，有完善的用户、菜单和权限管理。且提供了一套快速的表单管理的开发方案。简单业务可以通过[表单配置]快速生成，特定业务通过代码生成，完成具体业务。zcurd能够大大提高开发效率，节省更多时间去陪家人朋友，做自己喜欢的事情。
 
@@ -20,16 +20,18 @@ QQ群交流群：497019074
 * 1、安装开发环境，eclipse Mars + tomcat7 + mysql 5.5 (下载：)
 * 2、从oschina的git上导出项目。
 * 3、运行sql文件，生成数据库。（resource目下的sql文件，选择最新的那个）
-* 4、配置数据库连接，启动项目。打开浏览器，访问http://localhost:8080/zcurd/main
+* 4、配置数据库连接，启动项目。
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/103936_9ae072a4_487886.png "登陆")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174856_5b656530_487886.png "表单配置")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104031_5efc6db6_487886.png "表单配置")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/174920_b9f9a7c3_487886.png "编辑表单")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104131_78d66ffc_487886.png "编辑表单")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/175001_14e96f48_487886.png "权限管理")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104229_e43412dd_487886.png "主从表单")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0910/175049_6eff2e26_487886.png "编辑菜单")
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104333_f007f180_487886.png "增加页面")
+支持作者
+-----------------------------------
+项目的发展离不开你的支持，请作者喝杯咖啡吧。
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0120/104408_d01370fc_487886.png "全屏")
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0914/152628_76321dca_487886.png "在这里输入图片标题")
