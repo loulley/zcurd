@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.ICallback;
@@ -28,7 +27,6 @@ import com.zcurd.vo.ZcurdMeta;
  * @author 钟世云 2016.2.5
  */
 public class ZcurdService {
-	private static final Logger log = Logger.getLogger(ZcurdService.class);
 	
 	public void add(int headId, Map<String, String[]> paraMap) {
 		ZcurdMeta mapmeta = getMetaData(headId);
@@ -130,7 +128,7 @@ public class ZcurdService {
 						String sql = "select TABLE_COMMENT from information_schema.TABLES a where a.TABLE_SCHEMA=? and a.table_name=?";
 						form_name = Db.queryStr(sql, new Object[]{dbName, tableName});
 					}catch(Exception e) {
-						log.warn("获得表注释失败", e);
+						System.out.println("获得表注释失败！" + e.getMessage());
 					}
 					if(StringUtil.isEmpty(form_name)) {
 						form_name = pkRSet.getString(3);

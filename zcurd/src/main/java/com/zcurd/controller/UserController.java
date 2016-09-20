@@ -27,7 +27,7 @@ public class UserController extends BaseController {
 	
 	public void update() {
 		User.me.findById(getParaToInt("id"))
-			.setAttrs(getModel(User.class, "model")).update();
+			.put(getModel(User.class, "model")).update();
 	}
 	
 	public void delete() {
