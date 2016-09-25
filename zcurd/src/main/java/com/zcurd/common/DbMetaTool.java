@@ -93,9 +93,19 @@ public class DbMetaTool {
 		metaDataMap.remove(headId);
 	}
 	
+	/**
+	 * 根据字典sql获得字典数据
+	 */
 	public static Map<String, Object> getDictData(String dictSql) {
+		//解析dbSource，格式为[dbSource=xxx]select ...
+		String dbSource = "";
+		if(dictSql.toLowerCase().startsWith("[dbSource".toLowerCase())) {
+			dbSource = dictSql.substring(1, dictSql.indexOf("]")).split("=")[1].trim();
+			dictSql = dictSql.substring(dictSql.indexOf("]") + 1);
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<Record> listRecord = Db.find("select 'key', 'text' union all select * from (" + dictSql + ") a");
+		List<Record> listRecord = DBTool.use(dbSource).find("select 'key', 'text' union all select * from (" + dictSql + ") a");
 		for (int i = 1; i < listRecord.size(); i++) {
 			Record record = listRecord.get(i);
 			map.put(record.getStr("key"), record.getStr("text"));

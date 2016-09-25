@@ -27,10 +27,7 @@
                				valueField: 'id',
         					textField: 'text',
         					data:[
-	                			{id:'', text:''}
-	                			<#list item.dict.keySet() as key>
-	                			,{id:'${key}', text:'${item.dict.get(key)}'}
-		            			</#list>
+        						{id:'', text:''}<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>
 	               			]
                		"/>
                	<#elseif item.input_type == 'textarea'>	
@@ -73,7 +70,7 @@ function save() {
 function getParam() {
 	var param = {
 	    "headId": ${headId}, 
-	    "id": ${model[head.id_field]},
+	    "id": ${model[head.id_field]}, 
 		<#list updateFieldList as item><#if item.is_allow_update == 1>
        	    "model.${item.field_name}": getInputValue("${item.field_name}")<#if updateFieldList.size()!=item_index>, </#if>
 		</#if></#list>

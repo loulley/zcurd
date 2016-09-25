@@ -23,10 +23,7 @@
 	            				valueField: 'id',
    								textField: 'text',
 	            				data: [
-	            					{id:'', text:''}
-	            					<#list item.dict.keySet() as key>
-	            					,{id:'${key}', text:'${item.dict.get(key)}'}
-			            			</#list>
+	            					{id:'', text:''}<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>
 	            				]
 	            				<#if item.is_allow_null==0>,required:true</#if>
 	            	" />        	

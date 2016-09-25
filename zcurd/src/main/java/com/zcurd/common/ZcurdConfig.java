@@ -1,6 +1,8 @@
 package com.zcurd.common;
 
+import com.busi.controller.ClawBookUrlController;
 import com.busi.controller.StockHistoryLogController;
+import com.busi.model.ClawBookUrl;
 import com.busi.model.StockHistoryLog;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -63,6 +65,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/common", CommonController.class, "/zcurd");
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
+		me.add("clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
 	}
 	
 	/**
@@ -91,7 +94,9 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add(c3p0PluginAir);
 		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("zcurd_busi", c3p0PluginAir);
 		arpAir.setShowSql(true);
+		
 		arpAir.addMapping("stock_history_log", StockHistoryLog.class);
+		arpAir.addMapping("claw_book_url", ClawBookUrl.class);
 		
 		me.add(arpAir);
 	}

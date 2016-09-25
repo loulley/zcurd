@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Duang;
+import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
@@ -18,6 +20,7 @@ import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZcurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -134,18 +137,37 @@ public class ZcurdHeadController extends BaseController {
 			className = className.replace("_" + s, s.toUpperCase());
 			index = className.indexOf("_");
 		}
+		String lowerClassName = className.substring(0, 1).toLowerCase() + className.substring(1);
 		
 		Map<String, Object> mateDate = ZcurdTool.convert2Map(metaMap);
 		mateDate.put("className", className);
+		mateDate.put("queryPara", new HashMap<>());
 		
-        //gen(mateDate, "/zcurd/zcurd/genCode/listPage.html", "F:/genCode/list.html");
-        gen(mateDate, "/zcurd/zcurd/genCode/controller.html", "F:/genCode/" + className + "Controller.java");
-        //gen(mateDate, "/zcurd/zcurd/genCode/addPage.html", "F:/genCode/add.html");
-        gen(mateDate, "/zcurd/zcurd/genCode/updatePage.html", "F:/genCode/update.html");
+		//复制模板
+		copyTemp("listPage.html");		//列表页面
+        //copyTemp("addPage.html");		//增加页面
+        //copyTemp("updatePage.html");	//编辑页面
+        //copyTemp("detailPage.html");	//详情页面
+		
+        String genCodePath = "/Users/user/Desktop/genCode/" + className + "/";
+        String genCodePagePath = genCodePath + lowerClassName + "/";
+        new File(genCodePath).mkdirs();
+        new File(genCodePagePath).mkdirs();
         
-        renderSuccess("代码生成成功！");
+        gen(mateDate, "/zcurd/zcurd/genCode/listPage.html", genCodePagePath + "list.html");
+        //gen(mateDate, "/zcurd/zcurd/genCode/addPage.html", genCodePagePath + "add.html");
+        //gen(mateDate, "/zcurd/zcurd/genCode/updatePage.html", genCodePagePath + "update.html");
+        //gen(mateDate, "/zcurd/zcurd/genCode/detailPage.html", genCodePagePath + "detail.html");
+        
+        gen(mateDate, "/zcurd/zcurd/genCode/controller.html", genCodePath + className + "Controller.java");
+        //gen(mateDate, "/zcurd/zcurd/genCode/model.html", genCodePath + className + ".java");
+        
+        renderSuccess("代码生成成功！保存在" + genCodePath);
 	}
 	
+	/**
+	 * 生成代码
+	 */
 	private void gen(Map<String, Object> mateDate, String tempFile, String genFile) throws FileNotFoundException {
 		Configuration config = FreeMarkerRender.getConfiguration();
 		PrintWriter pw = new PrintWriter(new File(genFile));
@@ -160,6 +182,32 @@ public class ZcurdHeadController extends BaseController {
 				pw.close();
 			}
 		}
+	}
+	
+	/**
+	 * 复制模板文件（共用zcurd的模板）
+	 */
+	private void copyTemp(String fileName) {
+		String basePath = PathKit.getWebRootPath() + "/zcurd/zcurd/";
+		String content = StringUtil.readTxt2String(new File(basePath + fileName));
+		
+		//对特定标签进行替换，使freemark不解析
+		//替换include标签
+		content = content.replaceAll("<#include", "\\${\"<\"}#include");
+		//替换字典数据输出
+		content = content.replace("<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>", 
+				"<${'#'}list dictData${item.field_name}.keySet() as key>,{id:'${'$'}{key}', text:'${'$'}{dictData${item.field_name}.get(key)}'}</${'#'}list>");
+		
+		if("addPage.html".equals(fileName) || "updatePage.html".equals(fileName) || "detailPage.html".equals(fileName)) {
+			//删除块
+			content = content.replace("\"headId\": ${headId},", "");
+			//替换主键、model输出
+			content = content.replace("${model[head.id_field]}", "${'$'}{model.${head.id_field}}");
+			content = content.replaceAll("\\$\\{model\\[item\\.field_name\\]", "\\${'\\$'}{model.\\${item.field_name}");
+		}
+		System.out.println(content);
+		
+		StringUtil.saveToFile(basePath + "genCode/" + fileName, content);
 	}
 	
 }

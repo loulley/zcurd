@@ -17,10 +17,7 @@
 			            				valueField: 'id',
         								textField: 'text',
 			            				data: [
-			            					{id:'', text:''}
-			            					<#list item.dict.keySet() as key>
-			            					,{id:'${key}', text:'${item.dict.get(key)}'}
-					            			</#list>
+			            					{id:'', text:''}<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>
 			            				]
 			            			" />
 			            	</span>    
@@ -148,7 +145,7 @@ function add() {
 		showMsg("增加成功！");
 		datagrid.datagrid("load");
 	}
-	top.openWindow("${head.form_name}-增加", "${basePath}/zcurd/${head.id}/addPage?" + $.param(initPara), {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-增加", getCurrUrl("addPage") + "?" + $.param(initPara), {size: '${head.dialog_size!}'});
 }
 
 function update() {
@@ -162,7 +159,7 @@ function update() {
 		showMsg("更新成功！");
 		datagrid.datagrid("reload");
 	}
-	top.openWindow("${head.form_name}-编辑", "${basePath}/zcurd/${head.id}/updatePage?id=" + id, {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-编辑", getCurrUrl("updatePage") + "?id=" + id, {size: '${head.dialog_size!}'});
 }
 
 function del() {
@@ -189,7 +186,7 @@ function detail() {
 		return;
 	}
 	var id = rowsSel[0].${head.id_field};
-	top.openWindow("${head.form_name}-详情", "${basePath}/zcurd/${head.id}/detailPage?id=" + id, {size: '${head.dialog_size!}'});
+	top.openWindow("${head.form_name}-详情", getCurrUrl("detailPage") + "?id=" + id, {size: '${head.dialog_size!}'});
 }
 
 function exportCsv() {

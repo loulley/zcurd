@@ -1,6 +1,12 @@
 package com.zcurd.common;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -599,4 +605,52 @@ public class StringUtil
     {
         System.out.println(isEmail("luzhen@163.com"));
     }
+    
+    /**
+     * 读取txt文件的内容
+     * @param file 读取的文件对象
+     */
+    public static String readTxt2String(File file){
+        StringBuilder result = new StringBuilder();
+        BufferedReader br = null;
+        try{
+            br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String s = null;
+            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+                result.append(System.lineSeparator() + s);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }finally {
+        	if(br != null) {
+        		try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	}
+        }
+        return result.toString();
+    }
+    
+    /**
+     * 保存为文件
+     * @param filePath	保存的文件地址
+     * @param content	内容
+     */
+	public static void saveToFile(String filePath, String content) {
+		PrintStream ps = null;
+		try {
+			File file = new File(filePath);
+			ps = new PrintStream(new FileOutputStream(file));
+			ps.println(content);// 往文件里写入字符串
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (ps != null) {
+				ps.flush();
+				ps.close();
+			}
+		}
+	}
 }
