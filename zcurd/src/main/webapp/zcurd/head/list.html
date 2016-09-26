@@ -39,6 +39,7 @@
             <a href="#" class="easyui-linkbutton" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
             <a href="#" class="easyui-linkbutton" iconCls="glyphicon-pushpin" plain="true" onclick="extendBtn()">扩展按钮</a>
             <a href="#" class="easyui-linkbutton" iconCls="glyphicon-paperclip" plain="true" onclick="extendJs()">扩展JS</a>
+            <a href="#" class="easyui-linkbutton" iconCls="glyphicon-log-out" plain="true" onclick="genCode()">生成代码</a>
             <div style="float:right; padding-right:40px;">
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="flushPage()">重置</a>
@@ -187,6 +188,20 @@ function genForm() {
 		datagrid.datagrid("load");
 	}
 	top.openWindow("生成表单", "${basePath}/zcurdHead/genFormPage");
+}
+
+//生成代码
+function genCode() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择一条数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	$.post("genCode", {headId: id}, function(data) {
+		log(data);
+		showMsg(data.msg);
+	});
 }
 </script>
 

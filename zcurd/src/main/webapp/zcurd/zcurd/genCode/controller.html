@@ -6,10 +6,8 @@ import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Record;
 import com.busi.model.${className};
-import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
-import com.zcurd.common.ZcurdTool;
 import com.zcurd.controller.BaseController;
 import com.zcurd.ext.render.csv.CsvRender;
 
@@ -39,8 +37,8 @@ public class ${className}Controller extends BaseController {
 		}
 		
 		List<Record> list = DBTool.findByMultPropertiesDbSource("${head.db_source}", "${head.table_name}", properties, symbols, values, orderBy, getPager());
-		<#list updateFieldList as item>
-			<#if item.dict_sql?? && item.dict_sql?length gt 0>
+		<#list fieldList as item>
+			<#if item.is_show_list == 1 && item.dict_sql?? && item.dict_sql?length gt 0>
 		Map<String, Object> dictData${item.field_name} = ${className}.me.getDictData${item.field_name}();
 		for(Record record : list) {
 			String fieldName = "${item.field_name}";
@@ -111,10 +109,9 @@ public class ${className}Controller extends BaseController {
 		${className} model = ${className}.me.findById(getParaToInt("id"));
 		<#list updateFieldList as item>
 			<#if item.dict_sql?? && item.dict_sql?length gt 0>
-		String fieldName = "${item.field_name}";	
 		Map<String, Object> dictData${item.field_name} = ${className}.me.getDictData${item.field_name}();
-		if(dictData${item.field_name}.get(model.get(fieldName).toString()) != null) {
-			model.set(fieldName, dictData${item.field_name}.get(model.get(fieldName).toString()));
+		if(dictData${item.field_name}.get(model.get("${item.field_name}").toString()) != null) {
+			model.set("${item.field_name}", dictData${item.field_name}.get(model.get("${item.field_name}").toString()));
 		}
 			</#if>
 		</#list>
@@ -135,8 +132,8 @@ public class ${className}Controller extends BaseController {
 		}
 		
 		List<Record> list = DBTool.findByMultPropertiesDbSource("${head.db_source}", "${head.table_name}", properties, symbols, values);
-		<#list updateFieldList as item>
-			<#if item.dict_sql?? && item.dict_sql?length gt 0>
+		<#list fieldList as item>
+			<#if item.is_show_list == 1 && item.dict_sql?? && item.dict_sql?length gt 0>
 		Map<String, Object> dictData${item.field_name} = ${className}.me.getDictData${item.field_name}();
 		for(Record record : list) {
 			String fieldName = "${item.field_name}";

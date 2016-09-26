@@ -8,7 +8,7 @@ import com.zcurd.common.DbMetaTool;
 public class ${className} extends Model<${className}> {
 	private static final long serialVersionUID = 1L;
 	public static final ${className} me = new ${className}();
-	<#list updateFieldList as item>
+	<#list fieldList as item>
 		<#if item.dict_sql?? && item.dict_sql?length gt 0>
 		
 	public Map<String, Object> getDictData${item.field_name}() {

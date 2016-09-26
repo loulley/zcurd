@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Duang;
 import com.jfinal.kit.PathKit;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.ICallback;
@@ -145,22 +146,22 @@ public class ZcurdHeadController extends BaseController {
 		
 		//复制模板
 		copyTemp("listPage.html");		//列表页面
-        //copyTemp("addPage.html");		//增加页面
-        //copyTemp("updatePage.html");	//编辑页面
-        //copyTemp("detailPage.html");	//详情页面
+        copyTemp("addPage.html");		//增加页面
+        copyTemp("updatePage.html");	//编辑页面
+        copyTemp("detailPage.html");	//详情页面
 		
-        String genCodePath = "/Users/user/Desktop/genCode/" + className + "/";
+        String genCodePath = PropKit.get("genCodePath") + className + "/";
         String genCodePagePath = genCodePath + lowerClassName + "/";
         new File(genCodePath).mkdirs();
         new File(genCodePagePath).mkdirs();
         
         gen(mateDate, "/zcurd/zcurd/genCode/listPage.html", genCodePagePath + "list.html");
-        //gen(mateDate, "/zcurd/zcurd/genCode/addPage.html", genCodePagePath + "add.html");
-        //gen(mateDate, "/zcurd/zcurd/genCode/updatePage.html", genCodePagePath + "update.html");
-        //gen(mateDate, "/zcurd/zcurd/genCode/detailPage.html", genCodePagePath + "detail.html");
+        gen(mateDate, "/zcurd/zcurd/genCode/addPage.html", genCodePagePath + "add.html");
+        gen(mateDate, "/zcurd/zcurd/genCode/updatePage.html", genCodePagePath + "update.html");
+        gen(mateDate, "/zcurd/zcurd/genCode/detailPage.html", genCodePagePath + "detail.html");
         
         gen(mateDate, "/zcurd/zcurd/genCode/controller.html", genCodePath + className + "Controller.java");
-        //gen(mateDate, "/zcurd/zcurd/genCode/model.html", genCodePath + className + ".java");
+        gen(mateDate, "/zcurd/zcurd/genCode/model.html", genCodePath + className + ".java");
         
         renderSuccess("代码生成成功！保存在" + genCodePath);
 	}
@@ -205,7 +206,6 @@ public class ZcurdHeadController extends BaseController {
 			content = content.replace("${model[head.id_field]}", "${'$'}{model.${head.id_field}}");
 			content = content.replaceAll("\\$\\{model\\[item\\.field_name\\]", "\\${'\\$'}{model.\\${item.field_name}");
 		}
-		System.out.println(content);
 		
 		StringUtil.saveToFile(basePath + "genCode/" + fileName, content);
 	}

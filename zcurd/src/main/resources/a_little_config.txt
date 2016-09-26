@@ -18,3 +18,7 @@ busi_devMode = true
 #busi_jdbcUrl = jdbc:mysql://sqld.duapp.com:4050/xdxJySHokCQtMlEJpSqm?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
 #busi_user = e3218f67d6a04062977c1e26992bb855
 #busi_password = a62872b13fc7469184d9b8b959a032fa
+
+
+#代码生成保存地址
+genCodePath = C:/Users/admin/Desktop/genCode/

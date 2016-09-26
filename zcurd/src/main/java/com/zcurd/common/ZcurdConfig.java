@@ -65,7 +65,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/common", CommonController.class, "/zcurd");
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
-		me.add("clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
+		me.add("/clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
 	}
 	
 	/**
