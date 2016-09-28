@@ -21,4 +21,4 @@ busi_devMode = true
 
 
 #代码生成保存地址
-genCodePath = C:/Users/admin/Desktop/genCode/
+genCodePath = F:/genCode/
