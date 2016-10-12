@@ -53,7 +53,7 @@ public class DBTool{
 	}
 	
 	public static List<Record> findByMultProperties(String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
-		return findByMultPropertiesDbSource(null, fields, table, properties, symbols, values, null, pager);
+		return findByMultPropertiesDbSource(null, fields, table, properties, symbols, values, orderBy, pager);
 	}
 	
 	

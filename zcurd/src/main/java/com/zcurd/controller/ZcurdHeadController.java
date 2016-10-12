@@ -45,8 +45,20 @@ public class ZcurdHeadController extends BaseController {
 	
 	//列表页面数据
 	public void listData() {
-		Map<String, String[]> paraMap = getParaMap();
-		renderDatagrid(ZcurdHead.me.paginate(paraMap, getParaToInt("page", 1), getParaToInt("rows", 10)));
+		Object[] queryParams = getQueryParams();
+		String[] properties = (String[]) queryParams[0];
+		String[] symbols = (String[]) queryParams[1];
+		Object[] values = (Object[]) queryParams[2];
+		
+		String orderBy = getOrderBy();
+		if(StringUtil.isEmpty(orderBy)) {
+			orderBy = "id desc";
+		}
+		
+		renderDatagrid(
+			DBTool.findByMultProperties("zcurd_head", properties, symbols, values, orderBy, getPager()), 
+			DBTool.countByMultProperties("zcurd_head", properties, symbols, values)
+		);
 	}
 
 	//修改页面
