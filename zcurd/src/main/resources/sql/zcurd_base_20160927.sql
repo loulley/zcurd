@@ -507,3 +507,15 @@ INSERT INTO `zcurd_head_js` VALUES ('5', '12', 'add', '$(function() {\n changeCo
 INSERT INTO `zcurd_head_js` VALUES ('6', '152', 'list', '$(\"#searchBtnWrap\").hide();\n$(\".wrap_search\").hide();\ndgOptions.pageSize=1000;\ndgOptions.pagination=false;\n\nwindow.parent.getDgSelections2 = function() {\n    return datagrid.datagrid(\"getSelections\");\n}\n\ndgOptions.onLoadSuccess = selectAuthRow;\nfunction selectAuthRow() {\n var dataruleIds = window.parent.getCurrMenuDatarules();\n var rows = datagrid.datagrid(\"getData\").rows;\n if(dataruleIds && rows.length > 0) {\n    $.each(rows, function(i, item) {\n      $.each(dataruleIds, function(j, dataruleId) {\n       if(item.id == dataruleId) {\n         datagrid.datagrid(\"selectRow\", j);\n        }\n     });\n   });\n }\n}', '2016-02-15 11:13:14');
 INSERT INTO `zcurd_head_js` VALUES ('7', '6', 'list', '$(\"#searchBtnWrap\").hide();\n$(\".wrap_search\").hide();\ndgOptions.pageSize=1000;\ndgOptions.pagination=false;\n\nwindow.parent.getDgSelections = function() {\n    return datagrid.datagrid(\"getSelections\");\n}\n\ndgOptions.onLoadSuccess = selectAuthRow;\nfunction selectAuthRow() {\n  var btnIds = window.parent.getCurrMenuBtns();\n var rows = datagrid.datagrid(\"getData\").rows;\n if(btnIds && rows.length > 0) {\n   $.each(rows, function(i, item) {\n      $.each(btnIds, function(j, btnId) {\n       if(item.id == btnId) {\n          datagrid.datagrid(\"selectRow\", j);\n        }\n     });\n   });\n }\n}', '2016-09-27 00:17:56');
 INSERT INTO `zcurd_head_js` VALUES ('8', '12', 'update', '$(function() {\n changeComboboxToMult(\"roles\");\n});', '2016-09-27 00:40:00');
+
+CREATE TABLE `sys_oplog` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+	`user_id` INT(11) NULL DEFAULT NULL COMMENT '用户',
+	`op_content` VARCHAR(1000) NULL DEFAULT NULL COMMENT '操作内容',
+	`ip` VARCHAR(20) NULL DEFAULT NULL COMMENT 'ip',
+	`create_time` DATETIME NULL DEFAULT NULL COMMENT '创建时间',
+	PRIMARY KEY (`id`)
+)
+COMMENT='系统操作日志'
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM;

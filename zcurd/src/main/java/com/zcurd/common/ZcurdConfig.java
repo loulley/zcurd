@@ -23,12 +23,14 @@ import com.zcurd.controller.LoginController;
 import com.zcurd.controller.MainController;
 import com.zcurd.controller.MenuController;
 import com.zcurd.controller.RoleController;
+import com.zcurd.controller.SysOplogController;
 import com.zcurd.controller.UserController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
+import com.zcurd.model.SysOplog;
 import com.zcurd.model.User;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -63,6 +65,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/role", RoleController.class, "/zcurd/role");
 		me.add("/user", UserController.class, "/zcurd/user");
 		me.add("/common", CommonController.class, "/zcurd");
+		me.add("/oplog", SysOplogController.class, "/zcurd/sysOplog");
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
 		me.add("/clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
@@ -88,6 +91,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu_btn", MenuBtn.class);
 		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
 		arp.addMapping("sys_user", User.class);
+		arp.addMapping("sys_oplog", SysOplog.class);
 		
 		//业务数据库
 		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("busi_jdbcUrl"), PropKit.get("busi_user"), PropKit.get("busi_password").trim());

@@ -35,6 +35,8 @@ public class RoleController extends BaseController {
 		int roleId = getParaToInt("roleId");
 		RoleService roleService = Duang.duang(RoleService.class);
 		roleService.saveAuth(menuIds, btnIds, dataruleIds, roleId);
+		
+		addOpLog("[权限管理] 修改");
 		renderSuccess();
 	}
 	

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Record;
 import com.busi.model.${className};
+import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
 import com.zcurd.controller.BaseController;
@@ -68,6 +69,8 @@ public class ${className}Controller extends BaseController {
 	//增加
 	public void add() {
 		getModel(${className}.class, "model").save();
+		
+		addOpLog("[${head.form_name}] 增加");
 		renderSuccess();
 	}
 	
@@ -91,6 +94,7 @@ public class ${className}Controller extends BaseController {
 	</#if>
 </#list>		
 		model.update();
+		addOpLog("[${head.form_name}] 修改");
 		renderSuccess();
 	}
 	
@@ -101,6 +105,8 @@ public class ${className}Controller extends BaseController {
 			new ${className}().set("${head.id_field}", id).delete();
 			
 		}
+		
+		addOpLog("[${head.form_name}] 删除");
 		renderSuccess();
 	}
 	
@@ -156,6 +162,8 @@ public class ${className}Controller extends BaseController {
 		CsvRender csvRender = new CsvRender(headers, list);
 		csvRender.clomuns(clomuns);
 		csvRender.fileName("${head.form_name}");
+		
+		addOpLog("[${head.form_name}] 导出cvs");
 		render(csvRender);
 	}
 }

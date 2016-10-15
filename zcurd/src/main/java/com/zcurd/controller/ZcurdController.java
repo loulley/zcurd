@@ -24,10 +24,10 @@ public class ZcurdController extends BaseController {
 	public void listPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaData = zcurdService.getMetaData(headId);
 		
 		//更新dictData数据
-		for (ZcurdField zcurdField : metaMap.getFieldList()) {
+		for (ZcurdField zcurdField : metaData.getFieldList()) {
 			String dictSql = zcurdField.getStr("dict_sql");
 			if(StringUtil.isNotEmpty(dictSql)) {
 				Map<String, Object> dictData = DbMetaTool.getDictData(dictSql);
@@ -36,15 +36,16 @@ public class ZcurdController extends BaseController {
 		}
 		
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttrs(ZcurdTool.convert2Map(metaData));
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
+		render("listPage.html");
 	}
 	
 	public void listData() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
-		ZcurdHead head = mapmeta.getHead();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = metaData.getHead();
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -59,24 +60,30 @@ public class ZcurdController extends BaseController {
 		renderDatagrid(
 				ZcurdTool.replaceDict(headId, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
 				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values), 
-				zcurdService.getFooter(mapmeta, properties, symbols, values));
+				zcurdService.getFooter(metaData, properties, symbols, values));
 	}
 	
 	//增加页面
 	public void addPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaData = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttrs(ZcurdTool.convert2Map(metaData));
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
 	}
 	
 	//增加
 	public void add() {
-		Map<String, String[]> paraMap = getParaMap();
+		int headId = getHeadId();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = metaData.getHead();
+		
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
+		Map<String, String[]> paraMap = getParaMap();
 		zcurdService.add(getHeadId(), paraMap);
+		
+		addOpLog("[" + head.getFormName() + "] 增加");
 		renderSuccess();
 	}
 	
@@ -84,46 +91,61 @@ public class ZcurdController extends BaseController {
 	public void updatePage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
+		ZcurdMeta metaData = zcurdService.getMetaData(headId);
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttrs(ZcurdTool.convert2Map(metaData));
 		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
 		render("updatePage.html");
 	}
 	
 	//修改
 	public void update() {
+		int headId = getHeadId();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = metaData.getHead();
+		
 		Map<String, String[]> paraMap = getParaMap();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		zcurdService.update(getHeadId(), getParaToInt("id"), paraMap);
+		
+		addOpLog("[" + head.getFormName() + "] 修改");
 		renderSuccess();
 	}
 	
 	//删除
 	public void delete() {
+		int headId = getHeadId();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = metaData.getHead();
+		
 		Integer[] ids = getParaValuesToInt("id[]");
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		zcurdService.delete(getHeadId(), ids);
+		
+		addOpLog("[" + head.getFormName() + "] 删除");
+		renderSuccess();
 	}
 	
 	//详情页面
 	public void detailPage() {
 		int headId = getHeadId();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		ZcurdMeta metaMap = zcurdService.getMetaData(headId);
 		Map<String, Object> row = zcurdService.get(headId, getParaToInt("id")).getColumns();
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaMap));
+		setAttrs(ZcurdTool.convert2Map(metaData));
 		setAttr("model", ZcurdTool.replaceDict(headId, row));
+		
 		render("detailPage.html");
 	}
 	
 	//导出csv
 	public void exportCsv() {
 		int headId = getHeadId();
-		ZcurdMeta mapmeta = DbMetaTool.getMetaData(headId);
-		ZcurdHead head = mapmeta.getHead();
-		List<ZcurdField> fieldList = mapmeta.getFieldList();
+		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
+		ZcurdHead head = metaData.getHead();
+		List<ZcurdField> fieldList = metaData.getFieldList();
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -148,6 +170,8 @@ public class ZcurdController extends BaseController {
 		CsvRender csvRender = new CsvRender(headers, list);
 		csvRender.clomuns(clomuns);
 		csvRender.fileName(head.getStr("form_name"));
+		
+		addOpLog("[" + head.getFormName() + "] 导出cvs");
 		render(csvRender);
 	}
 	

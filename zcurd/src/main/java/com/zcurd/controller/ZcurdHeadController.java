@@ -90,6 +90,8 @@ public class ZcurdHeadController extends BaseController {
 				return true; 
 			}
 		});
+		
+		addOpLog("[在线表单] 修改");
 		renderSuccess("保存成功！");
 	}
 	
@@ -117,6 +119,8 @@ public class ZcurdHeadController extends BaseController {
 		String dbSource = getPara("db_source");
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		zcurdService.genForm(tableName, dbSource);
+		
+		addOpLog("[在线表单] 生成表单");
 		renderSuccess();
 	}
 	
@@ -128,6 +132,8 @@ public class ZcurdHeadController extends BaseController {
 			Db.update("delete from zcurd_field where head_id=?", id);
 			DbMetaTool.updateMetaData(id);
 		}
+		
+		addOpLog("[在线表单] 删除");
 		renderSuccess();
 	}
 	
@@ -175,6 +181,7 @@ public class ZcurdHeadController extends BaseController {
         gen(mateDate, "/zcurd/zcurd/genCode/controller.html", genCodePath + className + "Controller.java");
         gen(mateDate, "/zcurd/zcurd/genCode/model.html", genCodePath + className + ".java");
         
+        addOpLog("[在线表单] 生成代码");
         renderSuccess("代码生成成功！保存在" + genCodePath);
 	}
 	

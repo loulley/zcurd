@@ -17,4 +17,8 @@ public class ZcurdHead extends Model<ZcurdHead> {
 	public String getDbSource() {
 		return getStr("db_source");
 	}
+	
+	public String getFormName() {
+		return getStr("form_name");
+	}
 }

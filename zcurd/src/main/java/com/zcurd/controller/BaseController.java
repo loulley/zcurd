@@ -1,6 +1,7 @@
 package com.zcurd.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,22 +11,23 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.Pager;
 import com.zcurd.model.MenuDatarule;
+import com.zcurd.model.SysOplog;
 import com.zcurd.model.User;
 
 public class BaseController extends Controller {
 	
-	public void renderDatagrid(Page<?> pageData) {
+	protected void renderDatagrid(Page<?> pageData) {
 		Map<String, Object> datagrid = new HashMap<String, Object>();
 		datagrid.put("rows", pageData.getList());
 		datagrid.put("total", pageData.getTotalRow());
 		renderJson(datagrid);
 	}
 	
-	public void renderDatagrid(List<?> list, int total) {
+	protected void renderDatagrid(List<?> list, int total) {
 		renderDatagrid(list, total, null);
 	}
 	
-	public void renderDatagrid(List<?> list, int total, List<Map<String, Object>> footer) {
+	protected void renderDatagrid(List<?> list, int total, List<Map<String, Object>> footer) {
 		Map<String, Object> datagrid = new HashMap<String, Object>();
 		datagrid.put("rows", list);
 		datagrid.put("total", total);
@@ -35,50 +37,50 @@ public class BaseController extends Controller {
 		renderJson(datagrid);
 	}
 	
-	public void renderDatagrid(List<Record> list) {
+	protected void renderDatagrid(List<Record> list) {
 		Map<String, Object> datagrid = new HashMap<String, Object>();
 		datagrid.put("rows", list);
 		renderJson(datagrid);
 	}
 	
-	public void renderSuccess(String msg) {
+	protected void renderSuccess(String msg) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", "success");
 		result.put("msg", msg);
 		renderJson(result);
 	}
 	
-	public void renderSuccess() {
+	protected void renderSuccess() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", "success");
 		renderJson(result);
 	}
 	
-	public void renderFailed(String msg) {
+	protected void renderFailed(String msg) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", "fail");
 		result.put("msg", msg);
 		renderJson(result);
 	}
 	
-	public void renderFailed() {
+	protected void renderFailed() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", "fail");
 		renderJson(result);
 	}
 	
-	public User getSessionUser() {
+	protected User getSessionUser() {
 		return getSessionAttr("sysUser");
 	}
 	
-	public Pager getPager() {
+	protected Pager getPager() {
 		Pager pager = new Pager();
 		pager.setPage(getParaToInt("page", 0));
 		pager.setRows(getParaToInt("rows", 0));
 		return pager;
 	}
 	
-	public Object[] getQueryParams() {
+	protected Object[] getQueryParams() {
 		List<String> properties = new ArrayList<String>();
 		List<String> symbols = new ArrayList<String>();
 		List<Object> values = new ArrayList<Object>();
@@ -129,7 +131,7 @@ public class BaseController extends Controller {
 		return new Object[]{properties.toArray(new String[]{}), symbols.toArray(new String[]{}), values.toArray(new Object[]{})};
 	}
 	
-	public String getOrderBy() {
+	protected String getOrderBy() {
 		String sqlOrderBy = ""; 
 		Map<String, String[]> paraMap = getParaMap();
 		if(paraMap.get("sort") != null && paraMap.get("sort").length > 0) {
@@ -143,4 +145,34 @@ public class BaseController extends Controller {
 		return sqlOrderBy;
 	}
 
+	/**
+	 * 增加操作日志
+	 * @param opContent 操作内容
+	 */
+	protected void addOpLog(String opContent) {
+		SysOplog.me
+			.remove("id")
+			.set("user_id", getSessionUser().get("id"))
+			.set("op_content", opContent)
+			.set("ip", getRemoteAddress())
+			.set("create_time", new Date())
+			.save();
+	}
+	
+	/**
+	 * 获得ip地址
+	 */
+	protected String getRemoteAddress() {
+		String ip = getRequest().getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = getRequest().getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = getRequest().getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = getRequest().getRemoteAddr();
+		}
+		return ip;
+	}
 }

@@ -47,6 +47,7 @@ public class LoginController extends BaseController {
 				setSessionAttr("pageBtnMap", null);
 				setSessionAttr("noAuthDatarule", null);
 			}
+			addOpLog("登陆系统");
 			renderSuccess();
 		}else {
 			renderFailed("用户名或密码错误！");
@@ -54,6 +55,7 @@ public class LoginController extends BaseController {
 	}
 	
 	public void logout() {
+		addOpLog("退出系统");
 		removeSessionAttr("sysUser");
 		redirect("/login");
 	}

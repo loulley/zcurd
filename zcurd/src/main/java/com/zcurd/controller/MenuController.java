@@ -9,6 +9,7 @@ public class MenuController extends BaseController {
 	}
 
 	public void list() {
+		addOpLog("[菜单管理] 查看列表");
 		render("list.html");
 	}
 	
@@ -18,6 +19,7 @@ public class MenuController extends BaseController {
 	
 	public void add() {
 		if(getModel(Menu.class, "model").save()) {
+			addOpLog("[菜单管理] 增加");
 			renderSuccess();
 		}else {
 			renderFailed();
@@ -31,6 +33,7 @@ public class MenuController extends BaseController {
 	
 	public void update() {
 		if(getModel(Menu.class, "model").update()) {
+			addOpLog("[菜单管理] 修改");
 			renderSuccess();
 		}else {
 			renderFailed();
@@ -42,6 +45,7 @@ public class MenuController extends BaseController {
 		for (Integer id : ids) {
 			Menu.me.deleteById(id);
 		}
+		addOpLog("[菜单管理] 删除");
 		renderSuccess();
 	}
 }
