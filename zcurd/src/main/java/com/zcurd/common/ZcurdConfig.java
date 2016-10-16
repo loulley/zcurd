@@ -30,6 +30,7 @@ import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
+import com.zcurd.model.SysMenuBtn;
 import com.zcurd.model.SysOplog;
 import com.zcurd.model.User;
 import com.zcurd.model.ZcurdField;
@@ -91,6 +92,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu_btn", MenuBtn.class);
 		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
 		arp.addMapping("sys_user", User.class);
+		arp.addMapping("sys_menu_btn", SysMenuBtn.class);
 		arp.addMapping("sys_oplog", SysOplog.class);
 		
 		//业务数据库

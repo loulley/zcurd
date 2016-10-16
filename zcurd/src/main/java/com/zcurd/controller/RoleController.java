@@ -1,5 +1,6 @@
 package com.zcurd.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.model.Menu;
+import com.zcurd.model.SysMenuBtn;
 import com.zcurd.service.RoleService;
 
 /**
@@ -47,5 +49,19 @@ public class RoleController extends BaseController {
 		result.put("menuIds", Db.find("select * from sys_role_menu where role_id=?", roleId));
 		result.put("menuList", Menu.me.findAll());
 		renderJson(result);
+	}
+	
+	//一键生成增、删、改、导出权限按钮
+	public void genAuthBtnBatch() {
+		int menuId = getParaToInt("menuId");
+		List<SysMenuBtn> modelList = new ArrayList<SysMenuBtn>();
+		
+		modelList.add(new SysMenuBtn().set("menu_id", menuId).set("btn_name", "增加").set("class_name", "addBtn").set("method_name", "add,addPage"));
+		modelList.add(new SysMenuBtn().set("menu_id", menuId).set("btn_name", "修改").set("class_name", "updateBtn").set("method_name", "update,updatePage"));
+		modelList.add(new SysMenuBtn().set("menu_id", menuId).set("btn_name", "删除").set("class_name", "delBtn").set("method_name", "delete"));
+		modelList.add(new SysMenuBtn().set("menu_id", menuId).set("btn_name", "导出").set("class_name", "exportBtn").set("method_name", "exportCsv"));
+		Db.batchSave(modelList, 1000);
+		
+		renderSuccess();
 	}
 }
