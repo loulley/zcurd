@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.aop.Duang;
+import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
@@ -26,17 +27,8 @@ public class ZcurdController extends BaseController {
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = zcurdService.getMetaData(headId);
 		
-		//更新dictData数据
-		for (ZcurdField zcurdField : metaData.getFieldList()) {
-			String dictSql = zcurdField.getStr("dict_sql");
-			if(StringUtil.isNotEmpty(dictSql)) {
-				Map<String, Object> dictData = DbMetaTool.getDictData(dictSql);
-				zcurdField.put("dict", dictData);
-			}
-		}
-		
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaData));
+		setAttrs(metaData.toMap());
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
 		render("listPage.html");
 	}
@@ -46,6 +38,7 @@ public class ZcurdController extends BaseController {
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = metaData.getHead();
+		flushDictData(metaData);
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -58,7 +51,7 @@ public class ZcurdController extends BaseController {
 		}
 		
 		renderDatagrid(
-				ZcurdTool.replaceDict(headId, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
+				ZcurdTool.replaceDict(metaData, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
 				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values), 
 				zcurdService.getFooter(metaData, properties, symbols, values));
 	}
@@ -68,8 +61,10 @@ public class ZcurdController extends BaseController {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = zcurdService.getMetaData(headId);
+		flushDictData(metaData);
+		
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaData));
+		setAttrs(metaData.toMap());
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
 	}
 	
@@ -92,8 +87,10 @@ public class ZcurdController extends BaseController {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = zcurdService.getMetaData(headId);
+		flushDictData(metaData);
+		
 		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaData));
+		setAttrs(metaData.toMap());
 		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
 		render("updatePage.html");
 	}
@@ -130,13 +127,12 @@ public class ZcurdController extends BaseController {
 	public void detailPage() {
 		int headId = getHeadId();
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
-		
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		Map<String, Object> row = zcurdService.get(headId, getParaToInt("id")).getColumns();
-		setAttr("headId", headId);
-		setAttrs(ZcurdTool.convert2Map(metaData));
-		setAttr("model", ZcurdTool.replaceDict(headId, row));
 		
+		Record row = zcurdService.get(headId, getParaToInt("id"));
+		setAttr("headId", headId);
+		setAttrs(metaData.toMap());
+		setAttr("model", ZcurdTool.replaceDict(metaData, row));
 		render("detailPage.html");
 	}
 	
@@ -146,6 +142,7 @@ public class ZcurdController extends BaseController {
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = metaData.getHead();
 		List<ZcurdField> fieldList = metaData.getFieldList();
+		flushDictData(metaData);
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
@@ -157,7 +154,7 @@ public class ZcurdController extends BaseController {
 			orderBy = head.getIdField() + " desc";
 		}
 		
-		List<Map<String, Object>> list = ZcurdTool.replaceDict(headId, 
+		List<Record> list = ZcurdTool.replaceDict(headId, 
 				DBTool.findByMultPropertiesDbSource(ZcurdTool.getDbSource(head.getDbSource()), head.getTableName(), properties, symbols, values));
 		List<String> headers = new ArrayList<String>();
 		List<String> clomuns = new ArrayList<String>();
@@ -176,12 +173,24 @@ public class ZcurdController extends BaseController {
 	}
 	
 	/**
-	 * 从url中获取headId
+	 * 获得表单id
 	 */
 	private int getHeadId() {
 		String headId = getAttr("headId");
 		return Integer.parseInt(headId);
 	}
 
+	/**
+	 * 刷新字典数据
+	 */
+	private void flushDictData(ZcurdMeta metaData) {
+		for (ZcurdField zcurdField : metaData.getFieldList()) {
+			String dictSql = zcurdField.getStr("dict_sql");
+			if(StringUtil.isNotEmpty(dictSql)) {
+				Map<String, Object> dictData = DbMetaTool.getDictData(dictSql);
+				metaData.getDictMap().put(zcurdField.getStr("field_name"), dictData);
+			}
+		}
+	}
 
 }

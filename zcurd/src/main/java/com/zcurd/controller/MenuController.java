@@ -9,7 +9,6 @@ public class MenuController extends BaseController {
 	}
 
 	public void list() {
-		addOpLog("[菜单管理] 查看列表");
 		render("list.html");
 	}
 	

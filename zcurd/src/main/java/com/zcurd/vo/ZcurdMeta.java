@@ -1,5 +1,6 @@
 package com.zcurd.vo;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,21 @@ public class ZcurdMeta {
 	private List<ZcurdHeadBtn> topList;			//顶部按钮
 	private List<ZcurdHeadBtn> lineList;		//行内按钮
 	private List<ZcurdHeadJs> jsList;			//扩展js
+	
+	public Map<String, Object> toMap() {
+		Map<String, Object> metaData = new HashMap<String, Object>();
+		metaData.put("head", getHead());
+		metaData.put("fieldList", getFieldList());
+		metaData.put("dictMap", getDictMap());
+		metaData.put("addFieldList", getAddFieldList());
+		metaData.put("updateFieldList", getUpdateFieldList());
+		metaData.put("btnList", getBtnList());
+		metaData.put("topList", getTopList());
+		metaData.put("lineList", getLineList());
+		metaData.put("jsList", getJsList());
+		metaData.put("footerFieldList", getFooterFieldList());
+		return metaData;
+	}
 	
 	public ZcurdHead getHead() {
 		return head;

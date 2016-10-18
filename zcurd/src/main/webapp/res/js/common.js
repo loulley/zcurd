@@ -6,7 +6,7 @@ $(function() {
 	$("body").css("visibility", "visible");
 	
 	//回车刷新
-	if(!/login$/.test(location.href) && !/main/.test(location.href) && datagrid && $(".pagination-num:focus").length == 0) {
+	if(!/login$/.test(location.href) && !/main/.test(location.href) && window.datagrid && $(".pagination-num:focus").length == 0) {
 		document.onkeydown = function() {
 			if(event.keyCode==13) {
 				if(window.zcurdSearch) {

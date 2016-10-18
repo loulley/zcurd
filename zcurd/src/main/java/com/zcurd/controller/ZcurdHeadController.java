@@ -22,7 +22,6 @@ import com.jfinal.render.RenderException;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
-import com.zcurd.common.ZcurdTool;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;
@@ -158,7 +157,7 @@ public class ZcurdHeadController extends BaseController {
 		}
 		String lowerClassName = className.substring(0, 1).toLowerCase() + className.substring(1);
 		
-		Map<String, Object> mateDate = ZcurdTool.convert2Map(metaMap);
+		Map<String, Object> mateDate = metaMap.toMap();
 		mateDate.put("className", className);
 		mateDate.put("queryPara", new HashMap<>());
 		

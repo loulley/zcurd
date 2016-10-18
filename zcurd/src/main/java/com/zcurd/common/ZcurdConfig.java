@@ -24,7 +24,6 @@ import com.zcurd.controller.MainController;
 import com.zcurd.controller.MenuController;
 import com.zcurd.controller.RoleController;
 import com.zcurd.controller.SysOplogController;
-import com.zcurd.controller.UserController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
@@ -64,7 +63,6 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/menu", MenuController.class, "/zcurd/menu");
 		me.add("/main", MainController.class, "/zcurd");
 		me.add("/role", RoleController.class, "/zcurd/role");
-		me.add("/user", UserController.class, "/zcurd/user");
 		me.add("/common", CommonController.class, "/zcurd");
 		me.add("/oplog", SysOplogController.class, "/zcurd/sysOplog");
 		
