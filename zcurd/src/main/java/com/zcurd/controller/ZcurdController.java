@@ -26,6 +26,7 @@ public class ZcurdController extends BaseController {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = zcurdService.getMetaData(headId);
+		flushDictData(metaData);
 		
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
@@ -38,7 +39,6 @@ public class ZcurdController extends BaseController {
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = metaData.getHead();
-		flushDictData(metaData);
 		
 		Object[] queryParams = getQueryParams();
 		String[] properties = (String[]) queryParams[0];
