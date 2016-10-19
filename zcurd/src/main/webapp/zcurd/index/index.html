@@ -32,16 +32,17 @@ h2, .color1 {color: orange;}
 		<div>微信ID：z2872332</div>
 	</div>
 	
-	<div class="zhichi">+</div>
-<script type="text/javascript" src="/zcurd/res/js/jquery-easyui/jquery.min.js"></script>
+	<div class="zhichi" onclick="zhichi()">+</div>
+	
 <script type="text/javascript">
-$(".zhichi").click(function() {
-	if($("#block_zczz").css("display") == "none") {
-		$("#block_zczz").show();
+function zhichi() {
+	var d = document.getElementById("block_zczz");
+	if(d.style.display == "none") {
+		d.style.display = "block";
 	}else {
-		$("#block_zczz").hide();
+		d.style.display = "none";
 	}
-});
+}
 </script>	
 </body>
 </html>
