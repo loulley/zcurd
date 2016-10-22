@@ -8,23 +8,28 @@
             <tr>
            		<th><span>来源：</span></th>
                	<td>
-               		<input class="easyui-textbox" type="text" name="source" value="" data-options=""></input>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="source" value="" data-options="fit:true"></input></div>
            		</td>
+           	</tr>
+            <tr>	
            		<th><span>书名：</span></th>
                	<td>
-               		<input class="easyui-textbox" type="text" name="book_name" value="" data-options=""></input>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="book_name" value="" data-options="fit:true"></input></div>
            		</td>
             </tr>
             <tr>
            		<th><span>阅读地址：</span></th>
                	<td>
-               		<input class="easyui-textbox" type="text" name="url" value="" data-options=""></input>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="url" value="" data-options="fit:true"></input></div>
            		</td>
+           	</tr>
+            <tr>	
            		<th><span>状态：</span></th>
                	<td>
-	            	<input class="easyui-combobox" id="status" name="status" value="" data-options="
+	            	<div class="wrap_input"><input class="easyui-combobox" id="status" name="status" value="" data-options="
 	            				valueField: 'id',
    								textField: 'text',
+   								fit:true,
 	            				data: [
 	            					{id:'', text:''}
 	            					,{id:'2', text:'采集完'}
@@ -32,15 +37,20 @@
 	            					,{id:'0', text:'未采集'}
 	            				]
 	            				
-	            	" />        	
+	            	" /></div>      	
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>内容：</span></th>
+               	<td>
+               		<div class="wrap_input textarea"><textarea name="js_content" class="easyui-validatebox" data-options="required:true" rows="5"></textarea></div>
            		</td>
             </tr>
             <tr>
            		<th><span>创建时间：</span></th>
                	<td>
-               		<input class="easyui-textbox" type="text" name="create_time" value="" data-options="required:true"></input>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="create_time" value="" data-options="fit:true, required:true"></input></div>
            		</td>
-            <td colspan="2"></td>
             </tr>
         </table>
     </form>

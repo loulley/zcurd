@@ -1,6 +1,11 @@
 body{padding: 0px; margin: 0px; font-family: Arial, Helvetica, sans-serif; font-size: 12px;}
 a{text-decoration: none;color: inherit;}
 a:hover{color: blue;}
+pre{margin: 0px; padding: 0px;}
+textarea {border: 1px solid #D3D3D3; border-radius: 2px;}
+table{border-collapse: collapse;}
+table th{font-weight: normal; color: #383838; text-align: right; }
+
 .wrap_search{margin: 5px 0px;}
 .wrap_search .search_item, .wrap_search .search_item .item_text, .wrap_search .search_item .item_obj{display: inline-block;height: 28px; line-height: 28px; overflow: hidden;}
 .wrap_search .search_item{width: 200px;}
@@ -9,25 +14,22 @@ a:hover{color: blue;}
 .wrap_search .search_item.search_between{display: inline-block; width: 400px;}
 .wrap_search input,select{width: 100px;}
 
-.combobox-item, .combobox-group{min-height: 12px;}
-
-table{border-collapse: collapse;}
-table th{font-weight: normal; color: #383838; text-align: right; }
-
-.table1 th{background: #EFEFEF;}
-.table1 th, .table1 td{border-bottom: 1px solid #DADADA;}
-
-.addPage table, .updatePage table, .detailPage table{width: 100%;}
+.addPage table, .updatePage table, .detailPage table{width: 100%; margin: 10px 0px;}
 .addPage table td, .updatePage table td, .detailPage table td {padding: 5px;}
-.addPage table th, .updatePage table th, .detailPage table th {padding: 5px;}
-.addPage table th span, .updatePage table th span, .detailPage table th span {display: inline-block; width: 100px;}
-.addPage table td input, .updatePage table td input {width: 130px; line-height: 18px; border: 1px solid #D3D3D3; border-radius: 5px;}
-.addPage table td textarea, .updatePage table td textarea {width: 126px; line-height: 18px; border: 1px solid #D3D3D3; border-radius: 5px;}
-.detailPage .valueSpan{display: inline-block; min-width: 140px; max-width: 220px; word-break:break-all;}
+.addPage table th, .updatePage table th, .detailPage table th {padding: 5px; width: 120px;}
+.addPage table th span, .updatePage table th span, .detailPage table th span {display: inline-block; width: 110px;}
+.addPage table td input, .updatePage table td input {border: 1px solid #D3D3D3; border-radius: 0px; height: 30px;}
+.addPage table td textarea, .updatePage table td textarea {width: 126px; border: 1px solid #D3D3D3; width: 100%;}
+
+.detailPage .valueSpan{display: inline-block; word-break:break-all; line-height: 18px; padding: 4px;}
+.detailPage.multiple .valueSpan{display: inline-block; min-width: 140px; max-width: 220px; word-break:break-all;}
 
 .add_content input.box{width: 13px;}
 .datagrid-btable .operate{padding: 2px;}
-textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
+
+.wrap_input{height: 28px; padding: 2px 15px 2px 2px;}
+.wrap_input.textarea{height: auto; padding-right: 20px;}
+.multiple .wrap_input{width: 200px;}
 
 /**弹窗遮布背景**/
 .window-proxy-mask, .window-mask {background: #000000;}
@@ -83,7 +85,7 @@ textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
 
 /**调整window样式**/
 .window-thinborder .window-header {
-    padding: 10px 10px;
+    padding: 8px 8px;
 }
 
 .l-btn {
@@ -106,9 +108,9 @@ textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
 }
 
 .l-btn.color1, .l-btn.color1 .l-btn-icon {
-	border-color: #4898d5;
-    background: #2e8ded;
-    color: #fff;
+	color: #fff;
+    border: 1px solid #09c;
+    background: #09c;
 }
 
 .l-btn.color1:hover{
@@ -124,3 +126,7 @@ textarea {border: 1px solid #D3D3D3; border-radius: 5px;}
 .l-btn.color2:hover{
 	opacity: 0.9;
 }
+
+.textbox, .textbox .textbox-text {border-radius: 2px;}
+
+.combobox-item, .combobox-group{min-height: 12px;}

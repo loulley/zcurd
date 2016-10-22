@@ -1,31 +1,27 @@
 <#include "/common/head.html"/>
- <div class="easyui-panel detailPage" data-options="fit:true,border:false">
+
+<#-- 计算table列数 -->
+<#assign columnSize=head.dialog_size?split("x")[0]?number />
+<#if columnSize lt 700>
+	<#assign columnSize=1 />
+<#else>
+	<#assign columnSize=2 />
+</#if>
+
+ <div class="easyui-panel detailPage<#if columnSize gt 1> multiple</#if>" data-options="fit:true,border:false">
     <form id="ff" class="easyui-form" method="post">
         <table class="table1">
-        	<#assign columnSize=head.dialog_size?split("x")[0]?number />
-        	<#if columnSize lt 500>
-        		<#assign columnSize=1 />
-        	<#elseif columnSize gte 500 && columnSize lt 800 >
-       			<#assign columnSize=2 />
-        	<#else>
-        		<#assign columnSize=3 />
-        	</#if>
-        	
            	<#list updateFieldList as item>
-           		<#assign easyui_type="easyui-textbox" />
-	        	<#if item.data_type=='timestamp' || item.data_type=='datetime' || item.data_type=='date'>
-	        		<#assign easyui_type="easyui-datebox" />
-        		</#if>
-        		
            		<#if item_index == 0 || (item_index + 0) % columnSize == 0>
             <tr>
            		</#if>
            		<th><span>${item.column_name}：</span></th>
-               	<td><span class="valueSpan">${model[item.field_name]!''}</span></td>
+               	<td><span class="valueSpan"><pre>${model[item.field_name]!''}</pre></span></td>
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            		</#if>
            	</#list>
+           	
            	<#if updateFieldList.size() % columnSize != 0>
            		<#if (columnSize - updateFieldList.size() % columnSize) == 1>
                 <td colspan="2"></td>

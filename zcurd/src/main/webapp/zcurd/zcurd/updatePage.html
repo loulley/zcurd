@@ -1,19 +1,16 @@
 <#include "/common/head.html"/>
 
- <div class="easyui-panel updatePage" data-options="fit:true,border:false">
+<#-- 计算table列数 -->
+<#assign columnSize=head.dialog_size?split("x")[0]?number />
+<#if columnSize lt 700>
+	<#assign columnSize=1 />
+<#else>
+	<#assign columnSize=2 />
+</#if>
+
+ <div class="easyui-panel updatePage<#if columnSize gt 1> multiple</#if>" data-options="fit:true,border:false">
     <form id="ff" class="easyui-form" method="post">
         <table class="table1">
-        	<#-- 计算一行显示多少列 start -->
-        	<#assign columnSize=head.dialog_size?split("x")[0]?number />
-        	<#if columnSize lt 500>
-        		<#assign columnSize=1 />
-        	<#elseif columnSize gte 500 && columnSize lt 800 >
-       			<#assign columnSize=2 />
-        	<#else>
-        		<#assign columnSize=3 />
-        	</#if>
-        	<#-- 计算一行显示多少列 end -->
-        	
        	<#list updateFieldList as item>
            	<#if item_index == 0 || item_index % columnSize == 0>
             <tr>
@@ -22,18 +19,19 @@
                	<td>
             <#if item.is_allow_update == 1>
                	<#if item.input_type == 'easyui-combobox'>
-               		<input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
+               		<div class="wrap_input"><input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
                				<#if item.is_allow_null==0>required:true,</#if>
                				valueField: 'id',
         					textField: 'text',
+        					fit: true,
         					data:[
         						{id:'', text:''}<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>
 	               			]
-               		"/>
+               		"/></div>
                	<#elseif item.input_type == 'textarea'>	
-               		<textarea name="${item.field_name}" rows="2" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea>
+               		<div class="wrap_input textarea"><textarea name="${item.field_name}" rows="5" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea></div>
                	<#else>
-               		<input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="<#if item.is_allow_null==0>required:true</#if>"></input>
+               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
                	</#if>
              <#else>
                		<span class="item">${model[item.field_name]!''}</span>	
