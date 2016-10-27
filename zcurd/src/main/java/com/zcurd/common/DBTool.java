@@ -71,6 +71,7 @@ public class DBTool{
 	}
 	
 	public static List<Record> findByMultPropertiesDbSource(String dbSource, String[] fields, String table, String[] properties, String[] symbols, Object[] values, String orderBy, Pager pager) {
+		checkSecurity(properties, symbols);
 		StringBuilder sb = new StringBuilder("select ");
 		if(fields == null || fields.length == 0) {
 			fields = new String[]{"*"};
@@ -107,6 +108,7 @@ public class DBTool{
 	}
 	
 	public static int countByMultPropertiesDbSource(String dbSource, String table, String[] properties, String[] symbols, Object[] values) {
+		checkSecurity(properties, symbols);
 		StringBuilder sb = new StringBuilder("select count(*)");
 		sb.append(" from " + table + " where 1=1");
 		for (int i = 0; i < properties.length; i++) {
@@ -116,6 +118,7 @@ public class DBTool{
 	}
 	
 	public static List<Object> findDbSource(String dbSource, String selectSQL, String[] properties, String[] symbols, Object[] values) {
+		checkSecurity(properties, symbols);
 		StringBuilder sb = new StringBuilder(selectSQL);
 		if(selectSQL.toLowerCase().indexOf("where") < 0) {
 			sb.append(" where");
@@ -133,20 +136,82 @@ public class DBTool{
 		return Db.use(ZcurdTool.getDbSource(dbSource));
 	}
 	
+	/**
+	 * 判断是否安全的查询条件
+	 * @return true: 安全, false: 不安全
+	 */
+	public static boolean isSecurity(String[] properties, String[] symbols) {
+		return isSecurity(properties, symbols, false);
+	}
+	
+	/**
+	 * 判断是否安全的查询条件。如不安全，抛出运行时异常
+	 */
+	public static boolean checkSecurity(String[] properties, String[] symbols) {
+		return isSecurity(properties, symbols, true);
+	}
+	
+	/**
+	 * 判断是否安全的查询条件
+	 * @param isThrowException	是否抛出异常 (true: 抛出异常, false: 不抛出异常)
+	 * @return true: 安全, false: 不安全
+	 */
+	private static boolean isSecurity(String[] properties, String[] symbols, boolean isThrowException) {
+		if(properties != null) {
+			String[] danger4Properties = new String[]{" ", "=", ">" , "<"};
+			for (String propertie : properties) {
+				if(StringUtil.isNotEmpty(propertie)) {
+					propertie = propertie.trim();
+					for (String str : danger4Properties) {
+						if(propertie.contains(str)) {
+							if(isThrowException) {
+								throw new RuntimeException("SQL Danger: [" + propertie + "] 不是一个安全的properties");
+							}else{
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if(properties != null) {
+			String[] danger4Symbols = new String[]{" ", "'"};
+			for (String symbol : symbols) {
+				if(StringUtil.isNotEmpty(symbol)) {
+					symbol = symbol.trim();
+					for (String str : danger4Symbols) {
+						if(symbol.contains(str)) {
+							if(isThrowException) {
+								throw new RuntimeException("SQL Danger: [" + symbol + "] 不是一个安全的symbols");
+							}else{
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	public static void main(String[] args) {
 		C3p0Plugin c3p0Plugin = new C3p0Plugin("jdbc:mysql://127.0.0.1/zcurd?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull", "root", "123456");
 		ActiveRecordPlugin arp = new ActiveRecordPlugin("zcurd", c3p0Plugin); 
 		c3p0Plugin.start();
 		arp.start();
 		
-		/*List<Record> list = findByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0});
+		List<Record> list = findByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0});
 		for (Record record : list) {
 			System.out.println(record);
 		}
-		System.out.println(countByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0}));*/
+		System.out.println(countByMultProperties("sys_menu" , new String[]{"parent_id"}, new Object[]{0}));
 		
-		List<Object> list = findDbSource(null, "select sum(id), avg(id) from sys_menu", new String[]{"id"}, new String[]{"<"}, new Object[]{5});
-		System.out.println(list);
+		/*List<Object> list = findDbSource(null, "select sum(id), avg(id) from sys_menu", new String[]{"id"}, new String[]{"<"}, new Object[]{5});
+		System.out.println(list);*/
+		
+		System.out.println(isSecurity(new String[]{"name>1"}, new String[]{}));
 	}
 
 }
