@@ -8,6 +8,7 @@
 	<#assign columnSize=2 />
 </#if>
 
+<#escape x as x?html><#-- 安全输出 -->
  <div class="easyui-panel detailPage<#if columnSize gt 1> multiple</#if>" data-options="fit:true,border:false">
     <form id="ff" class="easyui-form" method="post">
         <table class="table1">
@@ -35,6 +36,7 @@
         </table>
     </form>
 </div>
+</#escape>
 <script>
 top.window.subPage.save = save;
 function save() {

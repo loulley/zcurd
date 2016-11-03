@@ -1,5 +1,7 @@
 package com.zcurd.service;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,6 +18,10 @@ import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.User;
+
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 /**
  * 登陆、权限业务
@@ -130,6 +136,29 @@ public class LoginService {
 		
 		Map<String, List<MenuDatarule>> pageDataruleMap = new HashMap<String, List<MenuDatarule>>();
 		List<MenuDatarule> userDataruleList = MenuDatarule.me.findByUser(user);
+		
+		//处理字段值中的变量
+		for (MenuDatarule menuDatarule : userDataruleList) {
+			String value = menuDatarule.get("value");
+			if(value.indexOf("${") != -1) {
+				Configuration cfg = new Configuration(Configuration.VERSION_2_3_0);
+				StringTemplateLoader stringLoader = new StringTemplateLoader();
+				stringLoader.putTemplate("myTemplate", value);
+				cfg.setTemplateLoader(stringLoader);
+				try {
+					Template temp = cfg.getTemplate("myTemplate", "utf-8");
+					Map<String, Object> root = new HashMap<String, Object>();
+					root.put("user", user);
+					//TODO 变量处理，此处可以加其它数据
+					Writer out = new StringWriter(2048);
+					temp.process(root, out);
+					menuDatarule.set("value", out.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		for (MenuDatarule menuDatarule : userDataruleList) {
 			String menuUrl = userMenuMap.get(menuDatarule.getInt("menu_id")).getStr("menu_url");
 			if(StringUtil.isNotEmpty(menuUrl)) {

@@ -19,7 +19,7 @@
                	<td>
             <#if item.is_allow_update == 1>
                	<#if item.input_type == 'easyui-combobox'>
-               		<div class="wrap_input"><input id="${item.field_name}" name="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
+               		<div class="wrap_input"><input id="${item.field_name}" name="${item.field_name}" id="${item.field_name}" class="easyui-combobox" value="${model[item.field_name]!''}" data-options="
                				<#if item.is_allow_null==0>required:true,</#if>
                				valueField: 'id',
         					textField: 'text',
@@ -29,12 +29,14 @@
 	               			]
                		"/></div>
                	<#elseif item.input_type == 'textarea'>	
-               		<div class="wrap_input textarea"><textarea name="${item.field_name}" rows="5" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea></div>
+               		<div class="wrap_input textarea"><textarea name="${item.field_name}" id="${item.field_name}" rows="5" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea></div>
                	<#else>
-               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" value="${model[item.field_name]!''}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
+               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" id="${item.field_name}" value="${model[item.field_name]!''}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
                	</#if>
              <#else>
-               		<span class="item">${model[item.field_name]!''}</span>	
+               		<#escape x as x?html><#-- 安全输出 -->
+               		<span class="item" id="${item.field_name}">${model[item.field_name]!''}</span>
+               		</#escape>
              </#if>	
            		</td>
            		
@@ -84,7 +86,7 @@ function getParam() {
 //扩展js
 <#list jsList as item>
 	<#if item.page == "update">
-${item.js_content!};
+${item.js_content!}
 	</#if>
 </#list>
 </script>

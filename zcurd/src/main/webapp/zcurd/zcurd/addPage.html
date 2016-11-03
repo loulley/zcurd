@@ -28,9 +28,9 @@
 	            				<#if item.is_allow_null==0>,required:true</#if>
 	            	" /></div>        	
 			<#elseif item.input_type == 'textarea'>	
-			        <div class="wrap_input textarea"><textarea name="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="5"></textarea></div>
+			        <div class="wrap_input textarea"><textarea name="${item.field_name}" id="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="5"></textarea></div>
 			<#else>
-               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
+               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" id="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
 			</#if>
            		</td>
            	<#if item_index != 0 && (item_index + 1) % columnSize == 0>
@@ -78,7 +78,7 @@ function getParam() {
 //扩展js
 <#list jsList as item>
 	<#if item.page == "add">
-${item.js_content!};
+${item.js_content!}
 	</#if>
 </#list>
 </script>

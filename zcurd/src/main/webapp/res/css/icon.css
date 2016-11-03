@@ -29,6 +29,9 @@
 	padding-left: 0px;
 }
 
+/** 变量 **/
+.icon-bianliang {background:url('../images/zcurd/variable.png') no-repeat center center;}
+
 .glyphicon-asterisk{background-position: 5000px;}
 .glyphicon-asterisk:before {content: "\2a";}
 .glyphicon-plus{background-position: 5000px;}
