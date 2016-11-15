@@ -198,6 +198,7 @@ public class ZcurdController extends BaseController {
 			if(StringUtil.isNotEmpty(dictSql)) {
 				Map<String, Object> dictData = DbMetaTool.getDictData(dictSql);
 				metaData.getDictMap().put(zcurdField.getStr("field_name"), dictData);
+				zcurdField.put("dict", dictData);
 			}
 		}
 	}
