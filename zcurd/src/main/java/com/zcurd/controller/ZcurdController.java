@@ -10,6 +10,7 @@ import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
 import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZcurdTool;
+import com.zcurd.common.handler.CurdHandle;
 import com.zcurd.ext.render.csv.CsvRender;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -22,6 +23,7 @@ import com.zcurd.vo.ZcurdMeta;
  */
 public class ZcurdController extends BaseController {
 	
+	//列表页面
 	public void listPage() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
@@ -34,6 +36,7 @@ public class ZcurdController extends BaseController {
 		render("listPage.html");
 	}
 	
+	//列表数据
 	public void listData() {
 		int headId = getHeadId();
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
@@ -73,6 +76,12 @@ public class ZcurdController extends BaseController {
 		int headId = getHeadId();
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = metaData.getHead();
+		/*try {
+			CurdHandle ch = (CurdHandle) Class.forName("com.zcurd.common.handler.FlushFormCurdHandle").newInstance();
+			ch.add(headId, getRequest());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 		
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
 		Map<String, String[]> paraMap = getParaMap();

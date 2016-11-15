@@ -14,7 +14,7 @@ public class MenuDatarule extends Model<MenuDatarule> {
 		return find("select * from sys_menu_datarule");
 	}
 	
-	public List<MenuDatarule> findByUser(User user) {
+	public List<MenuDatarule> findByUser(SysUser user) {
 		List<MenuDatarule> result = new ArrayList<MenuDatarule>();
 		String roles = user.getStr("roles");
 		if(StringUtil.isNotEmpty(roles)) {

@@ -4,6 +4,14 @@
 if (self != top) {  //主页不允许在iframe中
 	top.window.location.reload();
 }
+
+//修改密码
+function updatePassword() {
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("密码修改成功！");
+	}
+	top.openWindow("修改密码", "user/updatePasswordPage", {size: '400x300'});
+}
 </script>
 <style type="text/css">
 .head{background: #09C; font-size: 14px; color: white; height: 50px; line-height: 50px; padding: 0px 8px; overflow: hidden;}
@@ -49,7 +57,7 @@ if (self != top) {  //主页不允许在iframe中
 			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm1'"><#if session['sysUser']??>${session['sysUser'].user_name}<#else>未登陆</#if></a>
 			    </div>
 			    <div id="mm1" style="width:150px;">
-			        <div data-options="iconCls:'icon-edit'">修改密码</div>
+			        <div data-options="iconCls:'icon-edit'" onclick='updatePassword()'>修改密码</div>
 			        <div class="menu-sep"></div>
 			        <div data-options="iconCls:'icon-undo'" onclick="location.href='${basePath}/login/logout'">退出</div>
 			    </div>

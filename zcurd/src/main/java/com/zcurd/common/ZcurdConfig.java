@@ -24,6 +24,7 @@ import com.zcurd.controller.MainController;
 import com.zcurd.controller.MenuController;
 import com.zcurd.controller.RoleController;
 import com.zcurd.controller.SysOplogController;
+import com.zcurd.controller.SysUserController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.Menu;
@@ -31,7 +32,7 @@ import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.SysMenuBtn;
 import com.zcurd.model.SysOplog;
-import com.zcurd.model.User;
+import com.zcurd.model.SysUser;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.model.ZcurdHeadBtn;
@@ -65,6 +66,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/role", RoleController.class, "/zcurd/role");
 		me.add("/common", CommonController.class, "/zcurd");
 		me.add("/oplog", SysOplogController.class, "/zcurd/sysOplog");
+		me.add("/user", SysUserController.class, "/zcurd/sysUser");
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
 		me.add("/clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
@@ -89,7 +91,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu", Menu.class);
 		arp.addMapping("sys_menu_btn", MenuBtn.class);
 		arp.addMapping("sys_menu_datarule", MenuDatarule.class);
-		arp.addMapping("sys_user", User.class);
+		arp.addMapping("sys_user", SysUser.class);
 		arp.addMapping("sys_menu_btn", SysMenuBtn.class);
 		arp.addMapping("sys_oplog", SysOplog.class);
 		

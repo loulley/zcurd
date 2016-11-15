@@ -43,7 +43,7 @@ public class ${className}Controller extends BaseController {
 		Map<String, Object> dictData${item.field_name} = ${className}.me.getDictData${item.field_name}();
 		for(Record record : list) {
 			String fieldName = "${item.field_name}";
-			if(dictData${item.field_name}.get(record.get(fieldName).toString()) != null) {
+			if(record.get(fieldName) != null && dictData${item.field_name}.get(record.get(fieldName).toString()) != null) {
 				record.set(fieldName, dictData${item.field_name}.get(record.get(fieldName).toString()));
 			}
 		}

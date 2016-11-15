@@ -17,7 +17,7 @@ import com.zcurd.common.util.UrlUtil;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
-import com.zcurd.model.User;
+import com.zcurd.model.SysUser;
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
@@ -34,7 +34,7 @@ public class LoginService {
 	/**
 	 * 获得用户菜单
 	 */
-	public List<Menu> getUserMenu(User user) {
+	public List<Menu> getUserMenu(SysUser user) {
 		allMenuList = Menu.me.findAll();
 		userMenuList = Menu.me.findByUser(user);
 		
@@ -88,7 +88,7 @@ public class LoginService {
 	/**
 	 * 按钮权限
 	 */
-	public Map<String, Object> getNoAuthBtnUrl(User user) {
+	public Map<String, Object> getNoAuthBtnUrl(SysUser user) {
 		Map<Integer, Menu> userMenuMap = new HashMap<Integer, Menu>();
 		for (Menu menu : userMenuList) {
 			userMenuMap.put(menu.getInt("id"), menu);
@@ -128,7 +128,7 @@ public class LoginService {
 	/**
 	 * 数据权限
 	 */
-	public Map<String, List<MenuDatarule>> getNoAuthDatarule(User user) {
+	public Map<String, List<MenuDatarule>> getNoAuthDatarule(SysUser user) {
 		Map<Integer, Menu> userMenuMap = new HashMap<Integer, Menu>();
 		for (Menu menu : userMenuList) {
 			userMenuMap.put(menu.getInt("id"), menu);

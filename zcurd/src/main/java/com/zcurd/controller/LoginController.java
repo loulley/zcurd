@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jfinal.aop.Duang;
 import com.zcurd.model.Menu;
-import com.zcurd.model.User;
+import com.zcurd.model.SysUser;
 import com.zcurd.service.LoginService;
 
 /**
@@ -28,7 +28,7 @@ public class LoginController extends BaseController {
 	
 	public void login() {
 		LoginService loginService = Duang.duang(LoginService.class);
-		List<User> list = User.me.findByMultiProperties(new String[]{"user_name", "password"}, 
+		List<SysUser> list = SysUser.me.findByMultiProperties(new String[]{"user_name", "password"}, 
 				new Object[]{getPara("user_name"), getPara("password")});
 		if(list.size() > 0) {
 			setSessionAttr("sysUser", list.get(0));

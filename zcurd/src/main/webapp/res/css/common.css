@@ -18,8 +18,8 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 .addPage table td, .updatePage table td, .detailPage table td {padding: 5px;}
 .addPage table th, .updatePage table th, .detailPage table th {padding: 5px; width: 120px;}
 .addPage table th span, .updatePage table th span, .detailPage table th span {display: inline-block; width: 110px;}
-.addPage table td input, .updatePage table td input {border: 1px solid #D3D3D3; border-radius: 0px; height: 30px;}
-.addPage table td textarea, .updatePage table td textarea {width: 126px; border: 1px solid #D3D3D3; width: 100%;}
+.addPage table td input, .updatePage table td input {border: 1px solid #D3D3D3; border-radius: 0px; width: 100%; height: 100%;}
+.addPage table td textarea, .updatePage table td textarea {border: 1px solid #D3D3D3; width: 100%;}
 
 .detailPage .valueSpan{display: inline-block; word-break:break-all; line-height: 18px; padding: 4px;}
 .detailPage.multiple .valueSpan{display: inline-block; min-width: 140px; max-width: 220px; word-break:break-all;}
@@ -30,6 +30,7 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 .wrap_input{height: 28px; padding: 2px 15px 2px 2px;}
 .wrap_input.textarea{height: auto; padding-right: 20px;}
 .multiple .wrap_input{width: 200px;}
+.wrap_input input.validatebox-invalid{border-color: #ffa8a8;}
 
 /**弹窗遮布背景**/
 .window-proxy-mask, .window-mask {background: #000000;}

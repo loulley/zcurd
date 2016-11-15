@@ -12,7 +12,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.Pager;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.SysOplog;
-import com.zcurd.model.User;
+import com.zcurd.model.SysUser;
 
 public class BaseController extends Controller {
 	
@@ -69,7 +69,7 @@ public class BaseController extends Controller {
 		renderJson(result);
 	}
 	
-	protected User getSessionUser() {
+	protected SysUser getSessionUser() {
 		return getSessionAttr("sysUser");
 	}
 	

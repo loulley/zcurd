@@ -1,16 +1,18 @@
 package com.zcurd.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
+import com.zcurd.common.DbMetaTool;
 
-public class User extends Model<User> {
+public class SysUser extends Model<SysUser> {
 	private static final long serialVersionUID = 1L;
-	public static final User me = new User();
+	public static final SysUser me = new SysUser();
 	
-	public List<User> findByMultiProperties(String[] properties, Object[] values) {
+	public List<SysUser> findByMultiProperties(String[] properties, Object[] values) {
 		StringBuffer sql = new StringBuffer("select * from " + getTable().getName() + " where 1=1");
 		if(properties != null) {
 			for (String property : properties) {
@@ -25,6 +27,10 @@ public class User extends Model<User> {
 	
 	private Table getTable() {
 		return TableMapping.me().getTable(getUsefulClass());
+	}
+	
+	public Map<String, Object> getDictDataroles() {
+		return DbMetaTool.getDictData("select id, role_name from sys_role");
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -16,7 +16,7 @@ public class Menu extends Model<Menu> {
 		return find("select * from sys_menu order by order_num asc");
 	}
 	
-	public List<Menu> findByUser(User user) {
+	public List<Menu> findByUser(SysUser user) {
 		List<Menu> result = new ArrayList<Menu>();
 		String roles = user.getStr("roles");
 		if(StringUtil.isNotEmpty(roles)) {

@@ -244,7 +244,7 @@ $(window).ajaxError(function(handler){
 $(window).ajaxSuccess(function(evt, request, settings){
 	var s = request.responseText;
 	if(s && s.indexOf('{"result":"fail"') != -1) {
-		showWarnMsg(s.substring(25, s.length - 2));
+		showWarnMsg(s.substring(24, s.length - 2));
 	}
 });
 
@@ -268,3 +268,13 @@ function handleAuthDataRule() {
 		});
 	}
 }
+
+//extend the 'equals' rule
+$.extend($.fn.validatebox.defaults.rules, {
+    equals: {
+        validator: function(value,param){
+            return value == $(param[0]).val();
+        },
+        message: '两次输入不一致.'
+    }
+});

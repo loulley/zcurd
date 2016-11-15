@@ -14,7 +14,7 @@ public class MenuBtn extends Model<MenuBtn> {
 		return find("select * from sys_menu_btn");
 	}
 	
-	public List<MenuBtn> findByUser(User user) {
+	public List<MenuBtn> findByUser(SysUser user) {
 		List<MenuBtn> result = new ArrayList<MenuBtn>();
 		String roles = user.getStr("roles");
 		if(StringUtil.isNotEmpty(roles)) {
