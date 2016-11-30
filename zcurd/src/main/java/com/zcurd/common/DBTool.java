@@ -132,6 +132,29 @@ public class DBTool{
 		return result;
 	}
 	
+	/**
+	 * 解析dbSource和sql，格式为[dbSource=xxx]select ...
+	 * @param sql
+	 * @return String[0]为数据源，String[1]为sql
+	 */
+	public static String[] parseSQL4DbSource(String sql) {
+		String dbSource = "";
+		if(sql.toLowerCase().startsWith("[dbSource".toLowerCase())) {
+			dbSource = sql.substring(1, sql.indexOf("]")).split("=")[1].trim();
+			sql = sql.substring(sql.indexOf("]") + 1);
+		}
+		return new String[]{dbSource, sql};
+	}
+	
+	/**
+	 * 支持带数据源的查询
+	 * @param sql 格式为[dbSource=xxx]select ...
+	 */
+	public static List<Record> findBySQL4DbSource(String sql) {
+		String[] parseSql = parseSQL4DbSource(sql);
+		return use(parseSql[0]).find(parseSql[1]);
+	}
+	
 	public static DbPro use(String dbSource) {
 		return Db.use(ZcurdTool.getDbSource(dbSource));
 	}

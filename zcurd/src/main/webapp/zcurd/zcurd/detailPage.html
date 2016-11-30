@@ -45,7 +45,7 @@ function save() {
 
 //扩展js
 <#list jsList as item>
-	<#if item.page == "detail">
+	<#if item.page?contains("detail")>
 ${item.js_content!};
 	</#if>
 </#list>

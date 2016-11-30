@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
@@ -97,15 +96,10 @@ public class DbMetaTool {
 	 * 根据字典sql获得字典数据
 	 */
 	public static Map<String, Object> getDictData(String dictSql) {
-		//解析dbSource，格式为[dbSource=xxx]select ...
-		String dbSource = "";
-		if(dictSql.toLowerCase().startsWith("[dbSource".toLowerCase())) {
-			dbSource = dictSql.substring(1, dictSql.indexOf("]")).split("=")[1].trim();
-			dictSql = dictSql.substring(dictSql.indexOf("]") + 1);
-		}
+		String[] parseSql = DBTool.parseSQL4DbSource(dictSql);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<Record> listRecord = DBTool.use(dbSource).find("select 'key', 'text' union all select * from (" + dictSql + ") a");
+		List<Record> listRecord = DBTool.use(parseSql[0]).find("select 'key', 'text' union all select * from (" + parseSql[1] + ") a");
 		for (int i = 1; i < listRecord.size(); i++) {
 			Record record = listRecord.get(i);
 			map.put(record.getStr("key"), record.getStr("text"));

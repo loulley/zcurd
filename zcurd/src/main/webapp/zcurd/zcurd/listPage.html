@@ -220,7 +220,7 @@ function _openSubPage(pageUrl) {
 
 //扩展js
 <#list jsList as item>
-	<#if item.page == "list">
+	<#if item.page?contains("list")>
 ${item.js_content!};
 	</#if>
 </#list>

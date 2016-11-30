@@ -64,7 +64,7 @@ function getParam() {
 	var param = {
 	    "headId": ${headId}, 
 		<#list addFieldList as item>
-       	    "model.${item.field_name}": $(":input[name='${item.field_name}']").val()<#if addFieldList.size()!=item_index>, </#if>
+       		"model.${item.field_name}": getInputValue("${item.field_name}")<#if addFieldList.size()!=item_index>, </#if>
 		</#list>
 	}
 	for(key in param) {
@@ -77,7 +77,7 @@ function getParam() {
 
 //扩展js
 <#list jsList as item>
-	<#if item.page == "add">
+	<#if item.page?contains("add")>
 ${item.js_content!}
 	</#if>
 </#list>

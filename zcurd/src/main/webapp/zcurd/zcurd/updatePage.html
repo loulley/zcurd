@@ -85,7 +85,7 @@ function getParam() {
 
 //扩展js
 <#list jsList as item>
-	<#if item.page == "update">
+	<#if item.page?contains("update")>
 ${item.js_content!}
 	</#if>
 </#list>

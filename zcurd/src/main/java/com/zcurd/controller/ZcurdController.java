@@ -1,6 +1,7 @@
 package com.zcurd.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,12 +9,13 @@ import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Record;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.FreemarkUtil;
 import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZcurdTool;
-import com.zcurd.common.handler.CurdHandle;
 import com.zcurd.ext.render.csv.CsvRender;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
+import com.zcurd.model.ZcurdHeadJs;
 import com.zcurd.service.ZcurdService;
 import com.zcurd.vo.ZcurdMeta;
 
@@ -33,6 +35,7 @@ public class ZcurdController extends BaseController {
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
+		handleVar(metaData, null);
 		render("listPage.html");
 	}
 	
@@ -69,6 +72,7 @@ public class ZcurdController extends BaseController {
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
+		handleVar(metaData, null);
 	}
 	
 	//增加
@@ -100,7 +104,9 @@ public class ZcurdController extends BaseController {
 		
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
-		setAttr("model", zcurdService.get(headId, getParaToInt("id")).getColumns());
+		Record currRecord = zcurdService.get(headId, getParaToInt("id"));
+		setAttr("model", currRecord.getColumns());
+		handleVar(metaData, currRecord);
 		render("updatePage.html");
 	}
 	
@@ -142,6 +148,7 @@ public class ZcurdController extends BaseController {
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
 		setAttr("model", ZcurdTool.replaceDict(metaData, row));
+		handleVar(metaData, row);
 		render("detailPage.html");
 	}
 	
@@ -200,6 +207,36 @@ public class ZcurdController extends BaseController {
 				metaData.getDictMap().put(zcurdField.getStr("field_name"), dictData);
 				zcurdField.put("dict", dictData);
 			}
+		}
+	}
+	
+	/**
+	 * 处理变量
+	 */
+	private void handleVar(ZcurdMeta metaData, Record currRecord) {
+		//TODO 变量处理，此处可以加其它数据
+		Map<String, Object> varData = new HashMap<>();
+		varData.put("currRecord", currRecord);	//当前编辑记录，编辑、详情页面可用
+		varData.put("user", getSessionUser());
+		varData.put("metaData", metaData);
+		varData.put("request", getRequest());
+		varData.put("session", getSession());
+		
+		//sql数据
+		List<Object> sqlData = new ArrayList<>();
+		for (ZcurdHeadJs zcurdHeadJs : metaData.getJsList()) {
+			String sqlContent = FreemarkUtil.parse(zcurdHeadJs.getStr("sql_content"), varData);
+			if(StringUtil.isNotEmpty(sqlContent)) {
+				zcurdHeadJs.set("sql_content", sqlContent);
+				for (String sql : sqlContent.split(";")) {
+					sqlData.add(DBTool.findBySQL4DbSource(sql));
+				}
+			}
+		}
+		varData.put("sqlData", sqlData);
+		
+		for (ZcurdHeadJs zcurdHeadJs : metaData.getJsList()) {
+			zcurdHeadJs.set("js_content", FreemarkUtil.parse(zcurdHeadJs.getStr("js_content"), varData));
 		}
 	}
 
