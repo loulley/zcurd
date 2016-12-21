@@ -6,29 +6,32 @@
             <tr>
            		<th><span>菜单名称：</span></th>
                	<td>
-            		<input class="easyui-textbox"  data-options="required:true" type="text" name="menu_name"></input>
+            		<div class="wrap_input"><input class="easyui-textbox" data-options="fit:true, required:true" type="text" name="menu_name"></input></div>
            		</td>
+           	</tr>
+        	<tr>	
            		<th><span>菜单地址：</span></th>
                	<td>
-            		<input class="easyui-textbox" type="text" name="menu_url"></input>
+            		<div class="wrap_input"><input class="easyui-textbox" type="text" name="menu_url" data-options="fit:true, required:true"></input></div>
            		</td>
             </tr>
         	<tr>
            		<th><span>上级菜单：</span></th>
                	<td>
-            		<input id="parent_id" class="easyui-textbox" type="text" name="parent_id"></input>
+            		<div class="wrap_input"><input id="parent_id" class="easyui-textbox" type="text" name="parent_id" data-options="fit:true, required:true"></input></div>
            		</td>
+           	</tr>
+        	<tr>	
            		<th><span>图标：</span></th>
                	<td>
-            		<input type="text" name="icon" onclick='top.window.openPopup(this, "请选择图标", "${basePath}/common/iconsPage", {width: 540, height: 400})'></input>
+            		<div class="wrap_input"><input type="text" name="icon" onclick='top.window.openPopup(this, "请选择图标", "${basePath}/common/iconsPage", {width: 540, height: 400})'></input></div>
            		</td>
             </tr>
             <tr>
            		<th><span>顺序：</span></th>
                	<td>
-            		<input class="easyui-textbox" type="text" name="order_num"></input>
+            		<div class="wrap_input"><input class="easyui-textbox" type="text" name="order_num" data-options="fit:true"></input></div>
            		</td>
-               	<td colspan="2"></td>
             </tr>
         </table>
     </form>

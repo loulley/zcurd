@@ -39,6 +39,9 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 .detail_page .item {display: inline-block; min-width: 100px; max-width: 180px;}
 
 .datagrid-header-row, .datagrid-row {height: 29px;}
+/** 列表中的图片 **/
+.datagrid-body .dg_img{max-width: 200px; height: 50px; padding-top: 5px;}
+
 .textbox-focused {
   border-color: #48ADE0;
   -moz-box-shadow: 0 0 1px 0 #D3D3D3;
@@ -131,3 +134,7 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 .textbox, .textbox .textbox-text {border-radius: 2px;}
 
 .combobox-item, .combobox-group{min-height: 12px;}
+
+/** 预览图片 **/
+.image_pre{max-width: 150px; max-height: 150px; padding: 2px; display: none;}
+.image_pre img{max-width: 100%; max-height: 150px;}

@@ -91,7 +91,7 @@ var dgOptions = {
 		         {field:'${head.id_field}', checkbox:true}
 				 <#list fieldList as item>
 	           	 <#if item.is_show_list == 1 && item.field_name != head.id_field>
-	           	 ,{field:'${item.field_name}', title: '${item.column_name}', width:${item.column_length}, sortable: true}
+	           	 ,{field:'${item.field_name}', title: '${item.column_name}', width:${item.column_length}, sortable: true <#if item.input_type == 'easyui-filebox_img'>,formatter: function(value){return formatterDgImage(value)}</#if>}
 	           	 </#if>
 	             </#list>
 	             <#if lineList.size() gt 0>

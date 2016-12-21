@@ -177,10 +177,15 @@ function getObjFromList(list, attrName, attrValue) {
 }
 
 function getInputValue(inputName) {
+	var inputObj = $(":input[name='" + inputName + "']");
 	var result = "";
-	$(":input[name='" + inputName + "']").each(function(i, item) {
-		result += "," + $(item).val();
-	});
+	if(inputObj.attr("type") == "file") {
+		result = $("#" + inputName).attr("data");	//如果文件，从文件的显示框架读取
+	}else {
+		inputObj.each(function(i, item) {
+			result += "," + $(item).val();
+		});
+	}
 	return result.replace(",", "");
 }
 
@@ -278,3 +283,52 @@ $.extend($.fn.validatebox.defaults.rules, {
         message: '两次输入不一致.'
     }
 });
+
+/**
+ * 上传文件，用于easyui-filebox异步上传
+ * @param fileIptId 文件输入框id
+ */
+function uploadFile(fileIptId) {
+	if(window.FormData) {
+		var fileObj = $(":input[name='" + fileIptId + "']");
+		var files = fileObj.get(0).files;
+		var imgObj = $("#" + fileIptId + "Img");
+		
+		$("#" + fileIptId).attr("data", "");
+		if(files.length > 0) {
+			if(files[0].size / 1024 / 1025 > 5) {
+				showWarnMsg("上传图片不能大于5M");
+				return;
+			}
+			var formData = new FormData();
+			// 建立一个upload表单项，值为上传的文件
+			formData.append('upload', fileObj.get(0).files[0]);
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', basePath + "/common/uploadFile");
+			// 定义上传完成后的回调函数
+			xhr.onload = function () {
+				if (xhr.status === 200) {
+					$("#" + fileIptId).attr("data", xhr.response);
+					//显示图片
+					imgObj.attr("src", basePath + xhr.response).parent().show();
+				} else {
+					showWarnMsg("上传图片失败")
+				}
+			}	
+			xhr.send(formData);
+		}else {
+			//隐藏图片
+			imgObj.attr("src", "").parent().hide();
+		}
+	}else {
+		alert("该浏览器不支持文件上传，请用chrome或firefox浏览器~");
+	}
+}
+
+/**
+ * 格式化图片（用于datagrid）
+ * @param url
+ */
+function formatterDgImage(url) {
+	return url ? "<img class='dg_img' src='" + basePath + "/" + url + "' />" : "";
+}

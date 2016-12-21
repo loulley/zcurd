@@ -27,6 +27,9 @@
 	            				]
 	            				<#if item.is_allow_null==0>,required:true</#if>
 	            	" /></div>        	
+			<#elseif item.input_type == 'easyui-filebox_img'>	
+			        <div class="wrap_input"><input class="easyui-filebox" type="text" name="${item.field_name}" id="${item.field_name}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>,buttonText: '选择图片', accept1: 'image/*', onChange: function(){uploadFile('${item.field_name}')}"></input></div>
+					<div class="image_pre"><img id="${item.field_name}Img" src=""></div>
 			<#elseif item.input_type == 'textarea'>	
 			        <div class="wrap_input textarea"><textarea name="${item.field_name}" id="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="5"></textarea></div>
 			<#else>

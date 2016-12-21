@@ -18,6 +18,11 @@
 		    <artifactId>jfinal</artifactId>
 		    <version>2.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.jfinal</groupId>
+		    <artifactId>cos</artifactId>
+		    <version>26Dec2008</version>
+		</dependency>
 		
 		<!-- <dependency>
 			<groupId>com.jfinal</groupId>
@@ -65,6 +70,7 @@
 		    <version>5</version>
 		    <scope>provided</scope>
 		</dependency>
+		
 	</dependencies>
 	
 	<build>

@@ -17,7 +17,11 @@
             <tr>
            		</#if>
            		<th><span>${item.column_name}：</span></th>
-               	<td><span class="valueSpan"><pre>${model[item.field_name]!''}</pre></span></td>
+           		<#if item.input_type == 'easyui-filebox_img' && model[item.field_name]??>
+           			<td><div class="valueSpan image_pre"><img src="${basePath}${model[item.field_name]!''}"></div></td>
+           		<#else>
+	               	<td><span class="valueSpan"><pre>${model[item.field_name]!''}</pre></span></td>
+           		</#if>
            		<#if item_index != 0 && (item_index + 1) % columnSize == 0>
             </tr>
            		</#if>

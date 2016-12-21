@@ -27,6 +27,7 @@ import com.zcurd.controller.SysOplogController;
 import com.zcurd.controller.SysUserController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
+import com.zcurd.model.CommonFile;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;
 import com.zcurd.model.MenuDatarule;
@@ -94,6 +95,7 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_user", SysUser.class);
 		arp.addMapping("sys_menu_btn", SysMenuBtn.class);
 		arp.addMapping("sys_oplog", SysOplog.class);
+		arp.addMapping("common_file", CommonFile.class);
 		
 		//业务数据库
 		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("busi_jdbcUrl"), PropKit.get("busi_user"), PropKit.get("busi_password").trim());

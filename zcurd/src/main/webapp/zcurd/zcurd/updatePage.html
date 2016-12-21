@@ -28,6 +28,9 @@
         						{id:'', text:''}<#list item.dict.keySet() as key>,{id:'${key}', text:'${item.dict.get(key)}'}</#list>
 	               			]
                		"/></div>
+               	<#elseif item.input_type == 'easyui-filebox_img'>	
+			        <div class="wrap_input"><input class="easyui-filebox" type="text" name="${item.field_name}" id="${item.field_name}" value="${model[item.field_name]!''}" data="${model[item.field_name]!''}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>,buttonText: '选择图片', accept1: 'image/*', onChange: function(){uploadFile('${item.field_name}')}"></input></div>
+					<div class="image_pre" <#if model[item.field_name]??>style="display: block;"</#if>><img id="${item.field_name}Img" src="${basePath}${model[item.field_name]!''}"></div>
                	<#elseif item.input_type == 'textarea'>	
                		<div class="wrap_input textarea"><textarea name="${item.field_name}" id="${item.field_name}" rows="5" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>">${model[item.field_name]!''}</textarea></div>
                	<#else>
