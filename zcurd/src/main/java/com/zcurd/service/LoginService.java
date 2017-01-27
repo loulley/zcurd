@@ -103,7 +103,12 @@ public class LoginService {
 			String menuUrl = menu.getStr("menu_url");
 			if(StringUtil.isNotEmpty(methodName) && StringUtil.isNotEmpty(menuUrl)) {
 				for (String method : methodName.split(",")) {
-					btnUrlList.add(UrlUtil.formatBaseUrl(menuUrl) + "/" + method.replaceAll("//+", "/"));
+					method = ("/" + method).replaceAll("//+", "/");
+					if(method.lastIndexOf("/") > 0) {
+						btnUrlList.add(method);
+					}else {
+						btnUrlList.add(UrlUtil.formatBaseUrl(menuUrl) + method);
+					}
 				}
 				//页面按钮
 				String btnName = pageBtnMap.get(menuUrl);

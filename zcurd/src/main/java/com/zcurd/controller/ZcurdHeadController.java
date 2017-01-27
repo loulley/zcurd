@@ -223,6 +223,7 @@ public class ZcurdHeadController extends BaseController {
 			//替换主键、model输出
 			content = content.replace("${model[head.id_field]}", "${'$'}{model.${head.id_field}}");
 			content = content.replaceAll("\\$\\{model\\[item\\.field_name\\]", "\\${'\\$'}{model.\\${item.field_name}");
+			content = content.replaceAll("\\$\\{modelDetail\\[item\\.field_name\\]", "\\${'\\$'}{modelDetail.\\${item.field_name}");
 		}
 		
 		StringUtil.saveToFile(basePath + "genCode/" + fileName, content);
