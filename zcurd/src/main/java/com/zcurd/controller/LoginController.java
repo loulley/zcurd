@@ -3,6 +3,7 @@ package com.zcurd.controller;
 import java.util.List;
 
 import com.jfinal.aop.Duang;
+import com.zcurd.common.util.PasswordUtil;
 import com.zcurd.model.Menu;
 import com.zcurd.model.SysUser;
 import com.zcurd.service.LoginService;
@@ -29,7 +30,7 @@ public class LoginController extends BaseController {
 	public void login() {
 		LoginService loginService = Duang.duang(LoginService.class);
 		List<SysUser> list = SysUser.me.findByMultiProperties(new String[]{"user_name", "password"}, 
-				new Object[]{getPara("user_name"), getPara("password")});
+				new Object[]{getPara("user_name"), PasswordUtil.encodePassword(getPara("password"))});
 		if(list.size() > 0) {
 			setSessionAttr("sysUser", list.get(0));
 			//用户菜单

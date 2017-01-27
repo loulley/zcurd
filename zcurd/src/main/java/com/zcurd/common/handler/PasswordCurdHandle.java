@@ -4,16 +4,22 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.zcurd.common.util.PasswordUtil;
+
 /**
- * 刷新表单CurdHandle
- * @author 钟世云 2016.11.3
+ * 密码CurdHandle
+ * @author 钟世云 2017.1.27
  */
-public class FlushFormCurdHandle implements CurdHandle {
+public class PasswordCurdHandle implements CurdHandle {
 
 	@Override
 	public void add(int headId, HttpServletRequest req, Map<String, String[]> paraMap) {
-		System.out.println("------------------CurdHandle to add!");
-		
+		String password = PasswordUtil.defaultPassword;
+		String[] passwordPara = paraMap.get("model.password");
+		if(passwordPara != null && passwordPara.length > 0) {
+			password = passwordPara[0];
+		}
+		paraMap.put("model.password", new String[]{PasswordUtil.encodePassword(password)});
 	}
 
 	@Override
