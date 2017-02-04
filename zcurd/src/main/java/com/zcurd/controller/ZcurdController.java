@@ -56,7 +56,6 @@ public class ZcurdController extends BaseController {
 		if(StringUtil.isEmpty(orderBy)) {
 			orderBy = head.getIdField() + " desc";
 		}
-		
 		renderDatagrid(
 				ZcurdTool.replaceDict(metaData, DBTool.findByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values, orderBy, getPager())), 
 				DBTool.countByMultPropertiesDbSource(head.getDbSource(), head.getTableName(), properties, symbols, values), 
@@ -82,7 +81,7 @@ public class ZcurdController extends BaseController {
 		ZcurdMeta metaData = DbMetaTool.getMetaData(headId);
 		ZcurdHead head = metaData.getHead();
 		Map<String, String[]> paraMap = new HashMap<String, String[]>();
-		paraMap.putAll(getParaMap());
+		paraMap.putAll(getParaMap());	//原始paramMap不允许修改，因此创建新的paraMap
 		
 		String handleClass = head.getStr("handle_class");
 		if(StringUtil.isNotEmpty(handleClass)) {

@@ -105,7 +105,15 @@ var dgOptions = {
 	     		  	} 
 	             }
 	         	</#if>
-	           ]]
+	           ]],
+	           loadFilter: function(data) {
+	        	   if(data.result && data.result == 'fail') {	//失败时，错误消息提示
+	        		   showWarnMsg(data.msg);
+	        		   return {};
+	        	   }else {
+	        		   return data;
+	        	   }
+	           }           
 	};
 $(function() {
 	handleAuthDataRule();

@@ -115,6 +115,7 @@ public class ZcurdConfig extends JFinalConfig {
 	public void configInterceptor(Interceptors me) {
 		me.add(new SessionInViewInterceptor());
 		me.add(new AuthInterceptor());
+		me.add(new ErrorInterceptor());
 	}
 	
 	/**
