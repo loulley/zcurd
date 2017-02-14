@@ -16,6 +16,8 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.FreeMarkerRender;
+import com.jfinal.render.ViewType;
+import com.jfinal.template.Engine;
 import com.zcurd.common.handler.ZcurdHandler;
 import com.zcurd.common.interceptor.AuthInterceptor;
 import com.zcurd.controller.CommonController;
@@ -53,6 +55,7 @@ public class ZcurdConfig extends JFinalConfig {
 		// 加载少量必要配置，随后可用PropKit.get(...)获取值
 		PropKit.use("a_little_config.txt");
 		me.setDevMode(PropKit.getBoolean("devMode", false));
+		me.setViewType(ViewType.FREE_MARKER);
 	}
 	
 	/**
@@ -141,5 +144,11 @@ public class ZcurdConfig extends JFinalConfig {
 	 */
 	public static void main(String[] args) {
 		JFinal.start("WebRoot", 8080, "/", 5);
+	}
+
+	@Override
+	public void configEngine(Engine me) {
+		// TODO Auto-generated method stub
+		
 	}
 }
