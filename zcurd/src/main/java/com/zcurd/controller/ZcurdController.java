@@ -69,6 +69,20 @@ public class ZcurdController extends BaseController {
 		ZcurdMeta metaData = zcurdService.getMetaData(headId);
 		flushDictData(metaData);
 		
+		//变量
+		Map<String, Object> varData = new HashMap<>();
+		varData.put("user", getSessionUser());
+		varData.put("metaData", metaData);
+		varData.put("request", getRequest());
+		varData.put("session", getRequest().getSession());
+		for (ZcurdField field : metaData.getAddFieldList()) {
+			String defaultValue = field.getStr("default_value");
+			if(StringUtil.isNotEmpty(defaultValue)) {
+				//默认值变量处理
+				field.set("default_value", FreemarkUtil.parse(defaultValue, varData));
+			}
+		}
+		
 		setAttr("headId", headId);
 		setAttrs(metaData.toMap());
 		setAttr("queryPara", ZcurdTool.getQueryPara(getParaMap()));
@@ -94,7 +108,7 @@ public class ZcurdController extends BaseController {
 		}
 		
 		ZcurdService zcurdService = Duang.duang(ZcurdService.class);
-		zcurdService.add(getHeadId(), paraMap);
+		zcurdService.add(getHeadId(), paraMap, getRequest(), getSessionUser());
 		
 		addOpLog("[" + head.getFormName() + "] 增加");
 		renderSuccess();
@@ -241,6 +255,7 @@ public class ZcurdController extends BaseController {
 		varData.put("sqlData", sqlData);
 		
 		for (ZcurdHeadJs zcurdHeadJs : metaData.getJsList()) {
+			//扩展js支持变量
 			zcurdHeadJs.set("js_content", FreemarkUtil.parse(zcurdHeadJs.getStr("js_content"), varData));
 		}
 	}

@@ -138,3 +138,6 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 /** 预览图片 **/
 .image_pre{max-width: 150px; max-height: 150px; padding: 2px; display: none;}
 .image_pre img{max-width: 100%; max-height: 150px;}
+
+/** 变量符号 **/
+.symbol_var{font-style: normal;}

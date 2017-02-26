@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.ICallback;
@@ -16,8 +18,10 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
+import com.zcurd.common.FreemarkUtil;
 import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZcurdTool;
+import com.zcurd.model.SysUser;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.vo.ZcurdMeta;
@@ -28,16 +32,33 @@ import com.zcurd.vo.ZcurdMeta;
  */
 public class ZcurdService {
 	
-	public void add(int headId, Map<String, String[]> paraMap) {
+	public void add(int headId, Map<String, String[]> paraMap, HttpServletRequest request, SysUser user) {
 		ZcurdMeta mapmeta = getMetaData(headId);
 		ZcurdHead head = mapmeta.getHead();
 		List<ZcurdField> addFieldList = mapmeta.getAddFieldList();
-
+		
 		Record record = new Record();
 		for (ZcurdField field : addFieldList) {
 			String[] paramValues = paraMap.get("model." + field.getStr("field_name"));
 			record.set(field.getStr("field_name"), paramValues == null ? null : paramValues[0]);
 		}
+		
+		//变量
+		Map<String, Object> varData = new HashMap<>();
+		varData.put("user", user);
+		varData.put("metaData", mapmeta);
+		varData.put("request", request);
+		varData.put("session", request.getSession());
+		
+		//默认值处理
+		for (ZcurdField field : mapmeta.getFieldList()) {
+			String defaultValue = field.getStr("default_value");
+			//默认值为空，参数值不为空
+			if(StringUtil.isNotEmpty(defaultValue) && StringUtil.isEmpty(record.getStr(field.getStr("field_name")))) {
+				record.set(field.getStr("field_name"), FreemarkUtil.parse(defaultValue, varData));
+			}
+		}
+		
 		Db.use(ZcurdTool.getDbSource(head.getDbSource())).save(head.getStr("table_name"), head.getStr("id_field"), record);
 	}
 	

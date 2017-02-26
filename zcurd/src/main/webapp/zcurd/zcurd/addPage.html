@@ -15,7 +15,7 @@
            	<#if item_index == 0 || (item_index + 0) % columnSize == 0>
             <tr>
            	</#if>
-           		<th><span>${item.column_name}：</span></th>
+           		<th><span id="${item.field_name}_label">${item.column_name}：</span></th>
                	<td>
             <#if item.input_type == 'easyui-combobox'>
 	            	<div class="wrap_input"><input class="easyui-combobox" id="${item.field_name}" name="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="
@@ -33,7 +33,7 @@
 			<#elseif item.input_type == 'textarea'>	
 			        <div class="wrap_input textarea"><textarea name="${item.field_name}" id="${item.field_name}" class="easyui-validatebox" data-options="<#if item.is_allow_null==0>required:true</#if>" rows="5"></textarea></div>
 			<#else>
-               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" id="${item.field_name}" value="${queryPara[item.field_name!]!}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
+               		<div class="wrap_input"><input class="${item.input_type}" type="text" name="${item.field_name}" id="${item.field_name}" value="${queryPara[item.field_name!]!(item.default_value!)}" data-options="fit: true<#if item.is_allow_null==0>,required:true</#if>"></input></div>
 			</#if>
            		</td>
            	<#if item_index != 0 && (item_index + 1) % columnSize == 0>

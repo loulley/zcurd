@@ -205,8 +205,7 @@ function changeComboboxToMult(inputIds) {
 		inputIds = [inputIds];
 	}
 	$.each(inputIds, function(i, item) {
-		var iptObj = $("#" + inputIds);
-		var data = iptObj. combobox("getData").splice(0, 1);
+		var iptObj = $("#" + item);
 		iptObj. combobox({multiple:true});
 	});
 }

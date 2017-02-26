@@ -61,7 +61,6 @@
                     	<th data-options="field:'id', checkbox:true"></th>
                         <th data-options="field:'field_name',width:100,editor:'textbox'">字段名称</th>
                         <th data-options="field:'column_name',width:120,editor:'textbox'">列表列名</th>
-                        <th data-options="field:'data_type',width:80,editor:{type:'textbox',required:true}">数据类型</th>
                         <th data-options="field:'input_type',width:90,
                         		editor:{
                                     type:'combobox',
@@ -95,6 +94,7 @@
                         <th data-options="field:'is_allow_null',width:60,editor:{type:'checkbox',options:{align:'center'}}">允许为空</th>               
                         <th data-options="field:'column_length',width:40,editor:'textbox'">列宽</th>          
                         <th data-options="field:'dict_sql',width:100,editor:'textbox'">字典sql</th>
+                        <th data-options="field:'default_value',width:60,editor:'textbox'"><span class="symbol_var" title="支持变量">$</span>默认值</th>
                         <th data-options="field:'order_num',width:50,align:'center',editor:'textbox'">顺序</th>
                     </tr>
                 </thead>
@@ -201,7 +201,7 @@ var headFieldList = [
 	{field:"column_length", type: 1},
 	{field:"dict_sql", type: 1},
 	{field:"order_num", type: 1},
-	{field:"data_type", type: 1},
+	{field:"default_value", type: 1},
 	
 	{field:"is_show_list", type: 2},
 	{field:"is_allow_detail", type: 2},
