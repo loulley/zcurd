@@ -15,6 +15,7 @@ import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
@@ -110,6 +111,19 @@ public class ZcurdConfig extends JFinalConfig {
 		arpAir.addMapping("claw_book_url", ClawBookUrl.class);
 		
 		me.add(arpAir);
+		
+		//任务调度
+		Cron4jPlugin cp = new Cron4jPlugin();
+		cp.addTask("0 15 10 * * ? *", new Runnable() {
+			int i = 0;
+			@Override
+			public void run() {
+				System.out.println("第一个任务， 执行" + i);
+				i++;
+			}
+		});
+		me.add(cp);
+		
 	}
 	
 	/**
