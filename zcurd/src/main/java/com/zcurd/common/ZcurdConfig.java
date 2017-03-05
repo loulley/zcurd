@@ -4,6 +4,7 @@ import com.busi.controller.ClawBookUrlController;
 import com.busi.controller.StockHistoryLogController;
 import com.busi.model.ClawBookUrl;
 import com.busi.model.StockHistoryLog;
+import com.jfinal.aop.Duang;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -15,7 +16,6 @@ import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
-import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
@@ -28,6 +28,7 @@ import com.zcurd.controller.MenuController;
 import com.zcurd.controller.RoleController;
 import com.zcurd.controller.SysOplogController;
 import com.zcurd.controller.SysUserController;
+import com.zcurd.controller.TaskBaseController;
 import com.zcurd.controller.ZcurdController;
 import com.zcurd.controller.ZcurdHeadController;
 import com.zcurd.model.CommonFile;
@@ -37,10 +38,13 @@ import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.SysMenuBtn;
 import com.zcurd.model.SysOplog;
 import com.zcurd.model.SysUser;
+import com.zcurd.model.TaskBase;
+import com.zcurd.model.TaskLog;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.model.ZcurdHeadBtn;
 import com.zcurd.model.ZcurdHeadJs;
+import com.zcurd.service.TaskService;
 
 import freemarker.template.TemplateModelException;
 
@@ -72,6 +76,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/common", CommonController.class, "/zcurd");
 		me.add("/oplog", SysOplogController.class, "/zcurd/sysOplog");
 		me.add("/user", SysUserController.class, "/zcurd/sysUser");
+		me.add("/task", TaskBaseController.class, "/zcurd/taskBase");
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
 		me.add("/clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
@@ -100,6 +105,8 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("sys_menu_btn", SysMenuBtn.class);
 		arp.addMapping("sys_oplog", SysOplog.class);
 		arp.addMapping("common_file", CommonFile.class);
+		arp.addMapping("task_base", TaskBase.class);
+		arp.addMapping("task_log", "id", TaskLog.class);
 		
 		//业务数据库
 		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("busi_jdbcUrl"), PropKit.get("busi_user"), PropKit.get("busi_password").trim());
@@ -111,19 +118,6 @@ public class ZcurdConfig extends JFinalConfig {
 		arpAir.addMapping("claw_book_url", ClawBookUrl.class);
 		
 		me.add(arpAir);
-		
-		//任务调度
-		Cron4jPlugin cp = new Cron4jPlugin();
-		cp.addTask("0 15 10 * * ? *", new Runnable() {
-			int i = 0;
-			@Override
-			public void run() {
-				System.out.println("第一个任务， 执行" + i);
-				i++;
-			}
-		});
-		me.add(cp);
-		
 	}
 	
 	/**
@@ -145,11 +139,15 @@ public class ZcurdConfig extends JFinalConfig {
 	
 	@Override
 	public void afterJFinalStart() {
-		 try {
+		try {
 			FreeMarkerRender.getConfiguration().setSharedVariable("basePath", JFinal.me().getContextPath());
 		} catch (TemplateModelException e) {
 			e.printStackTrace();
 		}
+		
+		//定时任务
+		TaskService taskService = Duang.duang(TaskService.class);
+		taskService.start();
 	}
 	
 	/**
@@ -162,7 +160,6 @@ public class ZcurdConfig extends JFinalConfig {
 
 	@Override
 	public void configEngine(Engine me) {
-		// TODO Auto-generated method stub
 		
 	}
 }

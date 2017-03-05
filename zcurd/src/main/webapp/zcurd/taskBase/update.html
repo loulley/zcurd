@@ -1,0 +1,105 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel updatePage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span id="name_label">名称：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="name" id="name" value="${model.name!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            <tr>
+           		<th><span id="target_type_label">目标类型：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="target_type" id="target_type" value="${model.target_type!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="target_value_label">目标值：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="target_value" id="target_value" value="${model.target_value!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="cron_label">cron表达式：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="cron" id="cron" value="${model.cron!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="create_user_id_label">创建人：</span></th>
+               	<td>
+               		<span class="item" id="create_user_id">${model.create_user_id!''}</span>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="last_run_time_label">上次执行时间：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="last_run_time" id="last_run_time" value="${model.last_run_time!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="last_run_time_cost_label">上次执行耗时：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="last_run_time_cost" id="last_run_time_cost" value="${model.last_run_time_cost!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="status_label">状态：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="status" id="status" value="${model.status!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="create_time_label">创建时间：</span></th>
+               	<td>
+               		<span class="item" id="create_time">${model.create_time!''}</span>
+           		</td>
+           		
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	     
+	    "id": ${model.id}, 
+       	    "model.name": getInputValue("name"), 
+       	    "model.target_type": getInputValue("target_type"), 
+       	    "model.target_value": getInputValue("target_value"), 
+       	    "model.cron": getInputValue("cron"), 
+       	    "model.last_run_time": getInputValue("last_run_time"), 
+       	    "model.last_run_time_cost": getInputValue("last_run_time_cost"), 
+       	    "model.status": getInputValue("status"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>
