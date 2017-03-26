@@ -62,6 +62,15 @@ public abstract class BaseTaskBase<M extends BaseTaskBase<M>> extends Model<M> i
 	public java.lang.Integer getCreateUserId() {
 		return get("create_user_id");
 	}
+	
+	public M setLastRunResult(java.lang.String lastRunResult) {
+		set("last_run_result", lastRunResult);
+		return (M)this;
+	}
+
+	public java.lang.String getLastRunResult() {
+		return get("last_run_result");
+	}
 
 	public M setLastRunTime(java.util.Date lastRunTime) {
 		set("last_run_time", lastRunTime);

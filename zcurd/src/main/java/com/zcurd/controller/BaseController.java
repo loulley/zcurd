@@ -9,7 +9,7 @@ import java.util.Map;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.zcurd.common.Pager;
+import com.zcurd.common.util.Pager;
 import com.zcurd.model.MenuDatarule;
 import com.zcurd.model.SysOplog;
 import com.zcurd.model.SysUser;

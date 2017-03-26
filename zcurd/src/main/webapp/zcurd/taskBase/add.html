@@ -8,42 +8,32 @@
             <tr>
            		<th><span id="name_label">名称：</span></th>
                	<td>
-               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="name" id="name" value="" data-options="fit: true"></input></div>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="name" id="name" value="" data-options="fit: true,required:true"></input></div>
            		</td>
             <tr>
-           		<th><span id="target_type_label">目标类型：</span></th>
+           		<th><span id="target_type_label">任务类型：</span></th>
                	<td>
-               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="target_type" id="target_type" value="" data-options="fit: true"></input></div>
+	            	<div class="wrap_input"><input class="easyui-combobox" id="target_type" name="target_type" value="" data-options="
+	            				valueField: 'id',
+   								textField: 'text',
+   								fit: true,
+	            				data: [
+	            					{id:'', text:''}<#list dictDatatarget_type.keySet() as key>,{id:'${key}', text:'${dictDatatarget_type.get(key)}'}</#list>
+	            				]
+	            				,required:true
+	            	" /></div>        	
            		</td>
             </tr>
             <tr>
-           		<th><span id="target_value_label">目标值：</span></th>
+           		<th><span id="target_value_label">任务值：</span></th>
                	<td>
-               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="target_value" id="target_value" value="" data-options="fit: true"></input></div>
+           			<div class="wrap_input textarea"><textarea name="target_value" id="target_value" class="easyui-validatebox" data-options="required:true" rows="5" placeholder="多行用英文“;”隔开"></textarea></div>
            		</td>
             </tr>
             <tr>
            		<th><span id="cron_label">cron表达式：</span></th>
                	<td>
-               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="cron" id="cron" value="" data-options="fit: true"></input></div>
-           		</td>
-            </tr>
-            <tr>
-           		<th><span id="last_run_time_label">上次执行时间：</span></th>
-               	<td>
-               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="last_run_time" id="last_run_time" value="" data-options="fit: true"></input></div>
-           		</td>
-            </tr>
-            <tr>
-           		<th><span id="last_run_time_cost_label">上次执行耗时：</span></th>
-               	<td>
-               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="last_run_time_cost" id="last_run_time_cost" value="" data-options="fit: true"></input></div>
-           		</td>
-            </tr>
-            <tr>
-           		<th><span id="status_label">状态：</span></th>
-               	<td>
-               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="status" id="status" value="" data-options="fit: true"></input></div>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="cron" id="cron" value="" data-options="fit: true,required:true"></input></div>
            		</td>
             </tr>
         </table>
@@ -61,14 +51,11 @@ function save() {
 }
 function getParam() {
 	var param = {
-	     
        		"model.name": getInputValue("name"), 
        		"model.target_type": getInputValue("target_type"), 
        		"model.target_value": getInputValue("target_value"), 
        		"model.cron": getInputValue("cron"), 
-       		"model.last_run_time": getInputValue("last_run_time"), 
-       		"model.last_run_time_cost": getInputValue("last_run_time_cost"), 
-       		"model.status": getInputValue("status"), 
+       		"model.status": getInputValue("status")
 	}
 	for(key in param) {
 		if(!param[key]) {

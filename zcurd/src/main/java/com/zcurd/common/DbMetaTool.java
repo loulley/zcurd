@@ -3,10 +3,12 @@ package com.zcurd.common;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.model.ZcurdHeadBtn;
@@ -98,7 +100,7 @@ public class DbMetaTool {
 	public static Map<String, Object> getDictData(String dictSql) {
 		String[] parseSql = DBTool.parseSQL4DbSource(dictSql);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		List<Record> listRecord = DBTool.use(parseSql[0]).find("select 'key', 'text' union all select * from (" + parseSql[1] + ") a");
 		for (int i = 1; i < listRecord.size(); i++) {
 			Record record = listRecord.get(i);

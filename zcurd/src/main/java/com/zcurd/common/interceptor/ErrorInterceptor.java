@@ -1,4 +1,4 @@
-package com.zcurd.common;
+package com.zcurd.common.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
+import com.zcurd.common.ErrorMsgException;
 
 /**
  *  错误消息

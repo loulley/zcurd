@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.Record;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.vo.ZcurdMeta;
 
 public class ZcurdTool {
@@ -37,10 +38,30 @@ public class ZcurdTool {
 						dictValueStr +=  "," + fieldValue;
 					}
 				}
+				record.set("_" + key, record.get(key));	//原始值
 				record.set(key, dictValueStr.substring(1));
 			}
 		}
 		return record;
+	}
+	
+	/**
+	 * 替换成字典中的值
+	 */
+	public static void replaceDict(Map<String, Object> dictData, Record record, String fieldName) {
+		record.set("_" + fieldName, record.get(fieldName));	//原始值
+		if(record.get(fieldName) != null && dictData.get(record.get(fieldName).toString()) != null) {
+			record.set(fieldName, dictData.get(record.get(fieldName).toString()));
+		}
+	}
+	
+	/**
+	 * 替换成字典中的值
+	 */
+	public static void replaceDict(Map<String, Object> dictData, List<Record> recordList, String fieldName) {
+		for (Record record : recordList) {
+			replaceDict(dictData, record, fieldName);
+		}
 	}
 	
 	/**

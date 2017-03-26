@@ -8,8 +8,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.busi.model.ClawBookUrl;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
-import com.zcurd.common.StringUtil;
 import com.zcurd.common.ZcurdTool;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.controller.BaseController;
 import com.zcurd.ext.render.csv.CsvRender;
 

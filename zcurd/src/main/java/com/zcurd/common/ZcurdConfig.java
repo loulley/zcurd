@@ -21,6 +21,7 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.zcurd.common.handler.ZcurdHandler;
 import com.zcurd.common.interceptor.AuthInterceptor;
+import com.zcurd.common.interceptor.ErrorInterceptor;
 import com.zcurd.controller.CommonController;
 import com.zcurd.controller.LoginController;
 import com.zcurd.controller.MainController;
@@ -147,7 +148,7 @@ public class ZcurdConfig extends JFinalConfig {
 		
 		//定时任务
 		TaskService taskService = Duang.duang(TaskService.class);
-		taskService.start();
+		taskService.startAll();
 	}
 	
 	/**

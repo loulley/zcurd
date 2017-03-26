@@ -7,6 +7,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.DbPro;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.zcurd.common.util.Pager;
+import com.zcurd.common.util.StringUtil;
 
 public class DBTool{
 	public static final DBTool me = new DBTool();

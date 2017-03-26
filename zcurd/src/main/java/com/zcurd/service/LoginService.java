@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.zcurd.common.FreemarkUtil;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.util.FreemarkUtil;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.common.util.UrlUtil;
 import com.zcurd.model.Menu;
 import com.zcurd.model.MenuBtn;

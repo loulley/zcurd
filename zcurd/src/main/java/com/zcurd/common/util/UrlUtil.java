@@ -28,6 +28,7 @@ public class UrlUtil {
 		String urlString = "";
 		try {
 			URLConnection urlConnection = new URL(url).openConnection();
+			urlConnection.setConnectTimeout(1000 * 30);	//30秒超时
 			BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 			String current;
 			while ((current = in.readLine()) != null) {

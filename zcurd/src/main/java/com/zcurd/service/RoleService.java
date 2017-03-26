@@ -3,7 +3,7 @@ package com.zcurd.service;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.util.StringUtil;
 
 /**
  * 角色权限管理（权限实现请查看LoginService）

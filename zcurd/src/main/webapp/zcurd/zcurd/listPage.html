@@ -65,7 +65,7 @@
     
 <#if head.form_type == 2>
     </div>
-    <div data-options="region:'east',split:true, border:false, collapsed:true, width:window.subPageWidth||'40%', title:window.subPageTitle||'子页面'">
+    <div data-options="region:'east',split:true, border:false, collapsed:true, width:window.subPageWidth||'40%', title:window.subPageTitle||'子页面', onCollapse: function(){_openSubPageFlag=false;}">
     	<iframe id="subIframe" class="easyui-panel" data-options="fit:true,border:false"></iframe>
     </div>
 </div> 

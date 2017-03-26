@@ -6,7 +6,7 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.zcurd.common.DBTool;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.model.CommonFile;
 
 /**

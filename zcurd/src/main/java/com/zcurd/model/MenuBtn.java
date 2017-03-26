@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Model;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.util.StringUtil;
 
 public class MenuBtn extends Model<MenuBtn> {
 	private static final long serialVersionUID = 1L;

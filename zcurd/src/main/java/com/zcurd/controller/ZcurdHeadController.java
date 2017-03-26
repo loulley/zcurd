@@ -21,7 +21,7 @@ import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;
 import com.zcurd.common.DBTool;
 import com.zcurd.common.DbMetaTool;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.model.ZcurdField;
 import com.zcurd.model.ZcurdHead;
 import com.zcurd.service.ZcurdService;

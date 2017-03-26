@@ -1,4 +1,4 @@
-package com.zcurd.common;
+package com.zcurd.common.util;
 
 import java.util.List;
 

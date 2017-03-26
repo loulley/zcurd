@@ -2,11 +2,15 @@ package com.zcurd.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.jfinal.aop.Before;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.zcurd.common.DBTool;
-import com.zcurd.common.StringUtil;
+import com.zcurd.common.ZcurdTool;
+import com.zcurd.common.util.StringUtil;
 import com.zcurd.controller.BaseController;
 import com.zcurd.ext.render.csv.CsvRender;
 import com.zcurd.model.TaskBase;
@@ -15,9 +19,12 @@ import com.zcurd.service.TaskService;
 /**
  * 定时任务
  */
+@Before(Tx.class)
 public class TaskBaseController extends BaseController {
 	
 	public void listPage() {
+		setAttr("dictDatatarget_type", TaskBase.me.getDictDatatarget_type());
+		setAttr("dictDatastatus", TaskBase.me.getDictDatastatus());
 		render("list.html");
 	}
 	
@@ -33,6 +40,8 @@ public class TaskBaseController extends BaseController {
 		}
 		
 		List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_base", "task_base", properties, symbols, values, orderBy, getPager());
+		ZcurdTool.replaceDict(TaskBase.me.getDictDatatarget_type(), list, "target_type");
+		ZcurdTool.replaceDict(TaskBase.me.getDictDatastatus(), list, "status");
 		
 		renderDatagrid(
 			list, 
@@ -42,22 +51,25 @@ public class TaskBaseController extends BaseController {
 	
 	//增加页面
 	public void addPage() {
+		setAttr("dictDatatarget_type", TaskBase.me.getDictDatatarget_type());
+		setAttr("dictDatastatus", TaskBase.me.getDictDatastatus());
 		render("add.html");
 	}
 	
 	//增加
 	public void add() {
 		TaskBase model = getModel(TaskBase.class, "model");
-		model.save();
-		addOpLog("[定时任务] 增加");
-		
 		TaskService taskService = Duang.duang(TaskService.class);
 		taskService.add(model);
+		
+		addOpLog("[定时任务] 增加");
 		renderSuccess();
 	}
 	
 	//修改页面
 	public void updatePage() {
+		setAttr("dictDatatarget_type", TaskBase.me.getDictDatatarget_type());
+		setAttr("dictDatastatus", TaskBase.me.getDictDatastatus());
 		setAttr("model", TaskBase.me.findById(getPara("id")));
 		render("update.html");
 	}
@@ -70,11 +82,11 @@ public class TaskBaseController extends BaseController {
 		model.setTargetValue(getPara("model.target_value"));
 		model.setCron(getPara("model.cron"));
 		model.setStatus(getParaToInt("model.status"));
-		model.update();
-		addOpLog("[定时任务] 修改");
 		
 		TaskService taskService = Duang.duang(TaskService.class);
 		taskService.update(model);
+		
+		addOpLog("[定时任务] 修改");
 		renderSuccess();
 	}
 	
@@ -83,7 +95,6 @@ public class TaskBaseController extends BaseController {
 		Integer[] ids = getParaValuesToInt("id[]");
 		TaskService taskService = Duang.duang(TaskService.class);
 		for (Integer id : ids) {
-			new TaskBase().set("id", id).delete();
 			taskService.delete(id);
 		}
 		addOpLog("[定时任务] 删除");
@@ -93,8 +104,31 @@ public class TaskBaseController extends BaseController {
 	//详情页面
 	public void detailPage() {
 		TaskBase model = TaskBase.me.findById(getParaToInt("id"));
+		Map<String, Object> dictDatatarget_type = TaskBase.me.getDictDatatarget_type();
+		if(dictDatatarget_type.get(model.get("target_type").toString()) != null) {
+			model.set("target_type", dictDatatarget_type.get(model.get("target_type").toString()));
+		}
+		Map<String, Object> dictDatastatus = TaskBase.me.getDictDatastatus();
+		if(dictDatastatus.get(model.get("status").toString()) != null) {
+			model.set("status", dictDatastatus.get(model.get("status").toString()));
+		}
 		setAttr("model", model);
 		render("detail.html");
+	}
+	
+	//启动/停止任务
+	public void startOrStop() {
+		TaskService taskService = Duang.duang(TaskService.class);
+		taskService.startOrStop(getParaToInt("id"), getParaToInt("status"));
+		renderSuccess();
+	}
+	
+	//立即执行
+	public void runAtSoon() {
+		TaskService taskService = Duang.duang(TaskService.class);
+		TaskBase taskBase = TaskBase.me.findById(getPara("id"));
+		taskService.runAtSoon(taskBase);
+		renderSuccess();
 	}
 	
 	//导出csv
