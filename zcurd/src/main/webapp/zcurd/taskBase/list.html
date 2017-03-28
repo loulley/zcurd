@@ -82,8 +82,10 @@ var dgOptions = {
 	           	 ,{field:'last_run_time', title: '上次执行时间', width:120, sortable: true }
 	           	 ,{field:'last_run_time_cost', title: '上次执行耗时', width:90, sortable: true }
 	           	 ,{field:'status', title: '状态', width:80, sortable: true, styler:function(val, row) {
-	           		 if(val == "运行中") {
+	           		 if(val == "等待运行") {
 	           			return 'background-color: #4cae4c; color: #fff;';
+	           		 }else if(val == "运行中") {
+	           			return 'background-color: #4cae4c; color: #ffa500;';
 	           		 }
 	           	 }}
 	           	 ,{field:'create_time', title: '创建时间', width:120, sortable: true }
@@ -225,6 +227,7 @@ function runAtSoon(index) {
 		var row = datagrid.datagrid("getRows")[index];
 		$.post("runAtSoon", {id: row.id}, function(data) {
 			showMsg("操作成功！");
+			datagrid.datagrid("reload");
 		});
 	});
 }

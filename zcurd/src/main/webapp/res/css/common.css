@@ -141,3 +141,26 @@ table th{font-weight: normal; color: #383838; text-align: right; }
 
 /** 变量符号 **/
 .symbol_var{font-style: normal;}
+
+/*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
+.scrollbar::-webkit-scrollbar{
+    width: 8px;
+    height: 8px;
+}
+/*定义滚动条的轨道，内阴影及圆角*/
+.scrollbar::-webkit-scrollbar-track{
+    background-color: #424f63;
+}
+/*定义滑块，内阴影及圆角*/
+.scrollbar::-webkit-scrollbar-thumb{
+    background-color: #09C;
+    background-clip: content-box;
+    border-top: 5px solid rgba(255,255,255,0);
+    border-bottom: 5px solid rgba(255,255,255,0);
+    border-right: 4px solid rgba(255,255,255,0);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb{
+	background-color: #09C;
+}

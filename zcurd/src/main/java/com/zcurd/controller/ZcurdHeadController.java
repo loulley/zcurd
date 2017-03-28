@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -187,9 +188,9 @@ public class ZcurdHeadController extends BaseController {
 	/**
 	 * 生成代码
 	 */
-	private void gen(Map<String, Object> mateDate, String tempFile, String genFile) throws FileNotFoundException {
+	private void gen(Map<String, Object> mateDate, String tempFile, String genFile) throws FileNotFoundException, UnsupportedEncodingException {
 		Configuration config = FreeMarkerRender.getConfiguration();
-		PrintWriter pw = new PrintWriter(new File(genFile));
+		PrintWriter pw = new PrintWriter(new File(genFile), "utf8");
         try {
 			Template template = config.getTemplate(tempFile);
 			template.process(mateDate, pw);
