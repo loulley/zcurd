@@ -81,7 +81,7 @@ public class TaskService {
 		cp = new Cron4jPlugin();
 		cp.addTask(taskBase.getCron(), createTask(taskBase));
 		try {
-			if(taskBase.getStatus() == TaskConstant.TASK_STATU2) {
+			if(taskBase.getStatus() == TaskConstant.TASK_STATU1) {
 				cp.start();
 			}
 		}catch (Exception e) {
